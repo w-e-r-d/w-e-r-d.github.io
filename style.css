@@ -1,0 +1,7 @@
+:root { font-family: system-ui, Arial, sans-serif; }
+body { margin: 0; }
+header { padding: 1rem; border-bottom: 1px solid #ddd; }
+nav a { margin-right: 1rem; text-decoration: none; color: #0366d6; }
+main { padding: 1.25rem; max-width: 800px; }
+button { padding: 0.6rem 1rem; border: 1px solid #ccc; border-radius: 8px; background: #f8f8f8; cursor: pointer; }
+button:hover { background: #efefef; }
