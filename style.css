@@ -82,3 +82,7 @@ nav a::before {
   color: var(--black);
   margin-top: 1rem;
 }
+
+nav a[data-active="true"]::before {
+  transform: rotate(-2deg) scale(1.05);
+}
