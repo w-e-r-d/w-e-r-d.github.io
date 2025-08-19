@@ -1,8 +1,10 @@
 :root {
   --black: #2b2b2b;
   --pink: #fd9484;
+  --green: #7ec3a8;
 }
 
+/* general page */
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
@@ -24,8 +26,6 @@ body {
   color: #fff;
   padding: 2rem 1rem;
   margin-bottom: 2rem;
-
-  /* the magic: organic blob shape */
   border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
 }
 
@@ -49,8 +49,10 @@ nav a {
   font-weight: bold;
   font-size: 1.2rem;
   padding: 0.25rem 0.5rem;
+  z-index: 1;
 }
 
+/* pink splotch behind each link */
 nav a::before {
   content: "";
   position: absolute;
@@ -65,13 +67,12 @@ nav a::before {
 
 /* ====== IMAGE PLACEHOLDER ====== */
 .image-placeholder {
-  background: #a55c4d; /* temp brownish color */
+  background: var(--green);   /* switched to green */
   color: #fff;
   font-weight: bold;
   padding: 5rem;
   margin: 2rem auto;
   max-width: 400px;
-
   border-radius: 35% 65% 60% 40% / 55% 45% 55% 45%;
 }
 
