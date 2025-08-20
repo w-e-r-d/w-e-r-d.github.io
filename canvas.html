@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spotify Playlist Trimmer (Frontend Only)</title>
+  $1  <link rel="stylesheet" href="style.css" />
+<title>Spotify Playlist Trimmer (Frontend Only)</title>
   <style>
     :root { --gap: 14px; }
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 0; color: #111; background: #fafafa; }
-    header { padding: 24px; border-bottom: 1px solid #eee; background: #fff; position: sticky; top: 0; z-index: 2; }
+    /* inherit global body styles from site */
+    /* header styling inherits from .blob-header in site stylesheet */
     main { padding: 24px; max-width: 900px; margin: 0 auto; }
     h1 { margin: 0 0 8px; font-size: 22px; }
     .muted { color: #555; font-size: 14px; }
@@ -30,11 +30,19 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>Spotify Playlist Trimmer</h1>
-    <div class="muted">Creates a copy of a playlist without tracks that are already in your Liked Songs.</div>
-  </header>
-  <main>
+  <div class="container">
+    <header class="blob-header">
+      <h1>werd.</h1>
+      <nav>
+        <a href="index.html">home</a>
+        <a href="about.html">about</a>
+        <a href="spools.html">spools</a>
+      </nav>
+    </header>
+    <main>
+      <h2 style="margin-top:0">canvas</h2>
+      <p class="muted">Creates a copy of a playlist without tracks that are already in your Liked Songs.</p>
+
     <section class="card grid" id="auth-section">
       <div class="row">
         <div class="pill" id="auth-status">Not signed in</div>
@@ -64,6 +72,7 @@
       <div id="log"></div>
     </section>
   </main>
+  </div>
 
   <footer>
     Built with vanilla JS + Fetch using Spotify Web API (PKCE). No backend.
