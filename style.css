@@ -116,3 +116,22 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
     padding: 3rem;
   }
 }
+
+.canvas-btn {
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid #111;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.canvas-btn:hover {
+  background: #111;
+  color: #fff;
+}
+
+
+
