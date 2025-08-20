@@ -25,6 +25,8 @@
     .progress { height: 10px; background: #eee; border-radius: 999px; overflow: hidden; }
     .progress > div { height: 100%; width: 0%; background: #111; transition: width .2s; }
     .grid { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
+    .config-note { font-size: 12px; color: #666; }
+    .config-note code { background: #f3f3f3; padding: 2px 6px; border-radius: 6px; }
   </style>
 </head>
 <body>
@@ -39,12 +41,10 @@
         <div id="user-pill" class="pill" style="display:none"></div>
       </div>
       <div class="row">
-        <input id="client-id" type="text" placeholder="Spotify Client ID" style="flex:1 1 280px" />
-        <input id="redirect-uri" type="text" placeholder="Redirect URI (e.g., https://yourdomain.com/)" style="flex:1 1 320px" />
         <button id="login" class="primary">Sign in with Spotify</button>
         <button id="logout" style="display:none">Sign out</button>
       </div>
-      <div class="muted">Your Client ID is safe to expose on the web. Do <strong>not</strong> use a Client Secret here. This page uses the Authorization Code <strong>PKCE</strong> flow entirely in-browser.</div>
+      <div class="config-note">This page uses a preconfigured <em>Client ID</em> and will redirect to <code id="redir-label"></code>. Make sure that exact URL is listed in your Spotify app’s <strong>Redirect URIs</strong>.</div>
     </section>
 
     <section class="card grid">
@@ -71,14 +71,28 @@
 
   <script>
     // =====================
-    // Utilities & PKCE auth
+    // Configuration (edit these)
     // =====================
+    // It's OK to embed your CLIENT_ID in frontend code. DO NOT embed your client secret.
+    // Use the client ID of your Spotify app. You shared one earlier; replace below if needed.
+    const CLIENT_ID = "a511624e55bb4ebaa84621a637f31d9e";
+
+    // Default redirect is the current page URL (canvas.html). Ensure this EXACT value is
+    // present in the app's Redirect URIs in the Spotify Developer Dashboard.
+    const REDIRECT_URI = new URL(window.location.pathname, window.location.origin).toString();
+    // If you host at a subpath or want to be explicit, you can use:
+    // const REDIRECT_URI = new URL('canvas.html', window.location.origin).toString();
+
+    // Required scopes
     const SCOPES = [
       'playlist-modify-public',
       'playlist-modify-private',
       'user-library-read'
     ];
 
+    // =====================
+    // Utilities & PKCE auth
+    // =====================
     const el = id => document.getElementById(id);
     const logEl = el('log');
     const barEl = el('bar');
@@ -90,7 +104,6 @@
       logEl.scrollTop = logEl.scrollHeight;
     }
 
-    function pct(n, d) { return d ? Math.round(n / d * 100) : 0; }
     function setProgress(p) { barEl.style.width = `${Math.max(0, Math.min(100, p))}%`; }
 
     function parsePlaylistId(input) {
@@ -121,15 +134,15 @@
 
     const Auth = {
       key: 'sp_pkce_state',
-      async login(clientId, redirectUri) {
+      async login() {
         const state = randStr(16);
         const verifier = randStr(64);
         const challenge = base64url(await sha256(verifier));
-        Storage.set(this.key, { state, verifier, clientId, redirectUri });
+        Storage.set(this.key, { state, verifier, clientId: CLIENT_ID, redirectUri: REDIRECT_URI });
         const url = new URL('https://accounts.spotify.com/authorize');
         url.searchParams.set('response_type', 'code');
-        url.searchParams.set('client_id', clientId);
-        url.searchParams.set('redirect_uri', redirectUri);
+        url.searchParams.set('client_id', CLIENT_ID);
+        url.searchParams.set('redirect_uri', REDIRECT_URI);
         url.searchParams.set('scope', SCOPES.join(' '));
         url.searchParams.set('code_challenge_method', 'S256');
         url.searchParams.set('code_challenge', challenge);
@@ -207,22 +220,20 @@
       },
       me() { return this.fetch('/me'); },
       async getAllSavedTrackIds(onProgress) {
-        let items = []; let next = '/me/tracks?limit=50'; let page = 0;
+        let items = []; let next = '/me/tracks?limit=50';
         while (next) {
           const data = await this.fetch(next.replace('https://api.spotify.com/v1',''));
           items.push(...data.items);
-          page++;
           onProgress?.(items.length);
           next = data.next;
         }
         return items.filter(t => t.track && t.track.id).map(t => t.track.id);
       },
       async getAllPlaylistTrackIds(playlistId, onProgress) {
-        let items = []; let next = `/playlists/${playlistId}/tracks?limit=100`; let page = 0;
+        let items = []; let next = `/playlists/${playlistId}/tracks?limit=100`;
         while (next) {
           const data = await this.fetch(next.replace('https://api.spotify.com/v1',''));
           items.push(...data.items);
-          page++;
           onProgress?.(items.length);
           next = data.next;
         }
@@ -259,6 +270,7 @@
       el('login').style.display = authed ? 'none' : '';
       el('logout').style.display = authed ? '' : 'none';
       el('run').disabled = !authed;
+      el('redir-label').textContent = REDIRECT_URI;
       if (authed) {
         try {
           currentUser = await API.me();
@@ -275,10 +287,7 @@
     }
 
     el('login').addEventListener('click', async () => {
-      const clientId = el('client-id').value.trim();
-      const redirectUri = el('redirect-uri').value.trim();
-      if (!clientId || !redirectUri) { alert('Enter Client ID and Redirect URI first.'); return; }
-      await Auth.login(clientId, redirectUri);
+      await Auth.login();
     });
 
     el('logout').addEventListener('click', () => { Auth.logout(); ensureAuthedUI(); log('Signed out.'); });
