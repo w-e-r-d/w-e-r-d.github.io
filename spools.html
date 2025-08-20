@@ -39,7 +39,7 @@
     </header>
     <main>
       <h2>like remover</h2>
-      <p class="muted">find a playlist, paste the URI, and this will make a new copy without songs you already liked.</p>
+      <p class="muted">find a playlist, paste the URI, and this will make a new copy without songs you already liked.  since spotify changed their rules in may, u prolly will have to ask me to add u to the app for it to work.</p>
 
       <section class="card grid" id="auth-section">
         <div class="row">
@@ -74,7 +74,7 @@
 
   <script>
     const CLIENT_ID = "a511624e55bb4ebaa84621a637f31d9e";
-    const REDIRECT_URI = new URL(window.location.pathname, window.location.origin).toString();
+    const REDIRECT_URI = 'https://drewlefebvre.com/spools.html';
     const SCOPES = ['playlist-modify-public','playlist-modify-private','user-library-read'];
 
     const el = id => document.getElementById(id);
