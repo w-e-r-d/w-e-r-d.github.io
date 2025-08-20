@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   $1  <link rel="stylesheet" href="style.css" />
-<title>Spotify Playlist Trimmer (Frontend Only)</title>
+<title>like remover</title>
   <style>
     :root { --gap: 14px; }
     /* inherit global body styles from site */
@@ -40,29 +40,29 @@
       </nav>
     </header>
     <main>
-      <h2 style="margin-top:0">canvas</h2>
-      <p class="muted">Creates a copy of a playlist without tracks that are already in your Liked Songs.</p>
+      <h2 style="margin-top:0">like remover</h2>
+      <p class="muted">if u find a playlist and u only want to hear new songs.  use this to remove all the songs you've already liked.  it'll create a new version of the playlist w/o any liked songs.</p>
 
     <section class="card grid" id="auth-section">
       <div class="row">
-        <div class="pill" id="auth-status">Not signed in</div>
+        <div class="pill" id="auth-status">u not signed in yet</div>
         <div id="user-pill" class="pill" style="display:none"></div>
       </div>
       <div class="row">
-        <button id="login" class="primary">Sign in with Spotify</button>
-        <button id="logout" style="display:none">Sign out</button>
+        <button id="login" class="primary">sign in w/ spotify</button>
+        <button id="logout" style="display:none">sign out</button>
       </div>
-      <div class="config-note">This page uses a preconfigured <em>Client ID</em> and will redirect to <code id="redir-label"></code>. Make sure that exact URL is listed in your Spotify app’s <strong>Redirect URIs</strong>.</div>
+      <div class="config-note">made by me using spotify api</strong>.</div>
     </section>
 
     <section class="card grid">
       <div class="col">
-        <label for="playlist-uri">Source playlist URL/URI</label>
-        <input id="playlist-uri" type="text" placeholder="e.g. https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M or spotify:playlist:37i9dQZF1DXcBWIGoYBM5M" />
+        <label for="playlist-uri">source playlist uri (share > hold control > copy spotify uri)</label>
+        <input id="playlist-uri" type="text" placeholder="e.g. spotify:playlist:37i9dQZF1DXcBWIGoYBM5M" />
       </div>
       <div class="row">
-        <label><input id="refresh-cache" type="checkbox" /> Refresh Liked Songs cache</label>
-        <button id="run" class="primary" disabled>Run Trimmer</button>
+        <label><input id="refresh-cache" type="checkbox" /> refresh song cache</label>
+        <button id="run" class="primary" disabled>remove likes</button>
       </div>
       <div class="progress"><div id="bar"></div></div>
       <div id="stats" class="row"></div>
@@ -75,7 +75,7 @@
   </div>
 
   <footer>
-    Built with vanilla JS + Fetch using Spotify Web API (PKCE). No backend.
+    built with vanilla js + fetch using spotify web api (pkce)
   </footer>
 
   <script>
@@ -88,9 +88,9 @@
 
     // Default redirect is the current page URL (canvas.html). Ensure this EXACT value is
     // present in the app's Redirect URIs in the Spotify Developer Dashboard.
-    const REDIRECT_URI = new URL(window.location.pathname, window.location.origin).toString();
+    // const REDIRECT_URI = new URL(window.location.pathname, window.location.origin).toString();
     // If you host at a subpath or want to be explicit, you can use:
-    // const REDIRECT_URI = new URL('canvas.html', window.location.origin).toString();
+    const REDIRECT_URI = new URL('canvas.html', window.location.origin).toString();
 
     // Required scopes
     const SCOPES = [
