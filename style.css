@@ -26,7 +26,7 @@ body {
   color: #fff;
   padding: 2rem 1rem;
   margin-bottom: 2rem;
-  border-radius: 40% 65% 30% / 32% 37% 20%;
+  border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
 }
 
 .blob-header h1 {
