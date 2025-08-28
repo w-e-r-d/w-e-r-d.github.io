@@ -133,5 +133,9 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   color: #fff;
 }
 
+.flip {
+  display: inline-block;
+  transform: scaleX(-1);
+}
 
 
