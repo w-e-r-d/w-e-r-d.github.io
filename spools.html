@@ -1,28 +1,47 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>spools</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="container">
-    <header class="blob-header">
-      <h1>spools.</h1>
-      <nav>
-        <a href="index.html" class="blob-link home">home</a>
-        <a href="about.html" class="blob-link about" data-active="true">about</a>
-        <a href="spools.html" class="blob-link spools">spools</a>
-      </nav>
-    </header>
+<hr class="section-break" />
 
-    <main>
-      <div class="image-placeholder">i'll put a spools logo here sometime</div>
-      <p class="more-text">
-        spools is a windows (eventually mac too) utility for spotify power users to do all sorts of cool things for analytics, music discovery, and organization.  i'll hopefully be uploading an initial spools build for testing soon.
-      </p>
-    </main>
+<section id="client-id-guide" class="guide">
+  <h2>How to get a client ID to test Spools</h2>
+
+  <div class="steps">
+    <article class="step">
+      <h3>Step 1: go to spotify developer </h3>
+      <p>just search on google.  should be the first link</p>
+      <figure>
+        <img src="https://www.dropbox.com/scl/fi/lwh0hv3rgfrw15xuwo3sx/step1.png?rlkey=lgtl147nvfotlocsh0r0lqvle&st=die4jvc8&dl=1" alt="Spotify Developer Dashboard sign in screen" loading="lazy" />
+      </figure>
+    </article>
+
+    <article class="step">
+      <h3>Step 2: sign in</h3>
+      <p>sign in w/ spotify account or create an account</p>
+      <figure>
+        <img src="https://www.dropbox.com/scl/fi/xkh5r48xd2928s87njh85/step2.png?rlkey=rl2fbwrfcyh32uw2vztsea089&st=trh8ka8l&dl=1" alt="Create new app screen" loading="lazy" />
+      </figure>
+    </article>
+
+    <article class="step">
+      <h3>Step 3: create an app</h3>
+      <p>on ur dashboard, click the create app button</p>
+      <figure>
+        <img src="https://www.dropbox.com/scl/fi/dx91pnlgxsm1w4k32qxm1/step3.png?rlkey=g235zqsjafzexkqg81kejinnn&st=m0wxy4us&dl=1" alt="App overview with Edit Settings button" loading="lazy" />
+      </figure>
+    </article>
+
+    <article class="step">
+      <h3>Step 4: setup app</h3>
+      <p>most things shouldn't matter here, just make sure to check the highlighted boxes and enter this redirect url: <code>http://127.0.0.1:8000/callback</code> make sure to click add after</p>
+      <figure>
+        <img src="https://www.dropbox.com/scl/fi/bd0uhuaeu10np7ggb06l5/step4.png?rlkey=7a7pevhxsksk5r4zs65s7i015&st=wica9eam&dl=0" alt="Add Redirect URI in app settings" loading="lazy" />
+      </figure>
+    </article>
+
+    <article class="step">
+      <h3>Step 5: copy client id into spools</h3>
+      <p>copy ur client id.  go to spools' settings page and put it in the client id field</p>
+      <figure>
+        <img src="https://www.dropbox.com/scl/fi/zqsd8ertn6tc08a4bonhm/step5.png?rlkey=coxzu8paih49vxf9jr6zrhf75&st=ui24uveh&dl=0" alt="Client ID shown on app overview" loading="lazy" />
+      </figure>
+    </article>
   </div>
-</body>
-</html>
+</section>
