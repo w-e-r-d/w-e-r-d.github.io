@@ -138,4 +138,60 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   transform: scaleX(-1);
 }
 
+.section-break {
+  border: 0;
+  height: 2px;
+  margin: 40px 0 24px;
+  background: linear-gradient(90deg, #0000, #0003, #0000);
+}
+
+.guide h2 {
+  margin: 0 0 16px;
+}
+
+.steps {
+  display: grid;
+  gap: 16px;
+}
+
+/* cards look */
+.step {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.step h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.step p {
+  margin: 0 0 12px;
+  color: #444;
+  line-height: 1.45;
+}
+
+.step figure {
+  margin: 0;
+}
+
+.step img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #eee;
+}
+
+/* responsive grid */
+@media (min-width: 720px) {
+  .steps {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
 
