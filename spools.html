@@ -79,5 +79,41 @@
       </section>
     </main>
   </div>
+
+  <script>
+  // Make guide images click-to-zoom
+  (function () {
+    const imgs = document.querySelectorAll('.step img');
+    imgs.forEach(img => {
+      img.addEventListener('click', () => {
+        const isZoomed = img.classList.contains('zoomed');
+
+        // close if already zoomed
+        if (isZoomed) {
+          document.querySelector('.zoom-overlay')?.remove();
+          img.classList.remove('zoomed');
+          return;
+        }
+
+        // otherwise open
+        const overlay = document.createElement('div');
+        overlay.className = 'zoom-overlay';
+        document.body.appendChild(overlay);
+        img.classList.add('zoomed');
+
+        // clicking overlay or pressing Esc closes it
+        function close() {
+          img.classList.remove('zoomed');
+          overlay.remove();
+          window.removeEventListener('keydown', onKey);
+        }
+        function onKey(e) { if (e.key === 'Escape') close(); }
+
+        overlay.addEventListener('click', close);
+        window.addEventListener('keydown', onKey, { once: true });
+      });
+    });
+  })();
+</script>
 </body>
 </html>
