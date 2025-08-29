@@ -193,5 +193,32 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   }
 }
 
+/* click-to-zoom */
+.step img { cursor: zoom-in; }
+
+/* full-screen overlay shown when zoomed */
+.zoom-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 999; /* above page content */
+}
+
+/* the zoomed image itself */
+.step img.zoomed {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%); /* center it */
+  z-index: 1000;
+  max-width: min(95vw, 1400px);
+  max-height: 90vh;
+  width: auto;   /* ignore the card’s 100% rule when zoomed */
+  height: auto;
+  cursor: zoom-out;
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
 
 
