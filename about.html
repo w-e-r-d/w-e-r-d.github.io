@@ -6,7 +6,6 @@
   <title>about</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<script src="/script.js"></script>
 <body>
   <div class="container">
     <header class="blob-header">
@@ -19,12 +18,40 @@
       </nav>
     </header>
 
-    <main>
-      <div class="image-placeholder">image</div>
-      <p class="more-text">
-        will add stuff about me later.</a>
-      </p>
+    <main class="about-hero">
+      <!-- Portrait with paint splotches behind -->
+      <section class="about-photo">
+        <figure>
+          <!-- replace with your real image path -->
+          <img src="https://www.dropbox.com/scl/fi/4r2okqz9uycvoifteto8y/IMG_0353.jpg?rlkey=9bid259o1ar8cti5n547qb1ji&st=vdrkhel0&dl=1" alt="pic of me at grand canyon" />
+          <figcaption>hi, i’m drew.</figcaption>
+        </figure>
+      </section>
+
+      <!-- Clean bio panel -->
+      <section class="bio-panel">
+        <h2>bio</h2>
+        <p>
+          i’m a tinkerer who likes to make things in my free time — python scripts,
+          spotify tools, little web toys, 3D prints, etc.  by day i'm an analyst at a consulting firm.
+          if you somehow stumble across this site, i'd love to hear from u!  hit me up on linkedin (that's the only social i use anymore).
+        </p>
+        <p>
+          i love music, maps, creative ventures, and turning
+          random ideas into small, useful things.
+        </p>
+
+        <h3>quick bits</h3>
+        <ul class="bio-list">
+          <li>stack: python, js, html, css (not confident, but always learning)</li>
+          <li>current rabbit hole: <a href="now/index.html">/now</a></li>
+          <li>linkedin: <a href="https://www.linkedin.com/in/dlefeb/">drew lefebvre</a></li>
+        </ul>
+      </section>
     </main>
   </div>
+
+  <!-- global behavior (tilt for active tab, etc.) -->
+  <script src="/script.js"></script>
 </body>
 </html>
