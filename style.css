@@ -221,4 +221,39 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   border: 1px solid #ddd;
 }
 
+/* ====== NOW PAGE ====== */
+.now-content {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.now-intro {
+  font-size: 1.2rem;
+  color: var(--black);
+}
+
+.now-blob {
+  background: var(--pink);
+  color: var(--black);
+  padding: 2rem;
+  border-radius: 45% 55% 50% 60% / 50% 50% 40% 60%;
+  box-shadow: 6px 6px 0 var(--black);
+  text-align: left;
+}
+
+.now-blob h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.now-blob:nth-child(odd) {
+  background: var(--green);
+  box-shadow: -6px 6px 0 var(--black);
+}
+
+.now-blob em {
+  font-style: italic;
+}
 
