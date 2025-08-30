@@ -222,40 +222,81 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
 }
 
 /* ====== NOW PAGE ====== */
+/* ====== NOW PAGE: taped index cards ====== */
 .now-content {
   display: grid;
-  gap: 2rem;
+  gap: 1.75rem;
   margin-top: 2rem;
 }
 
-.now-intro {
-  font-size: 1.2rem;
+/* “paper” cards with torn bottom and offset shadow */
+.now-card {
+  position: relative;
+  background: #fffdf8;
   color: var(--black);
-}
-
-.now-blob {
-  background: var(--pink);
-  color: var(--black);
-  padding: 2rem;
-  border-radius: 45% 55% 50% 60% / 50% 50% 40% 60%;
+  border: 2px solid var(--black);
+  padding: 1.25rem 1.25rem 1.5rem;
   box-shadow: 6px 6px 0 var(--black);
   text-align: left;
+
+  /* torn-edge vibe using clip-path */
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 88%,
+    96% 92%, 90% 89%, 84% 93%, 76% 90%, 68% 94%,
+    60% 90%, 52% 93%, 44% 89%, 36% 92%, 28% 89%,
+    20% 93%, 12% 90%, 6% 92%, 0% 88%
+  );
+
+  /* slight random tilt per card for messy-but-clean look */
+  transform: rotate(var(--tilt, 0deg));
 }
 
-.now-blob h2 {
-  margin-top: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
+/* headings on cards */
+.now-card h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.35rem;
+  text-transform: lowercase;
 }
 
-.now-blob:nth-child(odd) {
+/* list styling */
+.now-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.now-card li { margin: .25rem 0; }
+
+/* “tape” strips — alternate colors automatically */
+.now-card::before,
+.now-card::after {
+  content: "";
+  position: absolute;
+  top: -.6rem;
+  width: 88px; height: 18px;
+  background: var(--pink);
+  opacity: .9;
+  border: 2px solid var(--black);
+  box-shadow: 2px 2px 0 var(--black);
+  transform: rotate(-4deg);
+}
+.now-card::before { left: 1rem; }
+.now-card::after  {
+  right: 1rem;
   background: var(--green);
-  box-shadow: -6px 6px 0 var(--black);
+  transform: rotate(3deg);
 }
 
-.now-blob em {
-  font-style: italic;
+/* vary tilt per card so the stack feels hand-placed */
+.now-card:nth-of-type(1) { --tilt: -0.8deg; }
+.now-card:nth-of-type(2) { --tilt:  1.2deg; }
+.now-card:nth-of-type(3) { --tilt: -1.6deg; }
+.now-card:nth-of-type(4) { --tilt:  0.6deg; }
+
+/* mobile tighten-up */
+@media (max-width: 600px) {
+  .now-card { box-shadow: 4px 4px 0 var(--black); }
+  .now-card::before, .now-card::after { width: 72px; }
 }
+
 
 nav a.now::before {
   border-radius: 50% 40% 60% 50% / 55% 45% 65% 35%;
