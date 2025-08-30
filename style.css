@@ -260,3 +260,13 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
 nav a.now::before {
   border-radius: 50% 40% 60% 50% / 55% 45% 65% 35%;
 }
+
+nav a[data-active="true"]::before {
+  border-radius: 6px;
+  transform: none;
+}
+
+nav a[data-active="true"]:hover::before {
+  transform: rotate(2deg) scale(1.06);
+}
+
