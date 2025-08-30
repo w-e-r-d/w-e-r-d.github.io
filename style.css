@@ -4,7 +4,6 @@
   --green: #7ec3a8;
 }
 
-/* ====== GENERAL PAGE ====== */
 * { box-sizing: border-box; }
 
 body {
@@ -22,14 +21,12 @@ body {
   width: 100%;
 }
 
-/* ====== HEADER (larger black splotch) ====== */
 .blob-header {
   background: var(--black);
   color: #fff;
   padding: 2rem 1rem;
   margin-bottom: 2rem;
 
-  /* more square / rounded-rectangle */
   border-radius: 20px;
 }
 
@@ -38,7 +35,6 @@ body {
   font-size: 2rem;
 }
 
-/* ====== NAVIGATION ====== */
 nav {
   display: flex;
   justify-content: center;
@@ -56,7 +52,6 @@ nav a {
   z-index: 1;
 }
 
-/* base pink splotch */
 nav a::before {
   content: "";
   position: absolute;
@@ -69,18 +64,14 @@ nav a::before {
   transition: transform 120ms ease;
 }
 
-/* unique shapes per link */
 nav a.home::before   { border-radius: 42% 58% 55% 45% / 52% 38% 60% 50%; }
 nav a.about::before  { border-radius: 60% 40% 35% 65% / 40% 60% 45% 55%; }
 nav a.spools::before { border-radius: 70% 30% 60% 40% / 50% 50% 60% 40%; }
 
-/* active link subtle pop */
 nav a[data-active="true"]::before { transform: rotate(-2deg) scale(1.05); }
 
-/* hover wiggle */
 nav a:hover::before { transform: rotate(2deg) scale(1.06); }
 
-/* ====== IMAGE PLACEHOLDER (green blob) ====== */
 .image-placeholder {
   background: var(--green);
   color: #fff;
@@ -91,14 +82,12 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   border-radius: 35% 65% 60% 40% / 55% 45% 55% 45%;
 }
 
-/* ====== BODY TEXT ====== */
 .more-text {
   font-size: 1.1rem;
   color: var(--black);
   margin-top: 1rem;
 }
 
-/* ====== MOBILE TWEAKS ====== */
 @media (max-width: 600px) {
   body { padding: 1rem; }
 
@@ -186,34 +175,30 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   border: 1px solid #eee;
 }
 
-/* responsive grid */
 @media (min-width: 720px) {
   .steps {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-/* click-to-zoom */
 .step img { cursor: zoom-in; }
 
-/* full-screen overlay shown when zoomed */
 .zoom-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.6);
-  z-index: 999; /* above page content */
+  z-index: 999;
 }
 
-/* the zoomed image itself */
 .step img.zoomed {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%); /* center it */
+  transform: translate(-50%,-50%);
   z-index: 1000;
   max-width: min(95vw, 1400px);
   max-height: 90vh;
-  width: auto;   /* ignore the card’s 100% rule when zoomed */
+  width: auto;
   height: auto;
   cursor: zoom-out;
   box-shadow: 0 12px 40px rgba(0,0,0,.35);
@@ -221,15 +206,12 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   border: 1px solid #ddd;
 }
 
-/* ====== NOW PAGE ====== */
-/* ====== NOW PAGE: taped index cards ====== */
 .now-content {
   display: grid;
   gap: 1.75rem;
   margin-top: 2rem;
 }
 
-/* “paper” cards with torn bottom and offset shadow */
 .now-card {
   position: relative;
   background: #fffdf8;
@@ -239,7 +221,6 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   box-shadow: 6px 6px 0 var(--black);
   text-align: left;
 
-  /* torn-edge vibe using clip-path */
   clip-path: polygon(
     0% 0%, 100% 0%, 100% 88%,
     96% 92%, 90% 89%, 84% 93%, 76% 90%, 68% 94%,
@@ -247,25 +228,21 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
     20% 93%, 12% 90%, 6% 92%, 0% 88%
   );
 
-  /* slight random tilt per card for messy-but-clean look */
   transform: rotate(var(--tilt, 0deg));
 }
 
-/* headings on cards */
 .now-card h2 {
   margin: 0 0 .5rem;
   font-size: 1.35rem;
   text-transform: lowercase;
 }
 
-/* list styling */
 .now-card ul {
   margin: 0;
   padding-left: 1.1rem;
 }
 .now-card li { margin: .25rem 0; }
 
-/* “tape” strips — alternate colors automatically */
 .now-card::before,
 .now-card::after {
   content: "";
@@ -285,13 +262,11 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   transform: rotate(3deg);
 }
 
-/* vary tilt per card so the stack feels hand-placed */
 .now-card:nth-of-type(1) { --tilt: -0.8deg; }
 .now-card:nth-of-type(2) { --tilt:  1.2deg; }
 .now-card:nth-of-type(3) { --tilt: -1.6deg; }
 .now-card:nth-of-type(4) { --tilt:  0.6deg; }
 
-/* mobile tighten-up */
 @media (max-width: 600px) {
   .now-card { box-shadow: 4px 4px 0 var(--black); }
   .now-card::before, .now-card::after { width: 72px; }
@@ -311,4 +286,94 @@ nav a[data-active="true"]:hover::before {
   transform: rotate(calc(var(--active-tilt, 0) + 2deg)) scale(1.06);
 }
 
+.about-hero {
+  display: grid;
+  grid-template-columns: 1.05fr 1.2fr;
+  gap: 2rem;
+  align-items: start;
+  margin-top: 2rem;
+}
+
+.about-photo {
+  position: relative;
+}
+.about-photo figure { margin: 0; position: relative; }
+
+.about-photo::before,
+.about-photo::after {
+  content: "";
+  position: absolute;
+  inset: -12px -16px auto auto;
+  height: 56%;
+  width: 70%;
+  z-index: -2;
+  background: var(--pink);
+  border-radius: 48% 52% 40% 60% / 55% 45% 65% 35%;
+  transform: rotate(-6deg);
+  box-shadow: 4px 4px 0 var(--black);
+}
+.about-photo::after {
+  inset: auto auto -14px -10px;
+  height: 52%;
+  width: 68%;
+  background: var(--green);
+  border-radius: 55% 45% 60% 40% / 40% 60% 45% 55%;
+  transform: rotate(5deg);
+}
+
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--black);
+  border-radius: 14px;
+  box-shadow: 6px 6px 0 var(--black);
+  transform: rotate(-1.2deg);
+}
+
+.about-photo figcaption {
+  margin-top: .5rem;
+  color: var(--black);
+  opacity: .85;
+  font-size: .95rem;
+}
+
+.bio-panel {
+  background: #fff;
+  color: var(--black);
+  border: 2px solid var(--black);
+  border-radius: 18px;
+  padding: 1.25rem 1.25rem 1.1rem;
+  box-shadow: 6px 6px 0 var(--black);
+  text-align: left;
+}
+.bio-panel h2 {
+  margin: 0 0 .6rem;
+  font-size: 1.6rem;
+  text-transform: lowercase;
+  position: relative;
+}
+.bio-panel h2::after {
+  content: "";
+  display: block;
+  height: 8px;
+  width: 120px;
+  margin-top: .2rem;
+  background: linear-gradient(90deg, var(--pink), var(--green));
+  border-radius: 6px;
+}
+.bio-panel h3 {
+  margin: 1rem 0 .4rem;
+  font-size: 1.1rem;
+  text-transform: lowercase;
+}
+.bio-list { margin: 0; padding-left: 1.1rem; }
+.bio-list li { margin: .25rem 0; }
+
+@media (max-width: 880px) {
+  .about-hero {
+    grid-template-columns: 1fr;
+  }
+  .about-photo img { transform: none; }
+}
 
