@@ -377,3 +377,28 @@ nav a[data-active="true"]:hover::before {
   .about-photo img { transform: none; }
 }
 
+/* gradient background */
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  background: linear-gradient(
+    90deg,
+    #fd9484,
+    #7ec3a8,
+    #f1cb62,
+    #708c50
+  );
+
+  background-size: 200% 200%;
+
+  animation: gradientShift 20s ease-in-out infinite alternate;
+
+  color: var(--black);
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; filter: blur(0px) saturate(100%); }
+  50%  { background-position: 100% 50%; filter: blur(2px) saturate(110%); }
+  100% { background-position: 0% 50%; filter: blur(0px) saturate(100%); }
+}
