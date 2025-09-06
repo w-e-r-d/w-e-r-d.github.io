@@ -230,8 +230,14 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   -webkit-backdrop-filter: blur(10px);
 
   transform: rotate(var(--tilt, 0deg));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+.now-card:hover {
+  transform: rotate(calc(var(--tilt, 0deg) + 1deg)) scale(1.02)
+             translateY(-2px);
+  box-shadow: 8px 8px 0 var(--black);
+}
 .now-card h2 {
   margin: 0 0 .5rem;
   font-size: 1.35rem;
