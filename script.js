@@ -65,16 +65,17 @@ const SONGS = [
     iframe.style.borderRadius = '12px';
     b.appendChild(iframe);
 
+
     function open() {
       if (openBubble && openBubble !== b) close(openBubble);
       b.classList.add('open');
-
       if (!iframe.src) {
+        const id = b.dataset.trackId;
         iframe.src = `https://open.spotify.com/embed/track/${id}?utm_source=generator`;
       }
       openBubble = b;
     }
-
+    
     function close(target = b) {
       target.classList.remove('open');
       if (openBubble === target) openBubble = null;
