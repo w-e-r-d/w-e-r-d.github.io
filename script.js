@@ -12,6 +12,7 @@ const SONGS = [
 
 // Spotify bubbles
 (function initBubbles() {
+  if (!document.body.classList.contains('home')) return;
   if (!SONGS.length) return;
 
   const layer = document.createElement('div');
