@@ -378,27 +378,36 @@ nav a[data-active="true"]:hover::before {
 }
 
 /* gradient background */
-body {
-  margin: 0;
-  min-height: 100vh;
-
-  background: linear-gradient(
-    90deg,
-    #fd9484,
-    #7ec3a8,
-    #f1cb62,
-    #708c50
-  );
-
-  background-size: 200% 200%;
-
-  animation: gradientShift 20s ease-in-out infinite alternate;
-
-  color: var(--black);
+/* Gradient background lives behind everything, not on the content */
+html, body {
+  height: 100%;
 }
 
+body {
+  position: relative;            /* create a containing block for ::before */
+  background: transparent;       /* no background blur on content */
+}
+
+/* full-viewport animated gradient layer */
+body::before {
+  content: "";
+  position: fixed;               /* stays put while scrolling */
+  inset: 0;                      /* fill the viewport */
+  z-index: -1;                   /* behind all content */
+  pointer-events: none;          /* never intercept clicks */
+
+  /* your colors, left→right */
+  background: linear-gradient(90deg, #fd9484, #7ec3a8, #f1cb62, #708c50);
+  background-size: 200% 200%;
+
+  /* animate just the background layer */
+  animation: gradientShift 20s ease-in-out infinite alternate;
+  filter: blur(2px) saturate(108%);  /* “filmy” softness only on the bg */
+}
+
+/* subtle drift */
 @keyframes gradientShift {
-  0%   { background-position: 0% 50%; filter: blur(0px) saturate(100%); }
-  50%  { background-position: 100% 50%; filter: blur(2px) saturate(110%); }
-  100% { background-position: 0% 50%; filter: blur(0px) saturate(100%); }
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
 }
