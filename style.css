@@ -339,12 +339,17 @@ nav a[data-active="true"]:hover::before {
 }
 
 .bio-panel {
-  background: #fff;
-  color: var(--black);
-  border: 2px solid var(--black);
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 18px;
   padding: 1.25rem 1.25rem 1.1rem;
+
   box-shadow: 6px 6px 0 var(--black);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: var(--black);
   text-align: left;
 }
 .bio-panel h2 {
