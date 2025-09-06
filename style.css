@@ -143,42 +143,46 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   gap: 16px;
 }
 
-/* cards look */
 .step {
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 14px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.65);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 18px;
   padding: 16px;
-  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  box-shadow: 6px 6px 0 var(--black);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-align: left;
 }
 
+.step:hover { transform: translateY(-1px); }
+
 .step h3 {
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   font-size: 18px;
+  color: var(--black);
 }
 
 .step p {
   margin: 0 0 12px;
-  color: #444;
-  line-height: 1.45;
+  color: var(--black);
+  line-height: 1.5;
 }
 
-.step figure {
-  margin: 0;
-}
+.step figure { margin: 0; }
 
 .step img {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 10px;
-  border: 1px solid #eee;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 3px 3px 0 var(--black);
 }
 
-@media (min-width: 720px) {
-  .steps {
-    grid-template-columns: 1fr 1fr;
-  }
+@media (max-width: 700px) {
+  .step { box-shadow: 4px 4px 0 var(--black); }
+  .step img { box-shadow: 2px 2px 0 var(--black); }
 }
 
 .step img { cursor: zoom-in; }
@@ -214,19 +218,16 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
 
 .now-card {
   position: relative;
-  background: #fffdf8;
-  color: var(--black);
-  border: 2px solid var(--black);
+  background: rgba(255, 255, 255, 0.65);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 18px;
   padding: 1.25rem 1.25rem 1.5rem;
   box-shadow: 6px 6px 0 var(--black);
   text-align: left;
 
-  clip-path: polygon(
-    0% 0%, 100% 0%, 100% 88%,
-    96% 92%, 90% 89%, 84% 93%, 76% 90%, 68% 94%,
-    60% 90%, 52% 93%, 44% 89%, 36% 92%, 28% 89%,
-    20% 93%, 12% 90%, 6% 92%, 0% 88%
-  );
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
   transform: rotate(var(--tilt, 0deg));
 }
