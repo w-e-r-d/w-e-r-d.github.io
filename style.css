@@ -439,11 +439,14 @@ body::before {
   position: absolute;
   pointer-events: auto;
   border-radius: 999px;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.75), rgba(255,255,255,0.35));
+  /* soft orb look using your colors */
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.75), rgba(255,255,255,0.35)),
+    radial-gradient(circle at 70% 60%, rgba(253,148,132,0.35), rgba(126,195,168,0.25));
   box-shadow: 0 8px 18px rgba(0,0,0,0.18), 4px 4px 0 var(--black);
   overflow: hidden;
   transform: translateZ(0);
-  transition: transform .25s ease, box-shadow .25s ease, width .25s ease, height .25s ease, border-radius .25s ease;
+  transition: transform .25s ease, box-shadow .25s ease, width .25s ease, height .25s ease, border-radius .25s ease, left .25s ease, top .25s ease;
   animation: bubbleFloat var(--floatDur, 18s) ease-in-out infinite;
 }
 
@@ -462,9 +465,13 @@ body::before {
 }
 
 .bubble.open {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   border-radius: 16px;
-  width: min(420px, 92vw);
-  height: min(420px, 70vh);
+  width: clamp(320px, 90vw, 480px);
+  height: clamp(300px, 70vh, 420px);
   box-shadow: 8px 8px 0 var(--black), 0 18px 38px rgba(0,0,0,0.22);
   animation-play-state: paused;
 }
