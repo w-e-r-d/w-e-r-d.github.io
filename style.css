@@ -469,12 +469,36 @@ body::before {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 16px;
-  width: clamp(320px, 90vw, 480px);
-  height: clamp(300px, 70vh, 420px);
+  border-radius: 14px;
+  padding: 0;
+  overflow: hidden;
+
+  width: clamp(480px, 92vw, 820px);
+  height: clamp(370px, 80vh, 520px);
+
   box-shadow: 8px 8px 0 var(--black), 0 18px 38px rgba(0,0,0,0.22);
   animation-play-state: paused;
 }
+
+.bubble .embed {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+
+.bubble.open .embed { display: block; }
+
+@media (max-width: 700px) {
+  .bubble.open {
+    width: min(96vw, 560px);
+    height: min(70vh, 440px);
+  }
+}
+
 
 .bubble.open .icon { display: none; }
 .bubble.open .embed { display: block; }
