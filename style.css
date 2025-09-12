@@ -424,7 +424,7 @@ body::before {
 }
 ::selection {
   background: transparent;
-  color: #fff;
+  color: #7d7361;
 }
 
 /* Spotify bubbles */
