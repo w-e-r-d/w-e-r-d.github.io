@@ -24,100 +24,45 @@
         spools is a utility for spotify power users to do all sorts of cool things for analytics, music discovery, and organization. i'll hopefully be uploading an initial spools build for testing soon.
       </p>
       <p class="more-text">
-        currently testing a desktop version with a limited group of users (that's why there's a client id creation guide below).  as soon as i have a build that's somewhat stable, i'll post it to download or (hopefully) as a web app.
+        currently testing a desktop version with a limited group of users.  working on a web app now.
       </p>
-
-      <!-- Section break + guide lives INSIDE main and inside .container -->
-      <hr class="section-break" />
-
-      <section id="client-id-guide" class="guide">
-        <h2>How to get a client ID to test Spools</h2>
-
-        <div class="steps">
-          <article class="step">
-            <h3>Step 1: go to spotify developer</h3>
-            <p>just search on google. should be the first link</p>
-            <figure>
-              <img src="https://www.dropbox.com/scl/fi/lwh0hv3rgfrw15xuwo3sx/step1.png?rlkey=lgtl147nvfotlocsh0r0lqvle&raw=1"
-                   alt="Spotify Developer Dashboard sign in screen" loading="lazy" />
-            </figure>
-          </article>
-
-          <article class="step">
-            <h3>Step 2: sign in</h3>
-            <p>sign in w/ spotify account or create an account</p>
-            <figure>
-              <img src="https://www.dropbox.com/scl/fi/xkh5r48xd2928s87njh85/step2.png?rlkey=rl2fbwrfcyh32uw2vztsea089&raw=1"
-                   alt="Create new app screen" loading="lazy" />
-            </figure>
-          </article>
-
-          <article class="step">
-            <h3>Step 3: create an app</h3>
-            <p>on ur dashboard, click the create app button</p>
-            <figure>
-              <img src="https://www.dropbox.com/scl/fi/dx91pnlgxsm1w4k32qxm1/step3.png?rlkey=g235zqsjafzexkqg81kejinnn&raw=1"
-                   alt="App overview with Edit Settings button" loading="lazy" />
-            </figure>
-          </article>
-
-          <article class="step">
-            <h3>Step 4: setup app</h3>
-            <p>make sure redirect is:
-              <code>http://127.0.0.1:8000/callback</code> and u click add</p>
-            <figure>
-              <img src="https://www.dropbox.com/scl/fi/bd0uhuaeu10np7ggb06l5/step4.png?rlkey=7a7pevhxsksk5r4zs65s7i015&raw=1"
-                   alt="Add Redirect URI in app settings" loading="lazy" />
-            </figure>
-          </article>
-
-          <article class="step">
-            <h3>Step 5: copy client id into spools</h3>
-            <p>copy ur client id. go to spools' settings page and put it in the client id field</p>
-            <figure>
-              <img src="https://www.dropbox.com/scl/fi/zqsd8ertn6tc08a4bonhm/step5.png?rlkey=coxzu8paih49vxf9jr6zrhf75&raw=1"
-                   alt="Client ID shown on app overview" loading="lazy" />
-            </figure>
-          </article>
-        </div>
-      </section>
     </main>
   </div>
 
   <script>
-  // Make guide images click-to-zoom
-  (function () {
-    const imgs = document.querySelectorAll('.step img');
-    imgs.forEach(img => {
-      img.addEventListener('click', () => {
-        const isZoomed = img.classList.contains('zoomed');
+  // // Make guide images click-to-zoom
+  // (function () {
+  //   const imgs = document.querySelectorAll('.step img');
+  //   imgs.forEach(img => {
+  //     img.addEventListener('click', () => {
+  //       const isZoomed = img.classList.contains('zoomed');
 
-        // close if already zoomed
-        if (isZoomed) {
-          document.querySelector('.zoom-overlay')?.remove();
-          img.classList.remove('zoomed');
-          return;
-        }
+  //       // close if already zoomed
+  //       if (isZoomed) {
+  //         document.querySelector('.zoom-overlay')?.remove();
+  //         img.classList.remove('zoomed');
+  //         return;
+  //       }
 
-        // otherwise open
-        const overlay = document.createElement('div');
-        overlay.className = 'zoom-overlay';
-        document.body.appendChild(overlay);
-        img.classList.add('zoomed');
+  //       // otherwise open
+  //       const overlay = document.createElement('div');
+  //       overlay.className = 'zoom-overlay';
+  //       document.body.appendChild(overlay);
+  //       img.classList.add('zoomed');
 
-        // clicking overlay or pressing Esc closes it
-        function close() {
-          img.classList.remove('zoomed');
-          overlay.remove();
-          window.removeEventListener('keydown', onKey);
-        }
-        function onKey(e) { if (e.key === 'Escape') close(); }
+  //       // clicking overlay or pressing Esc closes it
+  //       function close() {
+  //         img.classList.remove('zoomed');
+  //         overlay.remove();
+  //         window.removeEventListener('keydown', onKey);
+  //       }
+  //       function onKey(e) { if (e.key === 'Escape') close(); }
 
-        overlay.addEventListener('click', close);
-        window.addEventListener('keydown', onKey, { once: true });
-      });
-    });
-  })();
+  //       overlay.addEventListener('click', close);
+  //       window.addEventListener('keydown', onKey, { once: true });
+  //     });
+  //   });
+  // })();
 </script>
 </body>
 </html>
