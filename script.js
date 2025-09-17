@@ -1,9 +1,8 @@
-// random tilt for the active nav
+// random tilt for the active nav tab (wiggly square)
 const tilt = (Math.random() * 8 - 4).toFixed(2) + 'deg';
 document.documentElement.style.setProperty('--active-tilt', tilt);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Only run on the home page
   if (!document.body.classList.contains('home')) return;
 
   // ===== tracks =====
@@ -17,12 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   if (!SONGS.length) return;
 
-  // Helper: extract track ID from various formats
+  // extract track ID from various formats
   const toId = (s) => {
     if (!s) return null;
     if (s.startsWith('spotify:track:')) return s.split(':').pop();
     if (s.includes('/track/')) return s.split('/track/')[1].split('?')[0].split('/')[0];
-    return s;
+    return s; // assume raw ID
   };
 
   // ===== carousel structure into <main> =====
@@ -47,6 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
   wrap.appendChild(prev);
   wrap.appendChild(ring);
   wrap.appendChild(next);
+
+  // hint
+  const hint = document.createElement('p');
+  hint.className = 'carousel-hint more-text';
+  // hint.textContent = ' ';
 
   // add to the page
   main.appendChild(wrap);
@@ -116,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight') setActive(index + 1);
   });
 
-  // optional auto-rotate (pause on hover)
   let auto = setInterval(() => setActive(index + 1), 6000);
   wrap.addEventListener('mouseenter', () => clearInterval(auto));
   wrap.addEventListener('mouseleave', () => (auto = setInterval(() => setActive(index + 1), 6000)));
