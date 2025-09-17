@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const hint = document.createElement('p');
   hint.className = 'carousel-hint more-text';
-  hint.textContent = 'use ◀︎▶︎ or drag to spin • front card plays • i’ll swap tracks often';
+  // hint.textContent = '';
 
   main.appendChild(wrap);
   main.appendChild(hint);
