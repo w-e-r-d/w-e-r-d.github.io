@@ -625,3 +625,26 @@ body::before {
   .car-btn { width: 38px; height: 38px; }
   .car-card { filter: blur(0.6px) opacity(.9); }
 }
+
+/* Center the carousel perfectly */
+.container {
+  max-width: 1000px; /* gives the carousel room (was 800px) */
+}
+
+.carousel-wrap {
+  /* center the wrapper within the page */
+  width: 100%;
+  max-width: min(920px, 95vw);
+  margin: 2rem auto 1rem;
+
+  /* center the 3D ring inside the wrapper */
+  display: grid;
+  place-items: center;
+
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+}
+
+/* keep arrows aligned to the wrapper edges (not negative) */
+.car-btn.prev { left: 8px; }
+.car-btn.next { right: 8px; }
