@@ -1,11 +1,11 @@
-// random tilt for the active nav tab (wiggly square)
+// tiny tilt for the active nav tab
 const tilt = (Math.random() * 8 - 4).toFixed(2) + 'deg';
 document.documentElement.style.setProperty('--active-tilt', tilt);
 
 document.addEventListener('DOMContentLoaded', () => {
   if (!document.body.classList.contains('home')) return;
 
-  // ===== tracks =====
+  // ===== songs =====
   const SONGS = [
     "https://open.spotify.com/track/2TugrDKkd55mfVOMVZsfO8",
     "https://open.spotify.com/track/6QanbknK7HJMOaUqlNCxhz",
@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   if (!SONGS.length) return;
 
-  // extract track ID from various formats
   const toId = (s) => {
     if (!s) return null;
     if (s.startsWith('spotify:track:')) return s.split(':').pop();
@@ -24,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return s; // assume raw ID
   };
 
-  // ===== carousel structure into <main> =====
+  // container in <main>
   const main = document.querySelector('main') || document.body;
   const wrap = document.createElement('div');
   wrap.className = 'carousel-wrap';
@@ -47,58 +46,58 @@ document.addEventListener('DOMContentLoaded', () => {
   wrap.appendChild(ring);
   wrap.appendChild(next);
 
-  // hint
   const hint = document.createElement('p');
   hint.className = 'carousel-hint more-text';
-  // hint.textContent = ' ';
+  hint.textContent = 'use ◀︎▶︎ or drag to spin • front card plays • i’ll swap tracks often';
 
-  // add to the page
   main.appendChild(wrap);
   main.appendChild(hint);
 
-  // ===== ring of cards =====
+  // ring
   const ids = SONGS.map(toId).filter(Boolean);
   const count = Math.min(ids.length, 12);
-  const radius = 600; // depth of the 3D ring
-  const step = 360 / count;
+  const radius = 600;
+  const STEP = 360 / count;
 
   const cards = ids.slice(0, count).map((id, i) => {
     const card = document.createElement('div');
     card.className = 'car-card';
-    card.style.setProperty('--ry', `${i * step}deg`);
+    card.style.setProperty('--ry', `${i * STEP}deg`);
     card.style.setProperty('--tz', `${radius}px`);
 
     const iframe = document.createElement('iframe');
     iframe.loading = 'lazy';
     iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-    card.appendChild(iframe);
+    iframe.src = `https://open.spotify.com/embed/track/${id}?utm_source=generator`;
 
+    card.appendChild(iframe);
     ring.appendChild(card);
     return { el: card, id, ifr: iframe };
   });
 
-  // ===== rotate, activate, lazy-load =====
-  let index = 0;
+  let angle = 0;
 
-  function setActive(idx) {
-    index = (idx + count) % count;
-    ring.style.transform = `translateZ(-${radius}px) rotateY(${-index * step}deg)`;
-    cards.forEach((c, i) => {
-      const active = i === index;
-      c.el.classList.toggle('active', active);
-      if (active && !c.ifr.src) {
-        c.ifr.src = `https://open.spotify.com/embed/track/${c.id}?utm_source=generator`;
-      }
-    });
+  function activeIndexFromAngle() {
+    const approx = Math.round((-angle) / STEP);
+    return ((approx % count) + count) % count;
   }
 
-  setActive(0);
+  function applyTransform() {
+    ring.style.transform = `translateZ(-${radius}px) rotateY(${angle}deg)`;
+    const ai = activeIndexFromAngle();
+    cards.forEach((c, i) => c.el.classList.toggle('active', i === ai));
+  }
 
-  // arrows
-  prev.addEventListener('click', () => setActive(index - 1));
-  next.addEventListener('click', () => setActive(index + 1));
+  function nudge(steps) {
+    angle -= steps * STEP; 
+    applyTransform();
+  }
 
-  // drag to spin (desktop)
+  applyTransform();
+
+  prev.addEventListener('click', () => nudge(-1)); // previous
+  next.addEventListener('click', () => nudge(1));  // next
+
   let dragX = null;
   ring.addEventListener('pointerdown', (e) => {
     dragX = e.clientX;
@@ -109,18 +108,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dragX == null) return;
     const dx = e.clientX - dragX;
     if (Math.abs(dx) > 24) {
-      setActive(index - Math.sign(dx));
+      nudge(Math.sign(dx));
       dragX = e.clientX;
     }
   });
 
-  // keyboard
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft')  setActive(index - 1);
-    if (e.key === 'ArrowRight') setActive(index + 1);
+    if (e.key === 'ArrowLeft')  nudge(-1);
+    if (e.key === 'ArrowRight') nudge(1);
   });
 
-  let auto = setInterval(() => setActive(index + 1), 6000);
+  let auto = setInterval(() => nudge(1), 6000);
   wrap.addEventListener('mouseenter', () => clearInterval(auto));
-  wrap.addEventListener('mouseleave', () => (auto = setInterval(() => setActive(index + 1), 6000)));
+  wrap.addEventListener('mouseleave', () => (auto = setInterval(() => nudge(1), 6000)));
 });
