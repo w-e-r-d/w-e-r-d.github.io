@@ -7,12 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== songs =====
   const SONGS = [
+    "https://open.spotify.com/track/2QqDNk4meN58jBmUn0EBUi",
     "https://open.spotify.com/track/2TugrDKkd55mfVOMVZsfO8",
     "https://open.spotify.com/track/6QanbknK7HJMOaUqlNCxhz",
-    "https://open.spotify.com/track/6Y4Z2Gehxo4ciCIXmt72a8",
-    "https://open.spotify.com/track/6GM7Tngzr6tK5whGLnsUEx",
-    "https://open.spotify.com/track/4xT3B4ZRWAqxj1M3S8naKi",
-    "https://open.spotify.com/track/5CGX8JPDhMyUI4GkBSDxwP",
+    "https://open.spotify.com/track/25ywKtUww26ABFd0tiGt9D",
+    "https://open.spotify.com/track/47ojH5LeQhl1ZltSAHBEFF",
+    "https://open.spotify.com/track/3RmFPuTTAjSQ2pbEd2j9oA",
   ];
   if (!SONGS.length) return;
 
