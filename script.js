@@ -1,4 +1,4 @@
-// tiny random tilt for the active nav tab (wiggly square)
+// random tilt for the active nav
 const tilt = (Math.random() * 8 - 4).toFixed(2) + 'deg';
 document.documentElement.style.setProperty('--active-tilt', tilt);
 
@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Only run on the home page
   if (!document.body.classList.contains('home')) return;
 
-  // ===== 1) Update this list anytime you want new tracks =====
+  // ===== tracks =====
   const SONGS = [
     "https://open.spotify.com/track/2TugrDKkd55mfVOMVZsfO8",
     "https://open.spotify.com/track/6QanbknK7HJMOaUqlNCxhz",
@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!s) return null;
     if (s.startsWith('spotify:track:')) return s.split(':').pop();
     if (s.includes('/track/')) return s.split('/track/')[1].split('?')[0].split('/')[0];
-    return s; // assume raw ID
+    return s;
   };
 
-  // ===== 2) Inject the carousel structure into <main> =====
+  // ===== carousel structure into <main> =====
   const main = document.querySelector('main') || document.body;
   const wrap = document.createElement('div');
   wrap.className = 'carousel-wrap';
@@ -53,11 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
   hint.className = 'carousel-hint more-text';
   hint.textContent = 'use ◀︎▶︎ or drag to spin • front card plays • i’ll swap tracks often';
 
-  // add to the page (after any existing text in <main>)
+  // add to the page
   main.appendChild(wrap);
   main.appendChild(hint);
 
-  // ===== 3) Build the ring of cards =====
+  // ===== ring of cards =====
   const ids = SONGS.map(toId).filter(Boolean);
   const count = Math.min(ids.length, 12);
   const radius = 600; // depth of the 3D ring
@@ -72,14 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const iframe = document.createElement('iframe');
     iframe.loading = 'lazy';
     iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-    // src set lazily when card becomes active
     card.appendChild(iframe);
 
     ring.appendChild(card);
     return { el: card, id, ifr: iframe };
   });
 
-  // ===== 4) Interaction: rotate, activate, lazy-load =====
+  // ===== rotate, activate, lazy-load =====
   let index = 0;
 
   function setActive(idx) {
