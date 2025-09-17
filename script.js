@@ -48,11 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
   wrap.appendChild(ring);
   wrap.appendChild(next);
 
-  // optional hint below
-  const hint = document.createElement('p');
-  hint.className = 'carousel-hint more-text';
-  hint.textContent = 'use ◀︎▶︎ or drag to spin • front card plays • i’ll swap tracks often';
-
   // add to the page
   main.appendChild(wrap);
   main.appendChild(hint);
