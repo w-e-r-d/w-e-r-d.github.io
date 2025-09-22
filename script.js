@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "https://open.spotify.com/track/25ywKtUww26ABFd0tiGt9D",
     "https://open.spotify.com/track/47ojH5LeQhl1ZltSAHBEFF",
     "https://open.spotify.com/track/3RmFPuTTAjSQ2pbEd2j9oA",
-    "https://open.spotify.com/track/2A5eVG5jym5vbZiPCaEieh",
+    "https://open.spotify.com/track/0oBAbUchoN02dIccY8oZh6",
   ];
   if (!SONGS.length) return;
 
