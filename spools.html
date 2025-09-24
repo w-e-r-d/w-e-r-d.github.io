@@ -53,39 +53,40 @@
 
 
   <script>
-  // // Make guide images click-to-zoom
-  // (function () {
-  //   const imgs = document.querySelectorAll('.step img');
-  //   imgs.forEach(img => {
-  //     img.addEventListener('click', () => {
-  //       const isZoomed = img.classList.contains('zoomed');
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('download-btn');
+    if (!btn) return;
 
-  //       // close if already zoomed
-  //       if (isZoomed) {
-  //         document.querySelector('.zoom-overlay')?.remove();
-  //         img.classList.remove('zoomed');
-  //         return;
-  //       }
+    btn.addEventListener('click', function (e) {
+      // If it’s a normal link, let GA fire before we leave the page
+      const href = this.getAttribute('href');
+      if (href) {
+        e.preventDefault();
+        let navigated = false;
+        const go = () => { if (!navigated) { navigated = true; window.location.href = href; } };
 
-  //       // otherwise open
-  //       const overlay = document.createElement('div');
-  //       overlay.className = 'zoom-overlay';
-  //       document.body.appendChild(overlay);
-  //       img.classList.add('zoomed');
+        // Send a custom GA4 event with useful params
+        window.gtag?.('event', 'button_click', {
+          button_id: this.id || null,
+          button_text: (this.textContent || '').trim(),
+          link_url: href,
+          page_path: location.pathname,
+          event_callback: go,    // navigate after GA fires
+          event_timeout: 2000    // fallback if blocked/slow
+        });
 
-  //       // clicking overlay or pressing Esc closes it
-  //       function close() {
-  //         img.classList.remove('zoomed');
-  //         overlay.remove();
-  //         window.removeEventListener('keydown', onKey);
-  //       }
-  //       function onKey(e) { if (e.key === 'Escape') close(); }
-
-  //       overlay.addEventListener('click', close);
-  //       window.addEventListener('keydown', onKey, { once: true });
-  //     });
-  //   });
-  // })();
+        // Extra safety in case gtag is blocked
+        setTimeout(go, 700);
+      } else {
+        // For <button> without navigation
+        window.gtag?.('event', 'button_click', {
+          button_id: this.id || null,
+          button_text: (this.textContent || '').trim(),
+          page_path: location.pathname
+        });
+      }
+    });
+  });
 </script>
 </body>
 </html>
