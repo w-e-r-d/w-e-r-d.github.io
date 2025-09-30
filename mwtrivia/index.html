@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Morgan Wallen Trivia</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/style.css?v=2" />
 </head>
 <body class="mwtrivia">
   <div class="wrap">
@@ -13,7 +13,7 @@
         <div class="logo" aria-hidden="true"></div>
         <div>
           <h1>Morgan Wallen Trivia</h1>
-          <div class="muted">MVP · just testing</div>
+          <div class="muted">MVP · mobile-first</div>
         </div>
       </div>
 
@@ -30,6 +30,15 @@
         </button>
       </div>
     </header>
+
+    <!-- Score bubble -->
+    <section class="scorebar">
+      <div class="score-bubble">
+        <div class="score-label">Rare Best</div>
+        <div class="score-value" id="scoreBubbleBest">0</div>
+        <div class="score-sub">Attempts <span id="attempts">0</span></div>
+      </div>
+    </section>
 
     <main class="grid">
       <section class="card">
@@ -53,21 +62,6 @@
           <button id="btnReveal" class="btn ghost">Reveal</button>
         </div>
       </section>
-
-      <aside class="card">
-        <h3>Status</h3>
-        <div class="tiny">Loaded rows: <span id="rowCount">0</span></div>
-        <div class="tiny">Scope songs: <span id="songCount">0</span></div>
-        <div class="tiny">State: <span id="status">Fetching CSV…</span></div>
-        <div id="errorBox" class="error hidden"></div>
-
-        <div class="sep"></div>
-        <h3>Scores</h3>
-        <div class="scorepanel">
-          <div class="chip">Rare Best: <span id="bestRare">0</span></div>
-          <div class="chip">Attempts: <span id="attempts">0</span></div>
-        </div>
-      </aside>
     </main>
 
     <footer class="footer tiny">
@@ -75,6 +69,6 @@
     </footer>
   </div>
 
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=2"></script>
 </body>
 </html>

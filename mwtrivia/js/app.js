@@ -1,9 +1,5 @@
 // ========== Config ==========
-const CSV_URL = './data/mw_words_rare.csv'; // put your exported CSV here
-
-// Minimal runtime error surfacing
-window.addEventListener('error', (e)=>{ showError(`JS error: ${e.error?.message || e.message}`); });
-window.addEventListener('unhandledrejection', (e)=>{ showError(`Promise error: ${e.reason?.message || e.reason}`); });
+const CSV_URL = './data/mw_words_rare.csv'; // place your exported CSV here
 
 // ========== State ==========
 let persistence = 'session'; // or 'local'
@@ -17,10 +13,8 @@ function q(id){ return document.getElementById(id); }
 function selectEls(){
   [
     'scopeSelect','wordSpan','countInSong','countGlobal','songSearch','results','guessFeedback',
-    'btnNewRare','btnReveal','bestRare','attempts','rowCount','songCount','status','btnTogglePersist','errorBox'
+    'btnNewRare','btnReveal','btnTogglePersist','scoreBubbleBest','attempts'
   ].forEach(k => els[k] = q(k));
-  els.tabs = document.querySelectorAll('.tab'); // none yet (future)
-  els.rarePanel = q('rarePanel'); // optional future
 }
 
 // ========== Storage ==========
@@ -30,26 +24,22 @@ function setScore(key, val){ storage().setItem('mwtrivia_'+key, JSON.stringify(v
 function updateScoreUI(){
   const rare = getScore('rare_best', 0) || 0;
   const attempts = getScore('attempts', 0) || 0;
-  els.bestRare.textContent = rare;
+  els.scoreBubbleBest.textContent = rare;
   els.attempts.textContent = attempts;
 }
 
 // ========== CSV ==========
 async function loadCSV(){
-  setStatus('Fetching CSV…');
-  hideError();
   const res = await fetch(CSV_URL, { cache: 'no-store' });
   if(!res.ok) throw new Error(`Fetch failed: ${res.status}`);
   const text = await res.text();
   dataRows = parseCSV(text);
   if (!dataRows.length) throw new Error('CSV had no rows.');
-  els.rowCount.textContent = String(dataRows.length);
   rebuildSongIndex();
-  setStatus('Ready');
   pickRareWord();
 }
 
-// Robust CSV parser supporting quotes + commas inside quotes
+// Robust CSV parser (quotes + commas)
 function parseCSV(text){
   const out = [];
   const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim().length > 0);
@@ -58,9 +48,7 @@ function parseCSV(text){
   const headers = splitCSVRow(lines[0]).map(h => h.trim());
   const required = ['song_title','album','release_type','is_album','is_feature','track_spotify_id','cover_url','word','count_in_song','count_global'];
   const missing = required.filter(h => !headers.includes(h));
-  if (missing.length){
-    throw new Error('Missing columns: ' + missing.join(', '));
-  }
+  if (missing.length){ throw new Error('Missing columns: ' + missing.join(', ')); }
 
   for (let i=1;i<lines.length;i++){
     const cols = splitCSVRow(lines[i]);
@@ -68,11 +56,9 @@ function parseCSV(text){
     const row = {};
     headers.forEach((h, idx) => {
       let v = cols[idx] ?? '';
-      // trim outer quotes and unescape doubled quotes
       v = v.replace(/^"(.*)"$/s, '$1').replace(/""/g, '"').trim();
       row[h] = v;
     });
-    // normalize types
     row.is_album = toBool(row.is_album);
     row.is_feature = toBool(row.is_feature);
     row.count_in_song = parseInt(row.count_in_song, 10) || 0;
@@ -92,8 +78,7 @@ function splitCSVRow(line){
       if (inQuotes && line[i+1] === '"'){ cur += '"'; i++; }
       else { inQuotes = !inQuotes; }
     } else if (ch === ',' && !inQuotes){
-      out.push(cur);
-      cur = '';
+      out.push(cur); cur = '';
     } else {
       cur += ch;
     }
@@ -101,7 +86,6 @@ function splitCSVRow(line){
   out.push(cur);
   return out;
 }
-
 function toBool(v){ const s = String(v).toLowerCase().trim(); return s === 'true' || s === '1'; }
 
 // ========== Core ==========
@@ -111,7 +95,6 @@ function rebuildSongIndex(){
   for (const r of dataRows){
     if (scope === 'albums' && !r.is_album) continue;
     const key = r.track_spotify_id || r.song_title;
-
     if (!map.has(key)){
       map.set(key, {
         key,
@@ -126,7 +109,6 @@ function rebuildSongIndex(){
     }
   }
   songs = Array.from(map.values()).sort((a,b)=> a.song_title.localeCompare(b.song_title));
-  els.songCount.textContent = String(songs.length);
 }
 
 function pickRareWord(){
@@ -157,10 +139,6 @@ function pickRareWord(){
 }
 
 // ========== UI helpers ==========
-function setStatus(msg){ els.status.textContent = msg; }
-function showError(msg){ els.errorBox.textContent = msg; els.errorBox.classList.remove('hidden'); }
-function hideError(){ els.errorBox.classList.add('hidden'); els.errorBox.textContent = ''; }
-
 function hideResults(){ els.results.classList.add('hidden'); els.results.innerHTML = ''; }
 function renderResults(list, intoEl, onPick){
   intoEl.innerHTML = '';
@@ -180,7 +158,6 @@ function renderResults(list, intoEl, onPick){
   });
   if (list.length) intoEl.classList.remove('hidden'); else intoEl.classList.add('hidden');
 }
-
 function filterSongs(query){
   const q = (query || '').trim().toLowerCase();
   if (!q) return [];
@@ -205,6 +182,7 @@ function wireRareMode(){
         if (pts > best) setScore('rare_best', pts);
         updateScoreUI();
       } else {
+        updateScoreUI();
         els.guessFeedback.textContent = 'Not that one. Try again!';
       }
     });
@@ -216,7 +194,6 @@ function wireRareMode(){
   document.addEventListener('click', (e)=>{
     if (!els.results.contains(e.target) && e.target !== els.songSearch) hideResults();
   });
-
   els.btnNewRare.addEventListener('click', pickRareWord);
   els.btnReveal.addEventListener('click', ()=>{
     if (!currentRare) return;
@@ -239,7 +216,6 @@ function init(){
   updateScoreUI();
   wireFiltersAndPersist();
   wireRareMode();
-  loadCSV().catch(err => { setStatus('Error'); showError(err.message || String(err)); });
+  loadCSV().catch(err => console.error(err));
 }
-
 window.addEventListener('DOMContentLoaded', init);
