@@ -4,104 +4,69 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Morgan Wallen Trivia</title>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="assets/style.css" />
-  <!-- PapaParse for robust CSV parsing -->
-  <script defer src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <!-- Spotify Web Playback SDK (optional) -->
-  <script defer src="https://sdk.scdn.co/spotify-player.js"></script>
-  <script defer src="js/app.js"></script>
 </head>
-<body>
+<body class="mwtrivia">
   <div class="wrap">
     <header class="topbar">
       <div class="brand">
-        <div class="logo"></div>
+        <div class="logo" aria-hidden="true"></div>
         <div>
-          <h1>Morgan Wallen Lyric Trivia</h1>
-          <div class="muted">testing for now</div>
+          <h1>Morgan Wallen Trivia</h1>
+          <div class="muted">MVP · just testing</div>
         </div>
       </div>
+
       <div class="controls">
-        <button id="btnConnectSpotify" class="btn">Connect Spotify</button>
-        <button id="btnTogglePersist" class="btn ghost" title="Toggle session vs. local storage">Use Local Storage</button>
+        <label class="pill">
+          Scope
+          <select id="scopeSelect" class="select">
+            <option value="albums">Albums only</option>
+            <option value="all">Everything</option>
+          </select>
+        </label>
+        <button id="btnTogglePersist" class="btn ghost" title="Toggle session vs. local storage">
+          Use Local Storage
+        </button>
       </div>
     </header>
 
     <main class="grid">
       <section class="card">
-        <h3>Mode</h3>
-        <div class="mode-tabs">
-          <button data-mode="rare" class="tab active">Least‑Used Word</button>
-          <button data-mode="audio" class="tab">Guess the Song (Audio)</button>
+        <h3>Least-Used Word</h3>
+        <div class="wordbox"><span id="wordSpan">—</span></div>
+        <div class="muted hint">
+          Appears <span id="countInSong">0</span>× in the song, <span id="countGlobal">0</span>× across all songs
         </div>
-        <div class="sep"></div>
 
-        <h3>Filters</h3>
+        <div class="spacer"></div>
+        <div class="muted">Guess the song:</div>
+        <div class="searchwrap">
+          <input id="songSearch" class="input search" placeholder="Type to search songs…" autocomplete="off" />
+          <div id="results" class="results hidden"></div>
+        </div>
+        <div id="guessFeedback" class="muted feedback"></div>
+
+        <div class="spacer"></div>
         <div class="row">
-          <label class="pill">Scope
-            <select id="scopeSelect" class="select">
-              <option value="albums">Albums only</option>
-              <option value="all">Everything</option>
-            </select>
-          </label>
-          <label class="pill">Random Start (audio)
-            <input id="chkRandomStart" type="checkbox" />
-          </label>
-        </div>
-        <div class="sep"></div>
-
-        <div id="rarePanel">
-          <h3>Rare Word</h3>
-          <div class="wordbox"><span id="wordSpan">—</span></div>
-          <div class="muted hint">Hint: appears <span id="countInSong">0</span>× in the song, <span id="countGlobal">0</span>× across all songs</div>
-          <div class="spacer"></div>
-
-          <div>
-            <div class="muted">Guess the song:</div>
-            <div class="searchwrap">
-              <input id="songSearch" class="input search" placeholder="Type to search songs…" autocomplete="off" />
-              <div id="results" class="results hidden"></div>
-            </div>
-            <div id="guessFeedback" class="muted feedback"></div>
-          </div>
-          <div class="spacer"></div>
-          <div class="row">
-            <button id="btnNewRare" class="btn">New Word</button>
-            <button id="btnReveal" class="btn ghost">Reveal</button>
-          </div>
-        </div>
-
-        <div id="audioPanel" class="hidden">
-          <h3>Audio Round</h3>
-          <div class="muted">Press Start to begin playback. Clicking the search box <b>stops</b> the song so you can lock a guess.</div>
-          <div class="row">
-            <button id="btnStartAudio" class="btn primary">Start</button>
-            <button id="btnPauseAudio" class="btn">Pause</button>
-            <button id="btnResumeAudio" class="btn">Resume</button>
-          </div>
-          <div class="searchwrap">
-            <input id="songSearchAudio" class="input search" placeholder="Click here to stop & guess…" autocomplete="off" />
-            <div id="resultsAudio" class="results hidden"></div>
-          </div>
-          <div id="audioFeedback" class="muted feedback"></div>
-          <div class="tiny">Requires Spotify Premium for in‑browser playback. If unavailable, this mode will be disabled.</div>
+          <button id="btnNewRare" class="btn">New Word</button>
+          <button id="btnReveal" class="btn ghost">Reveal</button>
         </div>
       </section>
 
       <aside class="card">
+        <h3>Status</h3>
+        <div class="tiny">Loaded rows: <span id="rowCount">0</span></div>
+        <div class="tiny">Scope songs: <span id="songCount">0</span></div>
+        <div class="tiny">State: <span id="status">Fetching CSV…</span></div>
+        <div id="errorBox" class="error hidden"></div>
+
+        <div class="sep"></div>
         <h3>Scores</h3>
         <div class="scorepanel">
           <div class="chip">Rare Best: <span id="bestRare">0</span></div>
-          <div class="chip">Audio Best (ms): <span id="bestAudio">—</span></div>
           <div class="chip">Attempts: <span id="attempts">0</span></div>
         </div>
-        <div class="sep"></div>
-        <h3>Dataset</h3>
-        <div class="tiny">Loaded rows: <span id="rowCount">0</span></div>
-        <div class="tiny">Scope songs: <span id="songCount">0</span></div>
-        <div class="tiny">Status: <span id="status">Loading CSV…</span></div>
-        <div id="errorBox" class="error hidden"></div>
       </aside>
     </main>
 
@@ -109,5 +74,7 @@
       <span>© For fun — not affiliated with or endorsed by Morgan Wallen.</span>
     </footer>
   </div>
+
+  <script src="js/app.js"></script>
 </body>
 </html>
