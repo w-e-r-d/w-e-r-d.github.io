@@ -1,5 +1,5 @@
 // ===== Config =====
-const CSV_URL = 'data/mw_words_rare.csv'; // place your CSV here
+const CSV_URL = './data/mw_words_rare.csv'; // place your CSV here
 const SPOTIFY_CLIENT_ID = 'b0969ab732d74d4b86f84ed01ac31199'; // optional: fill to enable Connect Spotify
 const SPOTIFY_SCOPES = [
   'streaming', 'user-read-email', 'user-read-private',
