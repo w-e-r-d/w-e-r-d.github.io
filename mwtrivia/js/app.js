@@ -1,23 +1,30 @@
-// ========== Config ==========
-const CSV_URL = './data/mw_words_rare.csv'; // place your exported CSV here
+// ===== Config =====
+const CSV_URL = './data/mw_words_rare.csv'; // your CSV path
 
-// ========== State ==========
-let persistence = 'session'; // or 'local'
-let dataRows = [];
-let songs = [];
-let currentRare = null;
+// ===== State =====
+let persistence = 'session';            // or 'local'
+let dataRows = [];                      // raw rows from CSV
+let songs = [];                         // unique song index for search box
+let currentRare = null;                 // current picked row
+let currentMode = null;                 // 'super-rare' | 'rare' | 'audio'
+let docFreq = new Map();                // word -> number of unique songs containing it
 
-// ========== DOM ==========
+// ===== DOM =====
 const els = {};
 function q(id){ return document.getElementById(id); }
 function selectEls(){
   [
-    'scopeSelect','wordSpan','countInSong','countGlobal','songSearch','results','guessFeedback',
-    'btnNewRare','btnReveal','btnTogglePersist','scoreBubbleBest','attempts'
+    'scopeSelect','btnTogglePersist',
+    'modeGate','gameUI','scoreBar',
+    'modeLabel','scoreBubbleBest','attempts',
+    'gameTitle','wordSpan','countInSong','countGlobal',
+    'songSearch','results','guessFeedback',
+    'btnNewRare','btnReveal'
   ].forEach(k => els[k] = q(k));
+  els.modeCards = Array.from(document.querySelectorAll('.modecard'));
 }
 
-// ========== Storage ==========
+// ===== Storage =====
 function storage(){ return persistence === 'local' ? localStorage : sessionStorage; }
 function getScore(key, def=null){ try{ return JSON.parse(storage().getItem('mwtrivia_'+key)) ?? def; }catch{ return def; } }
 function setScore(key, val){ storage().setItem('mwtrivia_'+key, JSON.stringify(val)); }
@@ -28,7 +35,7 @@ function updateScoreUI(){
   els.attempts.textContent = attempts;
 }
 
-// ========== CSV ==========
+// ===== CSV parsing =====
 async function loadCSV(){
   const res = await fetch(CSV_URL, { cache: 'no-store' });
   if(!res.ok) throw new Error(`Fetch failed: ${res.status}`);
@@ -36,10 +43,9 @@ async function loadCSV(){
   dataRows = parseCSV(text);
   if (!dataRows.length) throw new Error('CSV had no rows.');
   rebuildSongIndex();
-  pickRareWord();
+  buildDocFrequency();                 // compute songs-with-word counts
 }
 
-// Robust CSV parser (quotes + commas)
 function parseCSV(text){
   const out = [];
   const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim().length > 0);
@@ -67,28 +73,22 @@ function parseCSV(text){
   }
   return out;
 }
-
 function splitCSVRow(line){
-  const out = [];
-  let cur = '';
-  let inQuotes = false;
+  const out = []; let cur = ''; let inQuotes = false;
   for (let i=0; i<line.length; i++){
     const ch = line[i];
     if (ch === '"'){
       if (inQuotes && line[i+1] === '"'){ cur += '"'; i++; }
       else { inQuotes = !inQuotes; }
-    } else if (ch === ',' && !inQuotes){
-      out.push(cur); cur = '';
-    } else {
-      cur += ch;
-    }
+    } else if (ch === ',' && !inQuotes){ out.push(cur); cur = ''; }
+    else { cur += ch; }
   }
   out.push(cur);
   return out;
 }
 function toBool(v){ const s = String(v).toLowerCase().trim(); return s === 'true' || s === '1'; }
 
-// ========== Core ==========
+// ===== Indexing / frequency =====
 function rebuildSongIndex(){
   const scope = els.scopeSelect.value; // 'albums' | 'all'
   const map = new Map();
@@ -111,18 +111,74 @@ function rebuildSongIndex(){
   songs = Array.from(map.values()).sort((a,b)=> a.song_title.localeCompare(b.song_title));
 }
 
-function pickRareWord(){
-  const scope = els.scopeSelect.value;
-  const pool = dataRows.filter(r => (scope === 'all' || r.is_album) && r.word && r.count_in_song > 0);
+function buildDocFrequency(){
+  // word -> set of unique track ids containing it
+  const sets = new Map();
+  for (const r of dataRows){
+    const w = (r.word || '').toLowerCase();
+    const id = r.track_spotify_id || r.song_title;
+    if (!w || !id) continue;
+    if (!sets.has(w)) sets.set(w, new Set());
+    sets.get(w).add(id);
+  }
+  docFreq = new Map();
+  sets.forEach((s, w) => docFreq.set(w, s.size));
+}
+
+// ===== Mode logic =====
+function setMode(mode){
+  currentMode = mode; // 'super-rare' | 'rare' | 'audio'
+
+  // UI show/hide
+  els.modeGate.classList.add('hidden');
+  els.gameUI.classList.remove('hidden');
+  els.scoreBar.classList.remove('hidden');
+
+  if (mode === 'super-rare'){
+    els.modeLabel.textContent = 'Super Rare Words';
+    els.gameTitle.textContent = 'Super Rare Words';
+    pickWordForCurrentMode();
+  } else if (mode === 'rare'){
+    els.modeLabel.textContent = 'Rare Words';
+    els.gameTitle.textContent = 'Rare Words';
+    pickWordForCurrentMode();
+  } else if (mode === 'audio'){
+    els.modeLabel.textContent = 'Guess the Song (Audio)';
+    els.gameTitle.textContent = 'Guess the Song (Audio)';
+    // For now, show a friendly placeholder (Spotify hookup to be added later)
+    els.wordSpan.textContent = 'Coming soon';
+    els.countInSong.textContent = '0';
+    els.countGlobal.textContent = '0';
+    els.guessFeedback.textContent = 'Audio mode will use your Spotify account to play a random track.';
+  }
+}
+
+function poolFilterByMode(r){
+  const scopeOK = (els.scopeSelect.value === 'all' || r.is_album);
+  if (!scopeOK) return false;
+
+  if (currentMode === 'super-rare'){
+    // word appears in exactly one unique song across the dataset
+    return (docFreq.get((r.word||'').toLowerCase()) === 1);
+  }
+  if (currentMode === 'rare'){
+    // word appears fewer than 10 times globally across all songs
+    return r.count_global < 10;
+  }
+  return false;
+}
+
+function pickWordForCurrentMode(){
+  const pool = dataRows.filter(r => poolFilterByMode(r) && r.word && r.count_in_song > 0);
   if (!pool.length){
     currentRare = null;
     els.wordSpan.textContent = '—';
     els.countInSong.textContent = '0';
     els.countGlobal.textContent = '0';
-    els.guessFeedback.textContent = 'No rows match this scope.';
+    els.guessFeedback.textContent = 'No rows match this mode/scope.';
     return;
   }
-  // Weight by rarity (inverse global count)
+  // Weight by rarity (inverse global count) but clamp to avoid extremes
   const weights = pool.map(r => 1 / Math.max(1, r.count_global));
   const total = weights.reduce((a,b)=>a+b,0);
   let pick = Math.random() * total;
@@ -138,7 +194,7 @@ function pickRareWord(){
   hideResults();
 }
 
-// ========== UI helpers ==========
+// ===== UI helpers =====
 function hideResults(){ els.results.classList.add('hidden'); els.results.innerHTML = ''; }
 function renderResults(list, intoEl, onPick){
   intoEl.innerHTML = '';
@@ -164,8 +220,23 @@ function filterSongs(query){
   return songs.filter(s => (s.song_title + ' ' + (s.album||'')).toLowerCase().includes(q)).slice(0, 20);
 }
 
-// ========== Wiring ==========
-function wireRareMode(){
+// ===== Wiring =====
+function wireModeGate(){
+  els.modeCards.forEach(card => {
+    const btn = card.querySelector('.btn');
+    const mode = card.getAttribute('data-mode');
+    btn.addEventListener('click', ()=>{
+      if (mode === 'audio'){
+        // Show the UI but as "coming soon" (no dead button)
+        setMode('audio');
+      } else {
+        setMode(mode);
+      }
+    });
+  });
+}
+
+function wireGame(){
   els.songSearch.addEventListener('input', (e)=>{
     if (!currentRare) return;
     const list = filterSongs(e.target.value);
@@ -194,7 +265,7 @@ function wireRareMode(){
   document.addEventListener('click', (e)=>{
     if (!els.results.contains(e.target) && e.target !== els.songSearch) hideResults();
   });
-  els.btnNewRare.addEventListener('click', pickRareWord);
+  els.btnNewRare.addEventListener('click', pickWordForCurrentMode);
   els.btnReveal.addEventListener('click', ()=>{
     if (!currentRare) return;
     els.guessFeedback.innerHTML = `It was <b>${currentRare.song_title}</b>`;
@@ -202,7 +273,10 @@ function wireRareMode(){
 }
 
 function wireFiltersAndPersist(){
-  els.scopeSelect.addEventListener('change', ()=>{ rebuildSongIndex(); if (currentRare) pickRareWord(); });
+  els.scopeSelect.addEventListener('change', ()=>{
+    rebuildSongIndex();
+    if (currentMode === 'super-rare' || currentMode === 'rare') pickWordForCurrentMode();
+  });
   els.btnTogglePersist.addEventListener('click', ()=>{
     persistence = persistence === 'local' ? 'session' : 'local';
     els.btnTogglePersist.textContent = persistence === 'local' ? 'Using Local Storage' : 'Use Local Storage';
@@ -210,12 +284,13 @@ function wireFiltersAndPersist(){
   });
 }
 
-// ========== Init ==========
+// ===== Init =====
 function init(){
   selectEls();
-  updateScoreUI();
+  wireModeGate();
   wireFiltersAndPersist();
-  wireRareMode();
+  wireGame();
+  updateScoreUI();
   loadCSV().catch(err => console.error(err));
 }
 window.addEventListener('DOMContentLoaded', init);

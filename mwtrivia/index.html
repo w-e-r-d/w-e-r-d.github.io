@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Morgan Wallen Trivia</title>
-  <link rel="stylesheet" href="assets/style.css?v=2" />
+  <link rel="stylesheet" href="./assets/style.css?v=3" />
 </head>
 <body class="mwtrivia">
   <div class="wrap">
@@ -13,7 +13,7 @@
         <div class="logo" aria-hidden="true"></div>
         <div>
           <h1>Morgan Wallen Trivia</h1>
-          <div class="muted">MVP · mobile-first</div>
+          <div class="muted">Pick a mode to start</div>
         </div>
       </div>
 
@@ -31,18 +31,43 @@
       </div>
     </header>
 
+    <!-- Mode gate (shown first on load) -->
+    <section id="modeGate" class="modes">
+      <div class="modecard" data-mode="super-rare">
+        <div class="mode-tag">Mode 1</div>
+        <h3>Super Rare Words</h3>
+        <p>Words that appear in <b>only one song</b> across the catalog.</p>
+        <button class="btn primary">Play</button>
+      </div>
+
+      <div class="modecard" data-mode="rare">
+        <div class="mode-tag">Mode 2</div>
+        <h3>Rare Words</h3>
+        <p>Words that appear <b>fewer than 10 times</b> globally.</p>
+        <button class="btn primary">Play</button>
+      </div>
+
+      <div class="modecard" data-mode="audio">
+        <div class="mode-tag">Mode 3</div>
+        <h3>Guess the Song</h3>
+        <p>Hear a random track and guess it as fast as you can.</p>
+        <button class="btn">Coming Soon</button>
+      </div>
+    </section>
+
     <!-- Score bubble -->
-    <section class="scorebar">
+    <section class="scorebar hidden" id="scoreBar">
       <div class="score-bubble">
-        <div class="score-label">Rare Best</div>
+        <div class="score-label" id="modeLabel">Mode</div>
         <div class="score-value" id="scoreBubbleBest">0</div>
         <div class="score-sub">Attempts <span id="attempts">0</span></div>
       </div>
     </section>
 
-    <main class="grid">
+    <!-- Game UI (hidden until a mode is chosen) -->
+    <main id="gameUI" class="grid hidden">
       <section class="card">
-        <h3>Least-Used Word</h3>
+        <h3 id="gameTitle">Least-Used Word</h3>
         <div class="wordbox"><span id="wordSpan">—</span></div>
         <div class="muted hint">
           Appears <span id="countInSong">0</span>× in the song, <span id="countGlobal">0</span>× across all songs
@@ -69,6 +94,6 @@
     </footer>
   </div>
 
-  <script src="js/app.js?v=2"></script>
+  <script src="./js/app.js?v=3"></script>
 </body>
 </html>
