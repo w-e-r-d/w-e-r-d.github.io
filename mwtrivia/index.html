@@ -26,17 +26,13 @@
           </select>
         </label>
 
-        <!-- Attempts Left badge (JS updates #attemptsLeft) -->
-        <div id="attemptsBadge" class="pill badge hidden" title="Attempts Remaining" aria-live="polite">
-          <span class="muted tiny">Attempts Left:</span>
-          <strong id="attemptsLeft">3</strong>
-        </div>
+        <!-- Attempts badge that your JS updates via updateAttemptsBadge() -->
+        <div id="attemptsBadge" class="pill badge hidden" aria-live="polite">Attempts left: 3</div>
 
-        <!--
+        <!-- DO NOT COMMENT THIS OUT: your JS attaches a listener to it -->
         <button id="btnTogglePersist" class="btn ghost" title="Toggle session vs. local storage">
           Use Local Storage
         </button>
-        -->
       </div>
     </header>
 
@@ -60,8 +56,7 @@
         <div class="mode-tag">Mode 3</div>
         <h3>Guess the Song</h3>
         <p>Hear a random track and guess it fast.</p>
-        <!-- Change to Play; JS will reveal #guessUI and init playback -->
-        <button class="btn primary" id="btnGuessModePlay">Play</button>
+        <button class="btn primary">Play</button>
       </div>
     </section>
 
@@ -74,8 +69,9 @@
       </div>
     </section>
 
-    <!-- Game UI (existing text-based modes) -->
+    <!-- Main game container -->
     <main id="gameUI" class="grid hidden">
+      <!-- ===== Text-based modes card (existing) ===== -->
       <section class="card" id="gameCard">
         <div class="roundhead">
           <div id="roundLabel" class="roundtag">Round 1 of 3</div>
@@ -104,39 +100,37 @@
 
         <div id="guessFeedback" class="muted feedback"></div>
       </section>
-    </main>
 
-    <!-- Guess the Song UI (hidden until Mode 3 Play is pressed) -->
-    <section id="guessUI" class="grid hidden" aria-labelledby="guessUITitle">
-      <section class="card">
-        <h3 id="guessUITitle">Guess the Song</h3>
+      <!-- ===== Audio mode card (hidden until Mode 3 Play) ===== -->
+      <section class="card hidden" id="audioUI" aria-labelledby="audioTitle">
+        <h3 id="audioTitle">Guess the Song</h3>
 
         <div class="row">
-          <button id="guessStart" class="btn primary">Start</button>
-          <button id="guessStop" class="btn" disabled>Stop</button>
-          <div id="guessTime" class="muted" aria-live="polite">Time: <span id="guessTimeVal">0.00</span>s</div>
+          <button id="btnSpotifyConnect" class="btn ghost" type="button">Connect Spotify</button>
+          <button id="btnAudioStart" class="btn primary" type="button">Start</button>
+          <div id="audioTimer" class="muted" aria-live="polite">0:00.0</div>
         </div>
 
-        <!-- If you use SDK, init via JS; if you embed, inject an iframe here -->
+        <div id="audioStatus" class="muted tiny"></div>
+
+        <!-- JS may use SDK player (no iframe needed) or inject an iframe here if you change approach -->
         <div id="spotifyPlayerContainer" class="player-slot" aria-hidden="true"></div>
 
         <div class="spacer"></div>
         <div class="muted">Search &amp; submit your guess:</div>
         <div class="searchwrap">
-          <!-- On focus, JS should stop/pause and lock in time -->
-          <input id="guessSearch" class="input search" placeholder="Type the song name…" autocomplete="off" />
-          <div id="guessResults" class="results hidden"></div>
+          <input id="audioSongSearch" class="input search" placeholder="Type the song name…" autocomplete="off" />
+          <div id="audioResults" class="results hidden"></div>
         </div>
 
         <div class="row">
-          <button id="guessSubmit" class="btn primary" disabled>Submit Guess</button>
-          <button id="guessReveal" class="btn ghost">Reveal</button>
-          <button id="guessNext" class="btn" disabled>Next</button>
+          <button id="btnAudioSubmit" class="btn primary" type="button" disabled>Submit Guess</button>
+          <div id="audioAttemptsBadge" class="pill badge">Attempts left: 3</div>
         </div>
 
-        <div id="guessAudioFeedback" class="muted feedback"></div>
+        <div id="audioFeedback" class="muted feedback"></div>
       </section>
-    </section>
+    </main>
 
     <!-- Round summary overlay -->
     <section id="roundSummary" class="overlay hidden">
@@ -172,6 +166,10 @@
   <!-- Confetti overlay -->
   <div id="confettiLayer" class="confetti hidden" aria-hidden="true"></div>
 
+  <!-- Spotify Web Playback SDK: your JS waits for window.Spotify -->
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+
+  <!-- Your app logic -->
   <script src="./js/app.js?v=5"></script>
 </body>
 </html>
