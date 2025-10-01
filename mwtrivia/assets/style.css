@@ -53,12 +53,12 @@
 .mwtrivia .modecard .btn { justify-self: start; margin-top: 6px; }
 
 /* score */
-.mwtrivia .scorebar { margin: 8px 0 14px; }
+.mwtrivia .scorebar { display: grid;  place-items: center; padding: 3px; margin: 3px 0 3px; justify-content: center; }
 .mwtrivia .score-bubble {
   background: linear-gradient(135deg, #22c55e, #0ea5e9 65%);
   color: #ffffff; border-radius: 20px; padding: 14px 16px;
   display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
-  box-shadow: 0 10px 26px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 10px 26px rgba(14, 165, 233, 0.25); width: 200%; max-width: 720px; 
 }
 .mwtrivia .score-label { font-weight: 700; opacity: 0.95; }
 .mwtrivia .score-value { font-size: 28px; font-weight: 900; letter-spacing: .3px; }
@@ -127,13 +127,18 @@
 .mwtrivia .audiohead { display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px; }
 .mwtrivia .timer { font-weight:800; font-size: 22px; letter-spacing:.3px; padding: 6px 10px; border:1px solid var(--border); border-radius: 12px; background:#f8fafc; }
 
-/*
 #btnSpotifyConnect.success {
   background: #16a34a;
   color: #fff;
   border-color: #15803d;
 }
-*/
+
+#gameUI {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+#gameUI .card { width: 100%; max-width: 480px; }
 
 @keyframes confetti-fall { to { transform: translateY(110vh) var(--twist, rotate(0deg)); opacity: 0.9; } }
 @keyframes confetti-spin { to { filter: hue-rotate(180deg); } }
