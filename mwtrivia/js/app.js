@@ -217,8 +217,8 @@ function startNewGame(mode){
 }
 
 function showWord(){
-  els.roundLabel.textContent = `Round ${game.roundIndex+1} of ${ROUNDS_PER_GAME}`;
-  els.wordLabel.textContent = `Word ${game.wordIndex+1} / ${WORDS_PER_ROUND}`;
+  setRoundLabel(`Round ${game.roundIndex+1} of ${ROUNDS_PER_GAME}`);
+  setWordLabel(`Word ${game.wordIndex+1} / ${WORDS_PER_ROUND}`);
   els.guessFeedback.textContent = '';
   els.songSearch.value = '';
   els.songSearch.classList.remove('error');
@@ -653,8 +653,8 @@ function sampleAudioSongs(excludeSet){
 function shuffle(a){ for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
 
 function updateAudioRoundHeader(){
-  els.roundLabel.textContent = `Round ${game.roundIndex+1} of ${ROUNDS_PER_GAME}`;
-  els.wordLabel.textContent = `Song ${game.wordIndex+1} / ${WORDS_PER_ROUND}`;
+  setRoundLabel(`Round ${game.roundIndex+1} of ${ROUNDS_PER_GAME}`);
+  setWordLabel(`Song ${game.wordIndex+1} / ${WORDS_PER_ROUND}`);
 }
 
 function resetAudioUIForNextSong(initial=false){
@@ -782,6 +782,13 @@ function setStartButtonState(state){
   if (state === 'pause') els.btnAudioStart.textContent = 'Pause';
   else if (state === 'play') els.btnAudioStart.textContent = 'Play';
   else els.btnAudioStart.textContent = 'Start';
+}
+
+function setRoundLabel(text) {
+  document.querySelectorAll('#roundLabel').forEach(el => { el.textContent = text; });
+}
+function setWordLabel(text) {
+  document.querySelectorAll('#wordLabel').forEach(el => { el.textContent = text; });
 }
 
 function submitAudioGuess(){
