@@ -26,10 +26,10 @@
           </select>
         </label>
 
-        <!-- Attempts badge that your JS updates via updateAttemptsBadge() -->
+        <!-- Attempts badge used by word modes -->
         <div id="attemptsBadge" class="pill badge hidden" aria-live="polite">Attempts left: 3</div>
 
-        <!-- DO NOT COMMENT THIS OUT: your JS attaches a listener to it -->
+        <!-- Keep this present so JS wiring doesn't throw -->
         <button id="btnTogglePersist" class="btn ghost" title="Toggle session vs. local storage">
           Use Local Storage
         </button>
@@ -71,7 +71,7 @@
 
     <!-- Main game container -->
     <main id="gameUI" class="grid hidden">
-      <!-- ===== Text-based modes card (existing) ===== -->
+      <!-- ===== Word modes card (existing) ===== -->
       <section class="card" id="gameCard">
         <div class="roundhead">
           <div id="roundLabel" class="roundtag">Round 1 of 3</div>
@@ -101,19 +101,26 @@
         <div id="guessFeedback" class="muted feedback"></div>
       </section>
 
-      <!-- ===== Audio mode card (hidden until Mode 3 Play) ===== -->
+      <!-- ===== Guess the Song card (hidden until Mode 3 Play) ===== -->
       <section class="card hidden" id="audioUI" aria-labelledby="audioTitle">
         <h3 id="audioTitle">Guess the Song</h3>
+
+        <!-- Round / item header mirrors word modes -->
+        <div class="roundhead">
+          <div id="roundLabel" class="roundtag">Round 1 of 3</div>
+          <div id="wordLabel" class="muted tiny">Song 1 / 5</div>
+        </div>
 
         <div class="row">
           <button id="btnSpotifyConnect" class="btn ghost" type="button">Connect Spotify</button>
           <button id="btnAudioStart" class="btn primary" type="button">Start</button>
+          <button id="btnAudioNext" class="btn" type="button" disabled>Next</button>
           <div id="audioTimer" class="muted" aria-live="polite">0:00.0</div>
         </div>
 
         <div id="audioStatus" class="muted tiny"></div>
 
-        <!-- JS may use SDK player (no iframe needed) or inject an iframe here if you change approach -->
+        <!-- SDK player is used; this container is here if you ever want to inject an iframe -->
         <div id="spotifyPlayerContainer" class="player-slot" aria-hidden="true"></div>
 
         <div class="spacer"></div>
@@ -166,7 +173,7 @@
   <!-- Confetti overlay -->
   <div id="confettiLayer" class="confetti hidden" aria-hidden="true"></div>
 
-  <!-- Spotify Web Playback SDK: your JS waits for window.Spotify -->
+  <!-- Spotify Web Playback SDK -->
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
 
   <!-- Your app logic -->
