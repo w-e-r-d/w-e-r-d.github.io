@@ -111,7 +111,7 @@ function rebuildSongIndex(){
   const scope = els.scopeSelect.value; // 'albums' | 'all'
   const map = new Map();
   for (const r of dataRows){
-    if (scope === 'albums' && !r.is_album) continue;
+    if (scope === 'albums' && !r.is_album) continue; // In 'all', include singles & features too
     const key = r.track_spotify_id || r.song_title;
     if (!map.has(key)){
       map.set(key, {
@@ -323,10 +323,10 @@ function showRoundSummary(){
     const div = document.createElement('div');
     // Handle both word-mode and audio-mode items
     if (it.word){
-      div.innerHTML = `• <b>${sanitizeText(it.word)}</b> ? ${sanitizeText(it.song_title)} <span class="muted">(+${it.points})</span>`;
+      div.innerHTML = `• <b>${sanitizeText(it.word)}</b> ? ${sanitizeText(it.song_title)} <span class=\"muted\">(+${it.points})</span>`;
     } else {
       const t = it.time_ms != null ? ` @ ${formatMs(it.time_ms)}` : '';
-      div.innerHTML = `• ${sanitizeText(it.song_title)} <span class="muted">(+${it.points}${t})</span>`;
+      div.innerHTML = `• ${sanitizeText(it.song_title)} <span class=\"muted\">(+${it.points}${t})</span>`;
     }
     els.roundBreakdown.appendChild(div);
   });
@@ -340,7 +340,6 @@ function closeRoundSummaryAndAdvance(){
     game.wordIndex = 0;
     if (game.mode === 'audio') {
       // prep audio next round
-      prepareAudioRoundIfNeeded();
       updateAudioRoundHeader();
       resetAudioUIForNextSong();
     } else {
@@ -440,7 +439,7 @@ function renderResults(list, intoEl, onPick){
     span.className = 'songtitle';
     const t = sanitizeText(s.song_title);
     const a = sanitizeText(s.album || '');
-    span.innerHTML = `<b>${t}</b> <span class="muted"> - ${a}</span>`;
+    span.innerHTML = `<b>${t}</b> <span class=\"muted\"> - ${a}</span>`;
     div.appendChild(img); div.appendChild(span);
     div.addEventListener('click', ()=> onPick(s));
     intoEl.appendChild(div);
@@ -614,7 +613,7 @@ function startAudioMode(){
     total: 0,
   };
 
-  // Pre-sample all rounds of songs
+  // Pre-sample all rounds of songs based on current scope (songs[] already respects scope)
   for (let r = 0; r < ROUNDS_PER_GAME; r++){
     const picks = sampleAudioSongs(game.usedKeys);
     picks.forEach(p => game.usedKeys.add(p.track_spotify_id || p.song_title));
@@ -629,7 +628,8 @@ function startAudioMode(){
 }
 
 function sampleAudioSongs(excludeSet){
-  const pool = songs.filter(s => (els.scopeSelect.value === 'all' || s.is_album) && !excludeSet.has(s.track_spotify_id || s.song_title));
+  // Use the current songs[] list (already filtered by scope). Do NOT re-filter albums here.
+  const pool = songs.filter(s => !excludeSet.has(s.track_spotify_id || s.song_title));
   if (pool.length <= WORDS_PER_ROUND) return shuffle(pool.slice());
   const picks = [];
   const used = new Set();
@@ -659,6 +659,7 @@ function resetAudioUIForNextSong(initial=false){
   updateAudioTimerDisplay(0);
   audioState.attempts = 0;
   audioState.selected = null;
+  setStartButtonState('start');
 }
 
 // Score: 1000 at <=1s, then linear down to 0 at 60s
@@ -675,11 +676,11 @@ async function startPlaybackAndPoll(song){
   try {
     await ensureSpotifyToken();
     await setupSpotifyPlayer();
+    updateSpotifyConnectUI(true);
   } catch (e){
     els.audioStatus.textContent = 'Spotify connection failed. Premium required.';
     return false;
   }
-
 
   try {
     await transferAndPlay(song.track_spotify_id);
@@ -694,6 +695,7 @@ async function startPlaybackAndPoll(song){
 
   // Begin polling SDK position
   startPositionPolling();
+  setStartButtonState('pause');
   return true;
 }
 
@@ -722,7 +724,6 @@ async function waitUntilPlaying(expectedTrackId, timeoutMs){
   while (Date.now() - start < timeoutMs){
     const st = await spotifyPlayer.getCurrentState();
     if (st && !st.paused && st.position != null){
-      // optional: verify track uri ends with expectedTrackId
       return true;
     }
     await new Promise(r=>setTimeout(r, 150));
@@ -741,17 +742,18 @@ function pauseAudioForGuess(){
   if (!spotifyToken || !spotifyDeviceId) return;
   fetch('https://api.spotify.com/v1/me/player/pause', { method:'PUT', headers:{ 'Authorization':'Bearer '+spotifyToken } });
   els.audioStatus.textContent = 'Paused';
-  // polling still shows frozen position, which is what we want for scoring
+  setStartButtonState('play');
 }
 
 function resumeAudio(){
-  if (!spotifyToken || !spotifyDeviceId || !audioState.song) return;
+  if (!spotifyToken || !spotifyDeviceId) return;
+  // Resume current playback without resetting to 0 — no URIs or position sent.
   fetch(`https://api.spotify.com/v1/me/player/play?device_id=${encodeURIComponent(spotifyDeviceId)}`, {
     method:'PUT',
-    headers:{ 'Authorization':'Bearer '+spotifyToken, 'Content-Type':'application/json' },
-    body: JSON.stringify({ uris:[`spotify:track:${audioState.song.track_spotify_id}`] })
+    headers:{ 'Authorization':'Bearer '+spotifyToken }
   });
   els.audioStatus.textContent = 'Playing...';
+  setStartButtonState('pause');
 }
 
 function stopAudio(){
@@ -764,6 +766,13 @@ function stopAudio(){
 function getFrozenMsForScoring(){
   // read once from SDK (position is frozen because we pause on input)
   return getCurrentPlaybackPositionMs();
+}
+
+function setStartButtonState(state){
+  if (!els.btnAudioStart) return;
+  if (state === 'pause') els.btnAudioStart.textContent = 'Pause';
+  else if (state === 'play') els.btnAudioStart.textContent = 'Play';
+  else els.btnAudioStart.textContent = 'Start';
 }
 
 function submitAudioGuess(){
@@ -779,6 +788,7 @@ function submitAudioGuess(){
       stopAudio();
       els.audioFeedback.textContent = 'Correct - ' + sanitizeText(audioState.song.song_title) + ' at ' + formatMs(ms) + ` (+${pts})`;
       launchConfetti();
+      setStartButtonState('play');
     } else {
       audioState.attempts += 1;
       const left = Math.max(0, ATTEMPTS_MAX - audioState.attempts);
@@ -787,6 +797,7 @@ function submitAudioGuess(){
         audioState.done = true;
         stopAudio();
         els.audioFeedback.textContent = 'Out of attempts. It was ' + sanitizeText(audioState.song.song_title);
+        setStartButtonState('play');
       } else {
         els.audioFeedback.textContent = 'Wrong - resuming...';
         resumeAudio();
@@ -807,26 +818,32 @@ function submitAudioGuess(){
   })();
 }
 
-async function startAudioGame(){
-  // If no current song for this index, set it
+async function handleAudioStart(){
   const r = game.roundIndex;
   const idx = game.wordIndex;
-  audioState.done = false;
-  audioState.attempts = 0;
-  els.audioAttemptsBadge.textContent = 'Attempts left: ' + ATTEMPTS_MAX;
-  els.audioFeedback.textContent = '';
-  els.btnAudioSubmit.disabled = true;
-
   const picks = game.rounds[r].picks;
   if (!picks || !picks.length){ els.audioFeedback.textContent = 'No songs available for this scope.'; return; }
   const song = picks[idx];
-  audioState.song = song;
 
-  // Start or resume current track
-  const ok = await startPlaybackAndPoll(song);
-  if (ok){
-    // Enable submit when user types/selects; timer displays from SDK
-    els.audioStatus.textContent = 'Playing...';
+  // If no song started yet for this index, start it
+  if (!audioState.song || (audioState.song.track_spotify_id !== song.track_spotify_id)){
+    audioState.song = song;
+    audioState.done = false;
+    audioState.attempts = 0;
+    els.audioAttemptsBadge.textContent = 'Attempts left: ' + ATTEMPTS_MAX;
+    els.audioFeedback.textContent = '';
+    els.btnAudioSubmit.disabled = true;
+    const ok = await startPlaybackAndPoll(song);
+    if (!ok) return;
+    return;
+  }
+
+  // Otherwise toggle play/pause based on current player state
+  const st = await (spotifyPlayer ? spotifyPlayer.getCurrentState() : null);
+  if (st && !st.paused){
+    pauseAudioForGuess();
+  } else {
+    resumeAudio();
   }
 }
 
@@ -836,7 +853,7 @@ function nextAudio(){
     game.wordIndex += 1;
     updateAudioRoundHeader();
     resetAudioUIForNextSong();
-    // Ready to press Start to begin next song
+    audioState.song = null; // force new song start on next press
   } else {
     // Round finished
     stopAudio();
@@ -848,8 +865,8 @@ function nextAudio(){
 function wireAudio(){
   // Connect / auth
   els.btnSpotifyConnect.addEventListener('click', beginSpotifyLogin);
-  // Start/resume
-  els.btnAudioStart.addEventListener('click', startAudioGame);
+  // Start/Play-Pause toggle
+  els.btnAudioStart.addEventListener('click', handleAudioStart);
   // Next song
   if (els.btnAudioNext){ els.btnAudioNext.addEventListener('click', ()=>{ if (!els.btnAudioNext.disabled){ els.btnAudioNext.disabled = true; nextAudio(); } }); }
 
@@ -885,17 +902,32 @@ function wireAudio(){
 }
 
 // ===== Spotify Auth / SDK =====
+function updateSpotifyConnectUI(connected){
+  if (!els.btnSpotifyConnect) return;
+  if (connected){
+    els.btnSpotifyConnect.textContent = 'Spotify Connected';
+    els.btnSpotifyConnect.classList.add('success');
+    els.btnSpotifyConnect.disabled = true;
+  } else {
+    els.btnSpotifyConnect.textContent = 'Connect Spotify';
+    els.btnSpotifyConnect.classList.remove('success');
+    els.btnSpotifyConnect.disabled = false;
+  }
+}
+
 async function ensureSpotifyToken(){
   const st = sessionStorage.getItem('mw_spotify_token');
-  if (st){ spotifyToken = st; return; }
+  if (st){ spotifyToken = st; updateSpotifyConnectUI(true); return; }
   const params = new URLSearchParams(location.search);
   const code = params.get('code');
   if (code && sessionStorage.getItem('spotify_code_verifier')){
     await exchangeSpotifyCode(code);
     params.delete('code'); params.delete('state');
     history.replaceState({}, '', `${location.pathname}${params.toString() ? ('?'+params.toString()) : ''}`);
+    updateSpotifyConnectUI(true);
     return;
   }
+  updateSpotifyConnectUI(false);
   throw new Error('No token');
 }
 
@@ -961,9 +993,9 @@ async function setupSpotifyPlayer(){
       getOAuthToken: cb => { cb(spotifyToken); },
       volume: 0.8
     });
-    spotifyPlayer.addListener('ready', ({ device_id }) => { spotifyDeviceId = device_id; });
+    spotifyPlayer.addListener('ready', ({ device_id }) => { spotifyDeviceId = device_id; updateSpotifyConnectUI(true); });
     spotifyPlayer.addListener('initialization_error', ({message}) => { console.error(message); });
-    spotifyPlayer.addListener('authentication_error', ({message}) => { console.error(message); });
+    spotifyPlayer.addListener('authentication_error', ({message}) => { console.error(message); updateSpotifyConnectUI(false); });
     spotifyPlayer.addListener('account_error', ({message}) => { console.error(message); });
     await spotifyPlayer.connect();
   }
