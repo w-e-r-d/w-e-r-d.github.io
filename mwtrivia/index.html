@@ -22,7 +22,7 @@
           Scope
           <select id="scopeSelect" class="select">
             <option value="albums">Albums only</option>
-            <option value="all">Everything</option>
+            <option value="all" selected>Everything</option>
           </select>
         </label>
 
@@ -174,9 +174,9 @@
   <div id="confettiLayer" class="confetti hidden" aria-hidden="true"></div>
 
   <!-- Spotify Web Playback SDK -->
-  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script defer src="https://sdk.scdn.co/spotify-player.js"></script>
 
-  <!-- Your app logic -->
-  <script src="./js/app.js?v=1"></script>
+  <!-- Your app logic (ensure this path & case match your project) -->
+  <script defer src="./js/app.js?v=7"></script>
 </body>
 </html>
