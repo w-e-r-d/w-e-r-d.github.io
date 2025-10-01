@@ -1,14 +1,21 @@
 // ===== Config =====
 const CSV_URL = './data/mw_words_rare.csv'; // your CSV path
+const ROUNDS_PER_GAME = 3;
+const WORDS_PER_ROUND = 10;
 
 // ===== State =====
 let persistence = 'session';            // or 'local'
 let dataRows = [];                      // raw rows from CSV
 let songs = [];                         // unique song index for search box
-let currentRare = null;                 // current picked row
-let currentMode = null;                 // 'super-rare' | 'rare' | 'audio'
 let docFreq = new Map();                // word -> number of unique songs containing it
-let selectedSong = null;                // song chosen from results (must Submit to check)
+
+let currentMode = null;                 // 'super-rare' | 'rare' | 'audio'
+let currentWordItem = null;             // the active (song,word) row
+let selectedSong = null;                // chosen song (must submit to grade)
+
+// Game lifecycle state (memory only)
+let game = null;                        // { mode, scope, roundIndex, wordIndex, rounds:[{score, items:[] }], total }
+// item structure pushed into rounds[i].items: { word, song_title, album, cover_url, count_global, correct, points }
 
 // ===== DOM =====
 const els = {};
@@ -17,25 +24,22 @@ function selectEls(){
   [
     'scopeSelect','btnTogglePersist',
     'modeGate','gameUI','scoreBar',
-    'modeLabel','scoreBubbleBest','attempts',
+    'modeLabel','scoreBubbleBest',
     'gameTitle','wordSpan','countInSong','countGlobal',
     'songSearch','results','guessFeedback',
-    'btnNewRare','btnReveal','btnSubmit',
-    'confettiLayer','wordBox','gameCard'
+    'btnSubmit','btnReveal','btnNext',
+    'confettiLayer','wordBox','gameCard',
+    'roundLabel','wordLabel',
+    // Round summary + Game over
+    'roundSummary','roundSummaryTitle','roundSummaryDesc','roundBreakdown','btnNextRound',
+    'gameOver','goRounds','goTotal','btnDownloadImage','btnPlayAgain','goModeScope'
   ].forEach(k => els[k] = q(k));
   els.modeCards = Array.from(document.querySelectorAll('.modecard'));
 }
 
-// ===== Storage =====
+// ===== Storage (kept for future; bubble now shows game score) =====
 function storage(){ return persistence === 'local' ? localStorage : sessionStorage; }
-function getScore(key, def=null){ try{ return JSON.parse(storage().getItem('mwtrivia_'+key)) ?? def; }catch{ return def; } }
-function setScore(key, val){ storage().setItem('mwtrivia_'+key, JSON.stringify(val)); }
-function updateScoreUI(){
-  const rare = getScore('rare_best', 0) || 0;
-  const attempts = getScore('attempts', 0) || 0;
-  els.scoreBubbleBest.textContent = rare;
-  els.attempts.textContent = attempts;
-}
+function updateScoreBubble(){ els.scoreBubbleBest.textContent = String(game?.total || 0); }
 
 // ===== CSV parsing =====
 async function loadCSV(){
@@ -126,71 +130,246 @@ function buildDocFrequency(){
   sets.forEach((s, w) => docFreq.set(w, s.size));
 }
 
-// ===== Mode logic =====
-function setMode(mode){
-  currentMode = mode; // 'super-rare' | 'rare' | 'audio'
-  els.modeGate.classList.add('hidden');
-  els.gameUI.classList.remove('hidden');
-  els.scoreBar.classList.remove('hidden');
-
-  if (mode === 'super-rare'){
-    els.modeLabel.textContent = 'Super Rare Words';
-    els.gameTitle.textContent = 'Super Rare Words';
-    pickWordForCurrentMode();
-  } else if (mode === 'rare'){
-    els.modeLabel.textContent = 'Rare Words';
-    els.gameTitle.textContent = 'Rare Words';
-    pickWordForCurrentMode();
-  } else if (mode === 'audio'){
-    els.modeLabel.textContent = 'Guess the Song (Audio)';
-    els.gameTitle.textContent = 'Guess the Song (Audio)';
-    els.wordSpan.textContent = 'Coming soon';
-    els.countInSong.textContent = '0';
-    els.countGlobal.textContent = '0';
-    els.guessFeedback.textContent = 'Audio mode will use your Spotify account to play a random track.';
-  }
-}
-
+// ===== Game helpers =====
 function poolFilterByMode(r){
   const scopeOK = (els.scopeSelect.value === 'all' || r.is_album);
   if (!scopeOK) return false;
-
   if (currentMode === 'super-rare'){
     return (docFreq.get((r.word||'').toLowerCase()) === 1);
   }
   if (currentMode === 'rare'){
     return r.count_global < 10;
   }
-  return false;
+  return false; // audio handled separately
 }
 
-function pickWordForCurrentMode(){
-  selectedSong = null;
-  els.btnSubmit.disabled = true;
-  els.songSearch.classList.remove('error');
+function sampleRoundWords(excludeSet){
+  const pool = dataRows.filter(r => poolFilterByMode(r) && r.word && r.count_in_song > 0 && !excludeSet.has(r.word + '||' + r.song_title));
+  if (pool.length < WORDS_PER_ROUND) return pool.slice(0, WORDS_PER_ROUND);
+  // Weighted by rarity (inverse global count)
+  const weights = pool.map(r => 1 / Math.max(1, r.count_global));
+  const picks = [];
+  const usedIdx = new Set();
+  while (picks.length < WORDS_PER_ROUND && usedIdx.size < pool.length){
+    const total = weights.reduce((a,b)=>a+b,0);
+    let t = Math.random() * total;
+    let idx = 0;
+    for (; idx < pool.length; idx++){
+      t -= weights[idx];
+      if (t <= 0) break;
+    }
+    if (!usedIdx.has(idx)){
+      usedIdx.add(idx);
+      picks.push(pool[idx]);
+    }
+  }
+  return picks;
+}
+
+function startNewGame(mode){
+  currentMode = mode; // 'super-rare' | 'rare'
+  els.modeGate.classList.add('hidden');
+  els.gameUI.classList.remove('hidden');
+  els.scoreBar.classList.remove('hidden');
+
+  els.modeLabel.textContent = mode === 'super-rare' ? 'Super Rare Words' : (mode === 'rare' ? 'Rare Words' : 'Guess the Song');
+  els.gameTitle.textContent = els.modeLabel.textContent;
+
+  game = {
+    mode,
+    scope: els.scopeSelect.value,
+    roundIndex: 0,
+    wordIndex: 0,
+    rounds: Array.from({length: ROUNDS_PER_GAME}, ()=>({ score:0, items:[] })),
+    usedKeys: new Set(),
+    total: 0,
+  };
+
+  // Pre-sample all rounds now (so game is deterministic for this session)
+  for (let r = 0; r < ROUNDS_PER_GAME; r++){
+    const picks = sampleRoundWords(game.usedKeys);
+    picks.forEach(p => game.usedKeys.add(p.word + '||' + p.song_title));
+    game.rounds[r].picks = picks; // store source rows
+  }
+
+  updateScoreBubble();
+  showWord();
+}
+
+function showWord(){
+  els.roundLabel.textContent = `Round ${game.roundIndex+1} of ${ROUNDS_PER_GAME}`;
+  els.wordLabel.textContent = `Word ${game.wordIndex+1} / ${WORDS_PER_ROUND}`;
   els.guessFeedback.textContent = '';
-  const pool = dataRows.filter(r => poolFilterByMode(r) && r.word && r.count_in_song > 0);
-  if (!pool.length){
-    currentRare = null;
-    els.wordSpan.textContent = '—';
-    els.countInSong.textContent = '0';
-    els.countGlobal.textContent = '0';
-    els.guessFeedback.textContent = 'No rows match this mode/scope.';
+  els.songSearch.value = '';
+  els.songSearch.classList.remove('error');
+  els.btnSubmit.disabled = true;
+  els.btnNext.disabled = true;
+  selectedSong = null;
+
+  const row = game.rounds[game.roundIndex].picks[game.wordIndex];
+  currentWordItem = row;
+  els.wordSpan.textContent = row.word;
+  els.countInSong.textContent = String(row.count_in_song);
+  els.countGlobal.textContent = String(row.count_global);
+  hideResults();
+}
+
+function gradeSelection(){
+  if (!currentWordItem) return;
+  if (!selectedSong){
+    els.songSearch.classList.add('error');
+    flash(els.wordBox, 'shake', 450);
+    els.guessFeedback.textContent = 'Pick a song from the list, then press Submit.';
     return;
   }
-  // Weight by rarity (inverse global count)
-  const weights = pool.map(r => 1 / Math.max(1, r.count_global));
-  const total = weights.reduce((a,b)=>a+b,0);
-  let pick = Math.random() * total;
-  let chosen = pool[0];
-  for (let i=0;i<pool.length;i++){ pick -= weights[i]; if (pick <= 0){ chosen = pool[i]; break; } }
+  const correct = selectedSong.song_title === currentWordItem.song_title;
+  let points = 0;
+  if (correct){
+    points = Math.max(50, Math.round(1000 / Math.max(1, currentWordItem.count_global)));
+    game.rounds[game.roundIndex].score += points;
+    game.total += points;
+    updateScoreBubble();
+    els.guessFeedback.innerHTML = `Correct — <b>${currentWordItem.song_title}</b> <span class="muted">(${currentWordItem.album || ''})</span>`;
+    flash(els.wordBox, 'success', 500);
+    launchConfetti();
+  } else {
+    els.guessFeedback.textContent = 'Not that one. Try again!';
+    els.songSearch.classList.add('error');
+    flash(els.wordBox, 'shake', 450);
+    // Keep current word until they get it right or hit Reveal
+  }
 
-  currentRare = chosen;
-  els.wordSpan.textContent = chosen.word;
-  els.countInSong.textContent = String(chosen.count_in_song);
-  els.countGlobal.textContent = String(chosen.count_global);
-  els.songSearch.value = '';
-  hideResults();
+  // Record item result (only on first correct submission)
+  if (correct){
+    game.rounds[game.roundIndex].items.push({
+      word: currentWordItem.word,
+      song_title: currentWordItem.song_title,
+      album: currentWordItem.album,
+      cover_url: currentWordItem.cover_url,
+      count_global: currentWordItem.count_global,
+      correct: true,
+      points
+    });
+    els.btnNext.disabled = false;
+  }
+}
+
+function nextStep(){
+  // Advance within round
+  if (game.wordIndex + 1 < WORDS_PER_ROUND){
+    game.wordIndex += 1;
+    showWord();
+    return;
+  }
+  // Round complete -> round summary or next round / game over
+  showRoundSummary();
+}
+
+function showRoundSummary(){
+  const r = game.roundIndex;
+  els.roundSummaryTitle.textContent = `Round ${r+1} Complete`;
+  els.roundSummaryDesc.textContent = `You scored ${game.rounds[r].score} points this round.`;
+  // breakdown list
+  els.roundBreakdown.innerHTML = '';
+  game.rounds[r].items.forEach(it => {
+    const div = document.createElement('div');
+    div.innerHTML = `• <b>${it.word}</b> ? ${it.song_title} <span class="muted">(+${it.points})</span>`;
+    els.roundBreakdown.appendChild(div);
+  });
+  els.roundSummary.classList.remove('hidden');
+}
+
+function closeRoundSummaryAndAdvance(){
+  els.roundSummary.classList.add('hidden');
+  if (game.roundIndex + 1 < ROUNDS_PER_GAME){
+    game.roundIndex += 1;
+    game.wordIndex = 0;
+    showWord();
+  } else {
+    // Game over
+    showGameOver();
+  }
+}
+
+function showGameOver(){
+  els.goRounds.innerHTML = '';
+  const modeName = game.mode === 'super-rare' ? 'Super Rare Words' : (game.mode === 'rare' ? 'Rare Words' : 'Guess the Song');
+  const scopeName = game.scope === 'albums' ? 'Albums only' : 'Everything';
+  els.goModeScope.textContent = `${modeName} · ${scopeName}`;
+  game.rounds.forEach((r, idx) => {
+    const div = document.createElement('div');
+    div.innerHTML = `<b>Round ${idx+1}:</b> ${r.score} pts`;
+    els.goRounds.appendChild(div);
+  });
+  els.goTotal.textContent = String(game.total);
+  els.gameOver.classList.remove('hidden');
+}
+
+// ===== Export image =====
+function downloadScoreImage(){
+  // Render a simple 1200x628 PNG with scores
+  const W = 1200, H = 628;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // background gradient
+  const g = ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0, '#22c55e');
+  g.addColorStop(.6, '#0ea5e9');
+  g.addColorStop(1, '#0ea5e9');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+  // card area
+  ctx.fillStyle = 'rgba(255,255,255,.95)';
+  roundRect(ctx, 48, 48, W-96, H-96, 24, true, false);
+
+  // header
+  ctx.fillStyle = '#0e1116';
+  ctx.font = '700 44px Segoe UI, system-ui, -apple-system, Roboto, Arial';
+  ctx.fillText('Morgan Wallen Trivia — Score', 76, 120);
+
+  // mode/scope
+  ctx.font = '400 24px Segoe UI, system-ui, -apple-system, Roboto, Arial';
+  const modeName = game.mode === 'super-rare' ? 'Super Rare Words' : (game.mode === 'rare' ? 'Rare Words' : 'Guess the Song');
+  const scopeName = game.scope === 'albums' ? 'Albums only' : 'Everything';
+  ctx.fillStyle = '#374151';
+  ctx.fillText(`${modeName} · ${scopeName}`, 76, 160);
+
+  // rounds
+  ctx.fillStyle = '#0e1116';
+  ctx.font = '600 28px Segoe UI, system-ui, -apple-system, Roboto, Arial';
+  let y = 230;
+  game.rounds.forEach((r, i)=>{
+    ctx.fillText(`Round ${i+1}: ${r.score} pts`, 76, y);
+    y += 46;
+  });
+
+  // total
+  ctx.font = '800 56px Segoe UI, system-ui, -apple-system, Roboto, Arial';
+  ctx.fillText(`Total: ${game.total} pts`, 76, y + 24);
+
+  // save
+  const url = canvas.toDataURL('image/png');
+  const a = document.createElement('a');
+  a.href = url; a.download = `mwtrivia_score_${Date.now()}.png`; a.click();
+}
+
+function roundRect(ctx, x, y, w, h, r, fill, stroke){
+  if (typeof r === 'number') r = {tl:r,tr:r,br:r,bl:r};
+  ctx.beginPath();
+  ctx.moveTo(x + r.tl, y);
+  ctx.lineTo(x + w - r.tr, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+  ctx.lineTo(x + w, y + h - r.br);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+  ctx.lineTo(x + r.bl, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+  ctx.lineTo(x, y + r.tl);
+  ctx.quadraticCurveTo(x, y, x + r.tl, y);
+  ctx.closePath();
+  if (fill) ctx.fill();
+  if (stroke) ctx.stroke();
 }
 
 // ===== UI helpers =====
@@ -220,10 +399,7 @@ function filterSongs(query){
 }
 
 // Anim helpers
-function flash(el, className, ms=500){
-  el.classList.add(className);
-  setTimeout(()=> el.classList.remove(className), ms);
-}
+function flash(el, className, ms=500){ el.classList.add(className); setTimeout(()=> el.classList.remove(className), ms); }
 function launchConfetti(){
   const layer = els.confettiLayer;
   layer.classList.remove('hidden');
@@ -246,11 +422,7 @@ function launchConfetti(){
     piece.style.setProperty('--twist', `rotate(${Math.random()*360}deg)`);
     layer.appendChild(piece);
   }
-  // Cleanup
-  setTimeout(()=> {
-    layer.innerHTML = '';
-    layer.classList.add('hidden');
-  }, 2200);
+  setTimeout(()=> { layer.innerHTML = ''; layer.classList.add('hidden'); }, 2200);
 }
 
 // ===== Wiring =====
@@ -259,8 +431,12 @@ function wireModeGate(){
     const btn = card.querySelector('.btn');
     const mode = card.getAttribute('data-mode');
     btn.addEventListener('click', ()=>{
-      if (mode === 'audio'){ setMode('audio'); }
-      else { setMode(mode); }
+      if (mode === 'audio'){
+        // still show coming soon; not wired to game rounds yet
+        document.querySelector('#modeGate .modecard[data-mode="audio"] .btn').textContent = 'Coming Soon';
+        return;
+      }
+      startNewGame(mode);
     });
   });
 }
@@ -271,7 +447,7 @@ function wireGame(){
     selectedSong = null;
     els.btnSubmit.disabled = true;
     els.songSearch.classList.remove('error');
-    if (!currentRare) return;
+    if (!currentWordItem) return;
     const list = filterSongs(e.target.value);
     renderResults(list, els.results, (s)=>{
       // choose a song from results (but do not grade yet)
@@ -297,56 +473,40 @@ function wireGame(){
   });
 
   // Submit to grade
-  els.btnSubmit.addEventListener('click', submitGuess);
-  els.songSearch.addEventListener('keydown', (e)=>{
-    if (e.key === 'Enter'){ e.preventDefault(); submitGuess(); }
-  });
+  els.btnSubmit.addEventListener('click', gradeSelection);
+  els.songSearch.addEventListener('keydown', (e)=>{ if (e.key === 'Enter'){ e.preventDefault(); gradeSelection(); }});
 
-  els.btnNewRare.addEventListener('click', pickWordForCurrentMode);
+  // Reveal (marks item as correct zero points, advances)
   els.btnReveal.addEventListener('click', ()=>{
-    if (!currentRare) return;
-    els.guessFeedback.innerHTML = `It was <b>${currentRare.song_title}</b>`;
+    if (!currentWordItem) return;
+    els.guessFeedback.innerHTML = `It was <b>${currentWordItem.song_title}</b>`;
+    // record zero-point item if not already recorded for this index
+    const curRound = game.rounds[game.roundIndex];
+    if (!curRound.items.find(it => it.word === currentWordItem.word && it.song_title === currentWordItem.song_title)){
+      curRound.items.push({ word: currentWordItem.word, song_title: currentWordItem.song_title, album: currentWordItem.album, cover_url: currentWordItem.cover_url, count_global: currentWordItem.count_global, correct:false, points:0 });
+    }
+    els.btnNext.disabled = false;
   });
+
+  // Next
+  els.btnNext.addEventListener('click', nextStep);
+
+  // Round summary controls
+  els.btnNextRound.addEventListener('click', closeRoundSummaryAndAdvance);
+
+  // Game over controls
+  els.btnPlayAgain.addEventListener('click', ()=>{ location.reload(); });
+  els.btnDownloadImage.addEventListener('click', downloadScoreImage);
 }
 
-function submitGuess(){
-  if (!currentRare) return;
-  if (!selectedSong){
-    // prompt to choose
-    els.songSearch.classList.add('error');
-    flash(els.wordBox, 'shake', 450);
-    els.guessFeedback.textContent = 'Pick a song from the list, then press Submit.';
-    return;
-  }
-  const attempts = (getScore('attempts', 0) || 0) + 1;
-  setScore('attempts', attempts);
-
-  const correct = selectedSong.song_title === currentRare.song_title;
-  if (correct){
-    els.guessFeedback.innerHTML = `Correct — <b>${currentRare.song_title}</b> <span class="muted">(${currentRare.album || ''})</span>`;
-    const pts = Math.max(50, Math.round(1000 / Math.max(1, currentRare.count_global)));
-    const best = getScore('rare_best', 0) || 0;
-    if (pts > best) setScore('rare_best', pts);
-    updateScoreUI();
-    flash(els.wordBox, 'success', 500);
-    launchConfetti();
-  } else {
-    els.guessFeedback.textContent = 'Not that one. Try again!';
-    els.songSearch.classList.add('error');
-    flash(els.wordBox, 'shake', 450);
-  }
-}
-
-// Filters & persistence
 function wireFiltersAndPersist(){
   els.scopeSelect.addEventListener('change', ()=>{
     rebuildSongIndex();
-    if (currentMode === 'super-rare' || currentMode === 'rare') pickWordForCurrentMode();
+    // game continues but future word pools honor new scope (only impacts next game ideally)
   });
   els.btnTogglePersist.addEventListener('click', ()=>{
     persistence = persistence === 'local' ? 'session' : 'local';
     els.btnTogglePersist.textContent = persistence === 'local' ? 'Using Local Storage' : 'Use Local Storage';
-    updateScoreUI();
   });
 }
 
@@ -356,7 +516,7 @@ function init(){
   wireModeGate();
   wireFiltersAndPersist();
   wireGame();
-  updateScoreUI();
+  updateScoreBubble();
   loadCSV().catch(err => console.error(err));
 }
 window.addEventListener('DOMContentLoaded', init);

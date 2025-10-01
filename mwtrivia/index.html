@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Morgan Wallen Trivia</title>
-  <link rel="stylesheet" href="./assets/style.css?v=4" />
+  <link rel="stylesheet" href="./assets/style.css?v=5" />
 </head>
 <body class="mwtrivia">
   <div class="wrap">
@@ -55,18 +55,23 @@
       </div>
     </section>
 
-    <!-- Score bubble -->
+    <!-- Score bubble shows current game total -->
     <section class="scorebar hidden" id="scoreBar">
       <div class="score-bubble">
         <div class="score-label" id="modeLabel">Mode</div>
         <div class="score-value" id="scoreBubbleBest">0</div>
-        <div class="score-sub">Attempts <span id="attempts">0</span></div>
+        <div class="score-sub">Game Score</div>
       </div>
     </section>
 
     <!-- Game UI -->
     <main id="gameUI" class="grid hidden">
       <section class="card" id="gameCard">
+        <div class="roundhead">
+          <div id="roundLabel" class="roundtag">Round 1 of 3</div>
+          <div id="wordLabel" class="muted tiny">Word 1 / 10</div>
+        </div>
+
         <h3 id="gameTitle">Least-Used Word</h3>
 
         <div class="wordbox" id="wordBox"><span id="wordSpan">—</span></div>
@@ -80,17 +85,42 @@
           <input id="songSearch" class="input search" placeholder="Type to search songs…" autocomplete="off" />
           <div id="results" class="results hidden"></div>
         </div>
-		<div class="row">
-		</div>
+
         <div class="row">
           <button id="btnSubmit" class="btn primary" disabled>Submit</button>
           <button id="btnReveal" class="btn ghost">Reveal</button>
-          <button id="btnNewRare" class="btn">New Word</button>
+          <button id="btnNext" class="btn" disabled>Next</button>
         </div>
 
         <div id="guessFeedback" class="muted feedback"></div>
       </section>
     </main>
+
+    <!-- Round summary overlay -->
+    <section id="roundSummary" class="overlay hidden">
+      <div class="overlay-card">
+        <h3 id="roundSummaryTitle">Round 1 Complete</h3>
+        <p class="muted" id="roundSummaryDesc">You scored 0 points this round.</p>
+        <div id="roundBreakdown" class="list"></div>
+        <div class="row">
+          <button id="btnNextRound" class="btn primary">Start Next Round</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game over screen -->
+    <section id="gameOver" class="overlay hidden">
+      <div class="overlay-card">
+        <h2>Game Over</h2>
+        <p class="muted" id="goModeScope"></p>
+        <div id="goRounds" class="list"></div>
+        <div class="totalbox">Total Score: <b id="goTotal">0</b></div>
+        <div class="row">
+          <button id="btnDownloadImage" class="btn primary">Download Score Image</button>
+          <button id="btnPlayAgain" class="btn">Play Again</button>
+        </div>
+      </div>
+    </section>
 
     <footer class="footer tiny">
       <span>© For fun — not affiliated with or endorsed by Morgan Wallen.</span>
@@ -100,6 +130,6 @@
   <!-- Confetti overlay -->
   <div id="confettiLayer" class="confetti hidden" aria-hidden="true"></div>
 
-  <script src="./js/app.js?v=4"></script>
+  <script src="./js/app.js?v=5"></script>
 </body>
 </html>
