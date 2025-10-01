@@ -352,7 +352,7 @@ function showGameOver(){
   if (game.mode === 'super-rare') modeName = 'Super Rare Words';
   if (game.mode === 'audio') modeName = 'Guess the Song';
   const scopeName = 'Everything';
-  els.goModeScope.textContent = `${modeName} · ${scopeName}`;
+  els.goModeScope.textContent = `${modeName}`;
   game.rounds.forEach((r, idx) => {
     const div = document.createElement('div');
     div.innerHTML = `<b>Round ${idx+1}:</b> ${r.score} pts`;
