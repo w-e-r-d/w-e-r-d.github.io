@@ -444,7 +444,6 @@ function renderResults(list, intoEl, onPick){
     const t = sanitizeText(s.song_title);
     const a = sanitizeText(s.album || '');
     span.innerHTML = `<b>${t}</b> <span class=\"muted\"> - ${a}</span>`;
-
     div.appendChild(img); div.appendChild(span);
     div.addEventListener('click', ()=> onPick(s));
     intoEl.appendChild(div);
