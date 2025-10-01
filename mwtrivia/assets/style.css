@@ -38,7 +38,7 @@
 .mwtrivia .hidden { display: none !important; }
 
 /* mode gate */
-.mwtrivia .modes { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.mwtrivia .modes { display: grid; grid-template-columns: 1fr; gap: 12px; align-content: center; }
 .mwtrivia .modecard {
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg);
   box-shadow: var(--shadow); padding: 16px; display: grid; gap: 6px;
