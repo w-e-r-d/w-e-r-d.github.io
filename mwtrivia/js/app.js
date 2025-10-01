@@ -108,10 +108,9 @@ function toBool(v){ const s = String(v).toLowerCase().trim(); return s === 'true
 
 // ===== Indexing / frequency =====
 function rebuildSongIndex(){
-  const scope = els.scopeSelect.value; // 'albums' | 'all'
+  // Scope removed: always include everything (albums, singles, features)
   const map = new Map();
   for (const r of dataRows){
-    if (scope === 'albums' && !r.is_album) continue; // In 'all', include singles & features too
     const key = r.track_spotify_id || r.song_title;
     if (!map.has(key)){
       map.set(key, {
@@ -124,6 +123,10 @@ function rebuildSongIndex(){
         track_spotify_id: r.track_spotify_id,
         cover_url: r.cover_url,
       });
+    }
+  }
+  songs = Array.from(map.values()).sort((a,b)=> a.song_title.localeCompare(b.song_title));
+});
     }
   }
   songs = Array.from(map.values()).sort((a,b)=> a.song_title.localeCompare(b.song_title));
@@ -150,7 +153,8 @@ function updateAttemptsBadge(){
 
 // ===== Mode / Game helpers (word modes) =====
 function poolFilterByMode(r){
-  const scopeOK = (els.scopeSelect.value === 'all' || r.is_album);
+  // Scope removed: always include everything
+  const scopeOK = true;
   if (!scopeOK) return false;
   if (currentMode === 'super-rare'){
     return (docFreq.get((r.word||'').toLowerCase()) === 1);
@@ -195,7 +199,7 @@ function startNewGame(mode){
 
   game = {
     mode,
-    scope: els.scopeSelect.value,
+    scope: 'all',
     roundIndex: 0,
     wordIndex: 0,
     rounds: Array.from({length: ROUNDS_PER_GAME}, ()=>({ score:0, items:[], picks:[] })),
@@ -440,6 +444,7 @@ function renderResults(list, intoEl, onPick){
     const t = sanitizeText(s.song_title);
     const a = sanitizeText(s.album || '');
     span.innerHTML = `<b>${t}</b> <span class=\"muted\"> - ${a}</span>`;
+
     div.appendChild(img); div.appendChild(span);
     div.addEventListener('click', ()=> onPick(s));
     intoEl.appendChild(div);
@@ -605,7 +610,7 @@ function startAudioMode(){
   // Initialize game meta for audio mode
   game = {
     mode: 'audio',
-    scope: els.scopeSelect.value,
+    scope: 'all',
     roundIndex: 0,
     wordIndex: 0, // acts as song index per round
     rounds: Array.from({length: ROUNDS_PER_GAME}, ()=>({ score:0, items:[], picks:[] })),

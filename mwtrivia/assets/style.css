@@ -127,6 +127,12 @@
 .mwtrivia .audiohead { display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px; }
 .mwtrivia .timer { font-weight:800; font-size: 22px; letter-spacing:.3px; padding: 6px 10px; border:1px solid var(--border); border-radius: 12px; background:#f8fafc; }
 
+#btnSpotifyConnect.success {
+  background: #16a34a;
+  color: #fff;
+  border-color: #15803d;
+}
+
 @keyframes confetti-fall { to { transform: translateY(110vh) var(--twist, rotate(0deg)); opacity: 0.9; } }
 @keyframes confetti-spin { to { filter: hue-rotate(180deg); } }
 
