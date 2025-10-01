@@ -1,9 +1,9 @@
 // ===== Config =====
 const CSV_URL = './data/mw_words_rare.csv'; // your CSV path
 const ROUNDS_PER_GAME = 3;
-const WORDS_PER_ROUND = 5;      // <- updated
-const ATTEMPTS_MAX = 3;         // <- new attempt cap
-const SCORE_BY_ATTEMPT = [1000, 500, 150]; // 1st / 2nd / 3rd attempts
+const WORDS_PER_ROUND = 5;      // used for both word and audio modes
+const ATTEMPTS_MAX = 3;         // cap per item
+const SCORE_BY_ATTEMPT = [1000, 500, 150]; // for word modes only
 
 // ===== State =====
 let persistence = 'session';            // or 'local'
@@ -12,14 +12,16 @@ let songs = [];                         // unique song index for search box
 let docFreq = new Map();                // word -> number of unique songs containing it
 
 let currentMode = null;                 // 'super-rare' | 'rare' | 'audio'
-let currentWordItem = null;             // the active (song,word) row
-let selectedSong = null;                // chosen song (must submit to grade)
-let attemptIndex = 0;                   // 0-based counter for current word
-let wordResolved = false;               // lock once correct/revealed/exhausted
+let currentWordItem = null;             // the active (song,word) row (word modes)
+let selectedSong = null;                // chosen song (word modes)
+let attemptIndex = 0;                   // 0-based counter for current word (word modes)
+let wordResolved = false;               // lock once correct/revealed/exhausted (word modes)
 
-// Game lifecycle state (memory only)
+// Game lifecycle state (shared across modes)
 let game = null;                        // { mode, scope, roundIndex, wordIndex, rounds:[{score, items:[], picks:[] }], total, usedKeys:Set }
-// item pushed into rounds[i].items: { word, song_title, album, cover_url, count_global, correct, points }
+// items:
+//  - word modes: { word, song_title, album, cover_url, count_global, correct, points }
+//  - audio mode: { song_title, album, cover_url, time_ms, correct, points }
 
 // ===== DOM =====
 const els = {};
@@ -38,7 +40,7 @@ function selectEls(){
     'roundSummary','roundSummaryTitle','roundSummaryDesc','roundBreakdown','btnNextRound',
     'gameOver','goRounds','goTotal','btnDownloadImage','btnPlayAgain','goModeScope',
     // Audio mode
-    'audioUI','btnSpotifyConnect','btnAudioStart','audioTimer','audioSongSearch','audioResults','btnAudioSubmit','audioAttemptsBadge','audioFeedback','audioStatus'
+    'audioUI','btnSpotifyConnect','btnAudioStart','audioTimer','audioSongSearch','audioResults','btnAudioSubmit','audioAttemptsBadge','audioFeedback','audioStatus','spotifyPlayerContainer','btnAudioNext'
   ].forEach(k => els[k] = q(k));
   els.modeCards = Array.from(document.querySelectorAll('.modecard'));
 }
@@ -76,7 +78,7 @@ function parseCSV(text){
       v = v.replace(/^"(.*)"$/s, '$1').replace(/""/g, '"').trim();
       row[h] = v;
     });
-    // sanitize visible strings to avoid replacement-char glitches and fancy punctuation
+    // sanitize visible strings
     row.song_title = sanitizeText(row.song_title);
     row.album = sanitizeText(row.album);
     row.word = sanitizeText(row.word);
@@ -146,7 +148,7 @@ function updateAttemptsBadge(){
   els.attemptsBadge.textContent = wordResolved ? 'Resolved' : ('Attempts left: ' + left);
 }
 
-// ===== Mode / Game helpers =====
+// ===== Mode / Game helpers (word modes) =====
 function poolFilterByMode(r){
   const scopeOK = (els.scopeSelect.value === 'all' || r.is_album);
   if (!scopeOK) return false;
@@ -319,7 +321,13 @@ function showRoundSummary(){
   els.roundBreakdown.innerHTML = '';
   game.rounds[r].items.forEach(it => {
     const div = document.createElement('div');
-    div.innerHTML = `• <b>${sanitizeText(it.word)}</b> ? ${sanitizeText(it.song_title)} <span class="muted">(+${it.points})</span>`;
+    // Handle both word-mode and audio-mode items
+    if (it.word){
+      div.innerHTML = `• <b>${sanitizeText(it.word)}</b> ? ${sanitizeText(it.song_title)} <span class="muted">(+${it.points})</span>`;
+    } else {
+      const t = it.time_ms != null ? ` @ ${formatMs(it.time_ms)}` : '';
+      div.innerHTML = `• ${sanitizeText(it.song_title)} <span class="muted">(+${it.points}${t})</span>`;
+    }
     els.roundBreakdown.appendChild(div);
   });
   els.roundSummary.classList.remove('hidden');
@@ -330,7 +338,14 @@ function closeRoundSummaryAndAdvance(){
   if (game.roundIndex + 1 < ROUNDS_PER_GAME){
     game.roundIndex += 1;
     game.wordIndex = 0;
-    showWord();
+    if (game.mode === 'audio') {
+      // prep audio next round
+      prepareAudioRoundIfNeeded();
+      updateAudioRoundHeader();
+      resetAudioUIForNextSong();
+    } else {
+      showWord();
+    }
   } else {
     showGameOver();
   }
@@ -338,7 +353,9 @@ function closeRoundSummaryAndAdvance(){
 
 function showGameOver(){
   els.goRounds.innerHTML = '';
-  const modeName = game.mode === 'super-rare' ? 'Super Rare Words' : 'Rare Words';
+  let modeName = 'Rare Words';
+  if (game.mode === 'super-rare') modeName = 'Super Rare Words';
+  if (game.mode === 'audio') modeName = 'Guess the Song';
   const scopeName = game.scope === 'albums' ? 'Albums only' : 'Everything';
   els.goModeScope.textContent = `${modeName} · ${scopeName}`;
   game.rounds.forEach((r, idx) => {
@@ -371,7 +388,9 @@ function downloadScoreImage(){
   ctx.fillText('Morgan Wallen Trivia — Score', 76, 120);
 
   ctx.font = '400 24px Segoe UI, system-ui, -apple-system, Roboto, Arial';
-  const modeName = game.mode === 'super-rare' ? 'Super Rare Words' : 'Rare Words';
+  let modeName = 'Rare Words';
+  if (game.mode === 'super-rare') modeName = 'Super Rare Words';
+  if (game.mode === 'audio') modeName = 'Guess the Song';
   const scopeName = game.scope === 'albums' ? 'Albums only' : 'Everything';
   ctx.fillStyle = '#374151';
   ctx.fillText(`${modeName} · ${scopeName}`, 76, 160);
@@ -461,7 +480,7 @@ function launchConfetti(){
   setTimeout(()=> { layer.innerHTML = ''; layer.classList.add('hidden'); }, 2200);
 }
 
-// Text sanitizer: strip replacement char and normalize quotes/dashes
+// Text sanitizer
 function sanitizeText(s){
   if (!s) return '';
   return String(s)
@@ -539,10 +558,12 @@ function wireGame(){
 
 function wireFiltersAndPersist(){
   els.scopeSelect.addEventListener('change', ()=>{ rebuildSongIndex(); });
-  els.btnTogglePersist.addEventListener('click', ()=>{
-    persistence = persistence === 'local' ? 'session' : 'local';
-    els.btnTogglePersist.textContent = persistence === 'local' ? 'Using Local Storage' : 'Use Local Storage';
-  });
+  if (els.btnTogglePersist){
+    els.btnTogglePersist.addEventListener('click', ()=>{
+      persistence = persistence === 'local' ? 'session' : 'local';
+      els.btnTogglePersist.textContent = persistence === 'local' ? 'Using Local Storage' : 'Use Local Storage';
+    });
+  }
 }
 
 // ===== Init =====
@@ -556,7 +577,6 @@ function init(){
 }
 window.addEventListener('DOMContentLoaded', init);
 
-
 // ===== Audio Mode (Spotify) =====
 const SPOTIFY_CLIENT_ID = '01757ce8e3694d6ba472ecd373e28087'; // <-- set this
 const SPOTIFY_REDIRECT_URI = location.origin + location.pathname; // also add in Spotify Dashboard
@@ -569,37 +589,272 @@ let spotifyDeviceId = null;
 const audioState = {
   song: null,          // chosen song object from songs[]
   attempts: 0,
-  startMs: 0,
-  pausedMs: 0,
-  pauseStart: 0,
-  timerId: null,
+  timerId: null,       // interval for SDK polling
   done: false,
   selected: null,      // chosen guess
 };
 
 function startAudioMode(){
+  currentMode = 'audio';
   els.modeGate.classList.add('hidden');
-  els.scoreBar.classList.add('hidden');
   els.gameUI.classList.remove('hidden');
-  // hide word game card, show audio card
+  els.scoreBar.classList.remove('hidden');
+
+  els.modeLabel.textContent = 'Guess the Song';
+  els.gameTitle.textContent = 'Guess the Song';
+
+  // Initialize game meta for audio mode
+  game = {
+    mode: 'audio',
+    scope: els.scopeSelect.value,
+    roundIndex: 0,
+    wordIndex: 0, // acts as song index per round
+    rounds: Array.from({length: ROUNDS_PER_GAME}, ()=>({ score:0, items:[], picks:[] })),
+    usedKeys: new Set(),
+    total: 0,
+  };
+
+  // Pre-sample all rounds of songs
+  for (let r = 0; r < ROUNDS_PER_GAME; r++){
+    const picks = sampleAudioSongs(game.usedKeys);
+    picks.forEach(p => game.usedKeys.add(p.track_spotify_id || p.song_title));
+    game.rounds[r].picks = picks;
+  }
+
+  // Show audio card, hide word card
   els.gameCard.classList.add('hidden');
   els.audioUI.classList.remove('hidden');
-  els.audioFeedback.textContent = '';
-  els.audioSongSearch.value = '';
-  els.audioAttemptsBadge.textContent = 'Attempts left: ' + ATTEMPTS_MAX;
-  els.audioTimer.textContent = '0:00.0';
-  els.audioStatus.textContent = '';
+  updateAudioRoundHeader();
+  resetAudioUIForNextSong(true);
 }
 
+function sampleAudioSongs(excludeSet){
+  const pool = songs.filter(s => (els.scopeSelect.value === 'all' || s.is_album) && !excludeSet.has(s.track_spotify_id || s.song_title));
+  if (pool.length <= WORDS_PER_ROUND) return shuffle(pool.slice());
+  const picks = [];
+  const used = new Set();
+  while (picks.length < WORDS_PER_ROUND && used.size < pool.length){
+    const idx = Math.floor(Math.random()*pool.length);
+    if (used.has(idx)) continue;
+    used.add(idx);
+    picks.push(pool[idx]);
+  }
+  return picks;
+}
+
+function shuffle(a){ for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function updateAudioRoundHeader(){
+  els.roundLabel.textContent = `Round ${game.roundIndex+1} of ${ROUNDS_PER_GAME}`;
+  els.wordLabel.textContent = `Song ${game.wordIndex+1} / ${WORDS_PER_ROUND}`;
+}
+
+function resetAudioUIForNextSong(initial=false){
+  els.audioFeedback.textContent = '';
+  els.audioSongSearch.value = '';
+  els.audioResults.classList.add('hidden');
+  els.btnAudioSubmit.disabled = true;
+  els.audioAttemptsBadge.textContent = 'Attempts left: ' + ATTEMPTS_MAX;
+  els.audioStatus.textContent = initial ? '' : 'Ready';
+  updateAudioTimerDisplay(0);
+  audioState.attempts = 0;
+  audioState.selected = null;
+}
+
+// Score: 1000 at <=1s, then linear down to 0 at 60s
+function scoreFromMs(ms){
+  if (ms <= 1000) return 1000;
+  if (ms >= 60000) return 0;
+  const rem = 60000 - 1000; // 59s span
+  const frac = 1 - ((ms - 1000) / rem);
+  return Math.max(0, Math.round(1000 * frac));
+}
+
+// Timer uses actual playback position from the SDK, not wall-clock
+async function startPlaybackAndPoll(song){
+  try {
+    await ensureSpotifyToken();
+    await setupSpotifyPlayer();
+  } catch (e){
+    els.audioStatus.textContent = 'Spotify connection failed. Premium required.';
+    return false;
+  }
+
+
+  try {
+    await transferAndPlay(song.track_spotify_id);
+  } catch (e){
+    els.audioStatus.textContent = 'Could not start playback.';
+    return false;
+  }
+
+  // Wait until the SDK reports playing state
+  await waitUntilPlaying(song.track_spotify_id, 5000);
+  els.audioStatus.textContent = 'Playing...';
+
+  // Begin polling SDK position
+  startPositionPolling();
+  return true;
+}
+
+function startPositionPolling(){
+  stopPositionPolling();
+  els.audioTimer.textContent = '0:00.0';
+  audioState.timerId = setInterval(updateTimerFromSDK, 150);
+  updateTimerFromSDK();
+}
+
+function stopPositionPolling(){
+  if (audioState.timerId){ clearInterval(audioState.timerId); audioState.timerId = null; }
+}
+
+async function updateTimerFromSDK(){
+  const pos = await getCurrentPlaybackPositionMs();
+  if (pos != null) updateAudioTimerDisplay(pos);
+}
+
+function updateAudioTimerDisplay(ms){
+  els.audioTimer.textContent = formatMs(ms);
+}
+
+async function waitUntilPlaying(expectedTrackId, timeoutMs){
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs){
+    const st = await spotifyPlayer.getCurrentState();
+    if (st && !st.paused && st.position != null){
+      // optional: verify track uri ends with expectedTrackId
+      return true;
+    }
+    await new Promise(r=>setTimeout(r, 150));
+  }
+  return false;
+}
+
+async function getCurrentPlaybackPositionMs(){
+  if (!spotifyPlayer) return null;
+  const st = await spotifyPlayer.getCurrentState();
+  if (!st) return null;
+  return st.position || 0;
+}
+
+function pauseAudioForGuess(){
+  if (!spotifyToken || !spotifyDeviceId) return;
+  fetch('https://api.spotify.com/v1/me/player/pause', { method:'PUT', headers:{ 'Authorization':'Bearer '+spotifyToken } });
+  els.audioStatus.textContent = 'Paused';
+  // polling still shows frozen position, which is what we want for scoring
+}
+
+function resumeAudio(){
+  if (!spotifyToken || !spotifyDeviceId || !audioState.song) return;
+  fetch(`https://api.spotify.com/v1/me/player/play?device_id=${encodeURIComponent(spotifyDeviceId)}`, {
+    method:'PUT',
+    headers:{ 'Authorization':'Bearer '+spotifyToken, 'Content-Type':'application/json' },
+    body: JSON.stringify({ uris:[`spotify:track:${audioState.song.track_spotify_id}`] })
+  });
+  els.audioStatus.textContent = 'Playing...';
+}
+
+function stopAudio(){
+  stopPositionPolling();
+  if (spotifyToken){
+    fetch('https://api.spotify.com/v1/me/player/pause', { method:'PUT', headers:{ 'Authorization':'Bearer '+spotifyToken } });
+  }
+}
+
+function getFrozenMsForScoring(){
+  // read once from SDK (position is frozen because we pause on input)
+  return getCurrentPlaybackPositionMs();
+}
+
+function submitAudioGuess(){
+  if (audioState.done) return;
+  if (!audioState.selected){ els.audioFeedback.textContent = 'Pick a song, then Submit.'; return; }
+  const correct = audioState.selected.song_title === audioState.song.song_title;
+  (async()=>{
+    const ms = await getFrozenMsForScoring() || 0;
+    let pts = 0;
+    if (correct){
+      pts = scoreFromMs(ms);
+      audioState.done = true;
+      stopAudio();
+      els.audioFeedback.textContent = 'Correct - ' + sanitizeText(audioState.song.song_title) + ' at ' + formatMs(ms) + ` (+${pts})`;
+      launchConfetti();
+    } else {
+      audioState.attempts += 1;
+      const left = Math.max(0, ATTEMPTS_MAX - audioState.attempts);
+      els.audioAttemptsBadge.textContent = 'Attempts left: ' + left;
+      if (audioState.attempts >= ATTEMPTS_MAX){
+        audioState.done = true;
+        stopAudio();
+        els.audioFeedback.textContent = 'Out of attempts. It was ' + sanitizeText(audioState.song.song_title);
+      } else {
+        els.audioFeedback.textContent = 'Wrong - resuming...';
+        resumeAudio();
+        return; // don't record yet
+      }
+    }
+
+    // Record item to round
+    const r = game.roundIndex;
+    const round = game.rounds[r];
+    round.items.push({ song_title: audioState.song.song_title, album: audioState.song.album, cover_url: audioState.song.cover_url, time_ms: ms, correct, points: pts });
+    round.score += pts;
+    game.total += pts;
+    updateScoreBubble();
+
+    // Enable Next
+    if (els.btnAudioNext) els.btnAudioNext.disabled = false;
+  })();
+}
+
+async function startAudioGame(){
+  // If no current song for this index, set it
+  const r = game.roundIndex;
+  const idx = game.wordIndex;
+  audioState.done = false;
+  audioState.attempts = 0;
+  els.audioAttemptsBadge.textContent = 'Attempts left: ' + ATTEMPTS_MAX;
+  els.audioFeedback.textContent = '';
+  els.btnAudioSubmit.disabled = true;
+
+  const picks = game.rounds[r].picks;
+  if (!picks || !picks.length){ els.audioFeedback.textContent = 'No songs available for this scope.'; return; }
+  const song = picks[idx];
+  audioState.song = song;
+
+  // Start or resume current track
+  const ok = await startPlaybackAndPoll(song);
+  if (ok){
+    // Enable submit when user types/selects; timer displays from SDK
+    els.audioStatus.textContent = 'Playing...';
+  }
+}
+
+function nextAudio(){
+  // advance song index or show round summary
+  if (game.wordIndex + 1 < WORDS_PER_ROUND){
+    game.wordIndex += 1;
+    updateAudioRoundHeader();
+    resetAudioUIForNextSong();
+    // Ready to press Start to begin next song
+  } else {
+    // Round finished
+    stopAudio();
+    showRoundSummary();
+  }
+}
+
+// ===== Audio wiring (UI) =====
 function wireAudio(){
   // Connect / auth
   els.btnSpotifyConnect.addEventListener('click', beginSpotifyLogin);
-  // Start
+  // Start/resume
   els.btnAudioStart.addEventListener('click', startAudioGame);
+  // Next song
+  if (els.btnAudioNext){ els.btnAudioNext.addEventListener('click', ()=>{ if (!els.btnAudioNext.disabled){ els.btnAudioNext.disabled = true; nextAudio(); } }); }
 
   // Search interactions
   els.audioSongSearch.addEventListener('input', (e)=>{
-    // Pauses on first activation
     pauseAudioForGuess();
     audioState.selected = null;
     els.btnAudioSubmit.disabled = true;
@@ -629,124 +884,7 @@ function wireAudio(){
   els.audioSongSearch.addEventListener('keydown', (e)=>{ if (e.key === 'Enter'){ e.preventDefault(); submitAudioGuess(); }});
 }
 
-async function startAudioGame(){
-  audioState.done = false;
-  audioState.attempts = 0;
-  els.audioAttemptsBadge.textContent = 'Attempts left: ' + ATTEMPTS_MAX;
-  els.audioFeedback.textContent = '';
-  els.btnAudioSubmit.disabled = true;
-  els.audioSongSearch.value = '';
-
-  // pick random song from scope
-  const pool = songs.filter(s => (els.scopeSelect.value === 'all' || s.is_album));
-  if (!pool.length){ els.audioFeedback.textContent = 'No songs available for this scope.'; return; }
-  const pick = pool[Math.floor(Math.random()*pool.length)];
-  audioState.song = pick;
-
-  // ensure token + player
-  try {
-    await ensureSpotifyToken();
-    await setupSpotifyPlayer();
-  } catch (e){
-    els.audioStatus.textContent = 'Spotify connection failed. Premium required.';
-    return; }
-
-  // start playback
-  audioState.startMs = performance.now();
-  audioState.pausedMs = 0;
-  audioState.pauseStart = 0;
-  startTimer();
-  try {
-    await transferAndPlay(pick.track_spotify_id);
-    els.audioStatus.textContent = 'Playing...';
-  } catch (e){
-    els.audioStatus.textContent = 'Could not start playback.';
-  }
-}
-
-function pauseAudioForGuess(){
-  if (audioState.done) return;
-  if (!audioState.startMs) return;
-  if (audioState.pauseStart) return; // already paused
-  if (!spotifyToken || !spotifyDeviceId) return;
-  // pause via Web API
-  fetch('https://api.spotify.com/v1/me/player/pause', { method:'PUT', headers:{ 'Authorization':'Bearer '+spotifyToken } });
-  audioState.pauseStart = performance.now();
-  updateTimerOnce();
-}
-
-function resumeAudio(){
-  if (audioState.done) return;
-  if (audioState.pauseStart){
-    audioState.pausedMs += performance.now() - audioState.pauseStart;
-    audioState.pauseStart = 0;
-  }
-  fetch(`https://api.spotify.com/v1/me/player/play?device_id=${encodeURIComponent(spotifyDeviceId)}`, {
-    method:'PUT',
-    headers:{ 'Authorization':'Bearer '+spotifyToken, 'Content-Type':'application/json' },
-    body: JSON.stringify({ uris:[`spotify:track:${audioState.song.track_spotify_id}`], position_ms: getElapsedMs() })
-  });
-  els.audioStatus.textContent = 'Playing...';
-}
-
-function stopAudio(){
-  if (audioState.timerId){ clearInterval(audioState.timerId); audioState.timerId = null; }
-  fetch('https://api.spotify.com/v1/me/player/pause', { method:'PUT', headers:{ 'Authorization':'Bearer '+spotifyToken } });
-}
-
-function getElapsedMs(){
-  const now = performance.now();
-  const base = now - audioState.startMs - audioState.pausedMs - (audioState.pauseStart ? (now - audioState.pauseStart) : 0);
-  return Math.max(0, Math.min(60000, Math.round(base))); // clamp at 60s
-}
-
-function startTimer(){
-  if (audioState.timerId) clearInterval(audioState.timerId);
-  audioState.timerId = setInterval(updateTimerOnce, 100);
-  updateTimerOnce();
-}
-function updateTimerOnce(){
-  const ms = getElapsedMs();
-  els.audioTimer.textContent = formatMs(ms);
-  if (ms >= 60000 && !audioState.done){
-    audioState.done = true;
-    stopAudio();
-    els.audioFeedback.textContent = 'Time up. It was ' + sanitizeText(audioState.song.song_title);
-  }
-}
-function formatMs(ms){
-  const s = Math.floor(ms/1000);
-  const m = Math.floor(s/60);
-  const r = s % 60;
-  const tenths = Math.floor((ms%1000)/100);
-  return `${m}:${String(r).padStart(2,'0')}.${tenths}`;
-}
-
-function submitAudioGuess(){
-  if (audioState.done) return;
-  if (!audioState.selected){ els.audioFeedback.textContent = 'Pick a song, then Submit.'; return; }
-  const correct = audioState.selected.song_title === audioState.song.song_title;
-  if (correct){
-    const ms = getElapsedMs();
-    audioState.done = true;
-    stopAudio();
-    els.audioFeedback.textContent = 'Correct - ' + sanitizeText(audioState.song.song_title) + ' at ' + formatMs(ms);
-    launchConfetti();
-  } else {
-    audioState.attempts += 1;
-    const left = Math.max(0, ATTEMPTS_MAX - audioState.attempts);
-    els.audioAttemptsBadge.textContent = 'Attempts left: ' + left;
-    if (audioState.attempts >= ATTEMPTS_MAX){
-      audioState.done = true;
-      stopAudio();
-      els.audioFeedback.textContent = 'Out of attempts. It was ' + sanitizeText(audioState.song.song_title);
-      return;
-    }
-    els.audioFeedback.textContent = 'Wrong - resuming...';
-    resumeAudio();
-  }
-}
-
+// ===== Spotify Auth / SDK =====
 async function ensureSpotifyToken(){
   const st = sessionStorage.getItem('mw_spotify_token');
   if (st){ spotifyToken = st; return; }
@@ -842,4 +980,13 @@ async function transferAndPlay(trackId){
     headers:{ 'Authorization':'Bearer '+spotifyToken, 'Content-Type':'application/json' },
     body: JSON.stringify({ uris: [`spotify:track:${trackId}`], position_ms: 0 })
   });
+}
+
+// ===== Utilities =====
+function formatMs(ms){
+  const s = Math.floor(ms/1000);
+  const m = Math.floor(s/60);
+  const r = s % 60;
+  const tenths = Math.floor((ms%1000)/100);
+  return `${m}:${String(r).padStart(2,'0')}.${tenths}`;
 }
