@@ -118,6 +118,15 @@
   position: absolute; top: -10px; width: 8px; height: 14px; border-radius: 2px;
   animation: confetti-fall linear forwards, confetti-spin linear forwards;
 }
+
+/* Attempts badge and audio UI tweaks */
+.mwtrivia .attempts-badge {
+  background:#fff7ed; color:#9a3412; border:1px solid #fed7aa;
+  padding:4px 10px; border-radius:999px; font-weight:600; font-size:12px;
+}
+.mwtrivia .audiohead { display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px; }
+.mwtrivia .timer { font-weight:800; font-size: 22px; letter-spacing:.3px; padding: 6px 10px; border:1px solid var(--border); border-radius: 12px; background:#f8fafc; }
+
 @keyframes confetti-fall { to { transform: translateY(110vh) var(--twist, rotate(0deg)); opacity: 0.9; } }
 @keyframes confetti-spin { to { filter: hue-rotate(180deg); } }
 

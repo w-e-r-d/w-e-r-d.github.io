@@ -1,7 +1,9 @@
 // ===== Config =====
 const CSV_URL = './data/mw_words_rare.csv'; // your CSV path
 const ROUNDS_PER_GAME = 3;
-const WORDS_PER_ROUND = 10;
+const WORDS_PER_ROUND = 5;      // <- updated
+const ATTEMPTS_MAX = 3;         // <- new attempt cap
+const SCORE_BY_ATTEMPT = [1000, 500, 150]; // 1st / 2nd / 3rd attempts
 
 // ===== State =====
 let persistence = 'session';            // or 'local'
@@ -12,10 +14,12 @@ let docFreq = new Map();                // word -> number of unique songs contai
 let currentMode = null;                 // 'super-rare' | 'rare' | 'audio'
 let currentWordItem = null;             // the active (song,word) row
 let selectedSong = null;                // chosen song (must submit to grade)
+let attemptIndex = 0;                   // 0-based counter for current word
+let wordResolved = false;               // lock once correct/revealed/exhausted
 
 // Game lifecycle state (memory only)
-let game = null;                        // { mode, scope, roundIndex, wordIndex, rounds:[{score, items:[] }], total }
-// item structure pushed into rounds[i].items: { word, song_title, album, cover_url, count_global, correct, points }
+let game = null;                        // { mode, scope, roundIndex, wordIndex, rounds:[{score, items:[], picks:[] }], total, usedKeys:Set }
+// item pushed into rounds[i].items: { word, song_title, album, cover_url, count_global, correct, points }
 
 // ===== DOM =====
 const els = {};
@@ -29,16 +33,17 @@ function selectEls(){
     'songSearch','results','guessFeedback',
     'btnSubmit','btnReveal','btnNext',
     'confettiLayer','wordBox','gameCard',
-    'roundLabel','wordLabel',
+    'roundLabel','wordLabel','attemptsBadge',
     // Round summary + Game over
     'roundSummary','roundSummaryTitle','roundSummaryDesc','roundBreakdown','btnNextRound',
-    'gameOver','goRounds','goTotal','btnDownloadImage','btnPlayAgain','goModeScope'
+    'gameOver','goRounds','goTotal','btnDownloadImage','btnPlayAgain','goModeScope',
+    // Audio mode
+    'audioUI','btnSpotifyConnect','btnAudioStart','audioTimer','audioSongSearch','audioResults','btnAudioSubmit','audioAttemptsBadge','audioFeedback','audioStatus'
   ].forEach(k => els[k] = q(k));
   els.modeCards = Array.from(document.querySelectorAll('.modecard'));
 }
 
-// ===== Storage (kept for future; bubble now shows game score) =====
-function storage(){ return persistence === 'local' ? localStorage : sessionStorage; }
+// ===== Storage (bubble shows live game total) =====
 function updateScoreBubble(){ els.scoreBubbleBest.textContent = String(game?.total || 0); }
 
 // ===== CSV parsing =====
@@ -71,6 +76,11 @@ function parseCSV(text){
       v = v.replace(/^"(.*)"$/s, '$1').replace(/""/g, '"').trim();
       row[h] = v;
     });
+    // sanitize visible strings to avoid replacement-char glitches and fancy punctuation
+    row.song_title = sanitizeText(row.song_title);
+    row.album = sanitizeText(row.album);
+    row.word = sanitizeText(row.word);
+
     row.is_album = toBool(row.is_album);
     row.is_feature = toBool(row.is_feature);
     row.count_in_song = parseInt(row.count_in_song, 10) || 0;
@@ -130,7 +140,13 @@ function buildDocFrequency(){
   sets.forEach((s, w) => docFreq.set(w, s.size));
 }
 
-// ===== Game helpers =====
+function updateAttemptsBadge(){
+  if (!els.attemptsBadge) return;
+  const left = Math.max(0, ATTEMPTS_MAX - attemptIndex);
+  els.attemptsBadge.textContent = wordResolved ? 'Resolved' : ('Attempts left: ' + left);
+}
+
+// ===== Mode / Game helpers =====
 function poolFilterByMode(r){
   const scopeOK = (els.scopeSelect.value === 'all' || r.is_album);
   if (!scopeOK) return false;
@@ -145,7 +161,7 @@ function poolFilterByMode(r){
 
 function sampleRoundWords(excludeSet){
   const pool = dataRows.filter(r => poolFilterByMode(r) && r.word && r.count_in_song > 0 && !excludeSet.has(r.word + '||' + r.song_title));
-  if (pool.length < WORDS_PER_ROUND) return pool.slice(0, WORDS_PER_ROUND);
+  if (pool.length <= WORDS_PER_ROUND) return pool.slice(0, WORDS_PER_ROUND);
   // Weighted by rarity (inverse global count)
   const weights = pool.map(r => 1 / Math.max(1, r.count_global));
   const picks = [];
@@ -172,7 +188,7 @@ function startNewGame(mode){
   els.gameUI.classList.remove('hidden');
   els.scoreBar.classList.remove('hidden');
 
-  els.modeLabel.textContent = mode === 'super-rare' ? 'Super Rare Words' : (mode === 'rare' ? 'Rare Words' : 'Guess the Song');
+  els.modeLabel.textContent = mode === 'super-rare' ? 'Super Rare Words' : 'Rare Words';
   els.gameTitle.textContent = els.modeLabel.textContent;
 
   game = {
@@ -180,12 +196,12 @@ function startNewGame(mode){
     scope: els.scopeSelect.value,
     roundIndex: 0,
     wordIndex: 0,
-    rounds: Array.from({length: ROUNDS_PER_GAME}, ()=>({ score:0, items:[] })),
+    rounds: Array.from({length: ROUNDS_PER_GAME}, ()=>({ score:0, items:[], picks:[] })),
     usedKeys: new Set(),
     total: 0,
   };
 
-  // Pre-sample all rounds now (so game is deterministic for this session)
+  // Pre-sample all rounds for determinism in this session
   for (let r = 0; r < ROUNDS_PER_GAME; r++){
     const picks = sampleRoundWords(game.usedKeys);
     picks.forEach(p => game.usedKeys.add(p.word + '||' + p.song_title));
@@ -205,10 +221,13 @@ function showWord(){
   els.btnSubmit.disabled = true;
   els.btnNext.disabled = true;
   selectedSong = null;
+  attemptIndex = 0;
+  wordResolved = false;
+  updateAttemptsBadge();
 
   const row = game.rounds[game.roundIndex].picks[game.wordIndex];
   currentWordItem = row;
-  els.wordSpan.textContent = row.word;
+  els.wordSpan.textContent = sanitizeText(row.word);
   els.countInSong.textContent = String(row.count_in_song);
   els.countGlobal.textContent = String(row.count_global);
   hideResults();
@@ -216,31 +235,26 @@ function showWord(){
 
 function gradeSelection(){
   if (!currentWordItem) return;
+  if (wordResolved) return; // already resolved
   if (!selectedSong){
     els.songSearch.classList.add('error');
     flash(els.wordBox, 'shake', 450);
     els.guessFeedback.textContent = 'Pick a song from the list, then press Submit.';
     return;
   }
+
   const correct = selectedSong.song_title === currentWordItem.song_title;
-  let points = 0;
+
   if (correct){
-    points = Math.max(50, Math.round(1000 / Math.max(1, currentWordItem.count_global)));
-    game.rounds[game.roundIndex].score += points;
-    game.total += points;
+    const pts = SCORE_BY_ATTEMPT[Math.min(attemptIndex, SCORE_BY_ATTEMPT.length-1)];
+    game.rounds[game.roundIndex].score += pts;
+    game.total += pts;
     updateScoreBubble();
-    els.guessFeedback.innerHTML = `Correct — <b>${currentWordItem.song_title}</b> <span class="muted">(${currentWordItem.album || ''})</span>`;
+    els.guessFeedback.innerHTML = `Correct - <b>${sanitizeText(currentWordItem.song_title)}</b> <span class="muted">(${sanitizeText(currentWordItem.album || '')})</span> (+${pts})`;
     flash(els.wordBox, 'success', 500);
     launchConfetti();
-  } else {
-    els.guessFeedback.textContent = 'Not that one. Try again!';
-    els.songSearch.classList.add('error');
-    flash(els.wordBox, 'shake', 450);
-    // Keep current word until they get it right or hit Reveal
-  }
 
-  // Record item result (only on first correct submission)
-  if (correct){
+    // record item
     game.rounds[game.roundIndex].items.push({
       word: currentWordItem.word,
       song_title: currentWordItem.song_title,
@@ -248,20 +262,53 @@ function gradeSelection(){
       cover_url: currentWordItem.cover_url,
       count_global: currentWordItem.count_global,
       correct: true,
-      points
+      points: pts
     });
+
+    wordResolved = true;
+    updateAttemptsBadge();
+    els.btnSubmit.disabled = true;
+    els.btnNext.disabled = false;
+    return;
+  }
+
+  // Wrong guess path
+  attemptIndex += 1;
+  updateAttemptsBadge();
+  const remaining = Math.max(0, ATTEMPTS_MAX - attemptIndex);
+  els.guessFeedback.textContent = remaining > 0 ? `Wrong. Attempts left: ${remaining}` : 'Out of attempts!';
+  els.songSearch.classList.add('error');
+  flash(els.wordBox, 'shake', 450);
+
+  if (attemptIndex >= ATTEMPTS_MAX){
+    // auto reveal and record zero points
+    const curRound = game.rounds[game.roundIndex];
+    if (!curRound.items.find(it => it.word === currentWordItem.word && it.song_title === currentWordItem.song_title)){
+      curRound.items.push({
+        word: currentWordItem.word,
+        song_title: currentWordItem.song_title,
+        album: currentWordItem.album,
+        cover_url: currentWordItem.cover_url,
+        count_global: currentWordItem.count_global,
+        correct: false,
+        points: 0
+      });
+    }
+    els.guessFeedback.innerHTML = 'It was ' + '<b>' + sanitizeText(currentWordItem.song_title) + '</b>';
+    wordResolved = true;
+    updateAttemptsBadge();
+    els.btnSubmit.disabled = true;
     els.btnNext.disabled = false;
   }
 }
 
 function nextStep(){
-  // Advance within round
   if (game.wordIndex + 1 < WORDS_PER_ROUND){
     game.wordIndex += 1;
     showWord();
     return;
   }
-  // Round complete -> round summary or next round / game over
+  // Round complete
   showRoundSummary();
 }
 
@@ -269,11 +316,10 @@ function showRoundSummary(){
   const r = game.roundIndex;
   els.roundSummaryTitle.textContent = `Round ${r+1} Complete`;
   els.roundSummaryDesc.textContent = `You scored ${game.rounds[r].score} points this round.`;
-  // breakdown list
   els.roundBreakdown.innerHTML = '';
   game.rounds[r].items.forEach(it => {
     const div = document.createElement('div');
-    div.innerHTML = `• <b>${it.word}</b> ? ${it.song_title} <span class="muted">(+${it.points})</span>`;
+    div.innerHTML = `• <b>${sanitizeText(it.word)}</b> ? ${sanitizeText(it.song_title)} <span class="muted">(+${it.points})</span>`;
     els.roundBreakdown.appendChild(div);
   });
   els.roundSummary.classList.remove('hidden');
@@ -286,14 +332,13 @@ function closeRoundSummaryAndAdvance(){
     game.wordIndex = 0;
     showWord();
   } else {
-    // Game over
     showGameOver();
   }
 }
 
 function showGameOver(){
   els.goRounds.innerHTML = '';
-  const modeName = game.mode === 'super-rare' ? 'Super Rare Words' : (game.mode === 'rare' ? 'Rare Words' : 'Guess the Song');
+  const modeName = game.mode === 'super-rare' ? 'Super Rare Words' : 'Rare Words';
   const scopeName = game.scope === 'albums' ? 'Albums only' : 'Everything';
   els.goModeScope.textContent = `${modeName} · ${scopeName}`;
   game.rounds.forEach((r, idx) => {
@@ -307,49 +352,38 @@ function showGameOver(){
 
 // ===== Export image =====
 function downloadScoreImage(){
-  // Render a simple 1200x628 PNG with scores
   const W = 1200, H = 628;
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // background gradient
   const g = ctx.createLinearGradient(0,0,W,H);
   g.addColorStop(0, '#22c55e');
   g.addColorStop(.6, '#0ea5e9');
   g.addColorStop(1, '#0ea5e9');
   ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
 
-  // card area
   ctx.fillStyle = 'rgba(255,255,255,.95)';
   roundRect(ctx, 48, 48, W-96, H-96, 24, true, false);
 
-  // header
   ctx.fillStyle = '#0e1116';
   ctx.font = '700 44px Segoe UI, system-ui, -apple-system, Roboto, Arial';
   ctx.fillText('Morgan Wallen Trivia — Score', 76, 120);
 
-  // mode/scope
   ctx.font = '400 24px Segoe UI, system-ui, -apple-system, Roboto, Arial';
-  const modeName = game.mode === 'super-rare' ? 'Super Rare Words' : (game.mode === 'rare' ? 'Rare Words' : 'Guess the Song');
+  const modeName = game.mode === 'super-rare' ? 'Super Rare Words' : 'Rare Words';
   const scopeName = game.scope === 'albums' ? 'Albums only' : 'Everything';
   ctx.fillStyle = '#374151';
   ctx.fillText(`${modeName} · ${scopeName}`, 76, 160);
 
-  // rounds
   ctx.fillStyle = '#0e1116';
   ctx.font = '600 28px Segoe UI, system-ui, -apple-system, Roboto, Arial';
   let y = 230;
-  game.rounds.forEach((r, i)=>{
-    ctx.fillText(`Round ${i+1}: ${r.score} pts`, 76, y);
-    y += 46;
-  });
+  game.rounds.forEach((r, i)=>{ ctx.fillText(`Round ${i+1}: ${r.score} pts`, 76, y); y += 46; });
 
-  // total
   ctx.font = '800 56px Segoe UI, system-ui, -apple-system, Roboto, Arial';
   ctx.fillText(`Total: ${game.total} pts`, 76, y + 24);
 
-  // save
   const url = canvas.toDataURL('image/png');
   const a = document.createElement('a');
   a.href = url; a.download = `mwtrivia_score_${Date.now()}.png`; a.click();
@@ -381,11 +415,13 @@ function renderResults(list, intoEl, onPick){
     div.className = 'result';
     const img = document.createElement('img');
     img.className = 'cover';
-    img.src = s.cover_url || '';
+    img.src = sanitizeText(s.cover_url || '');
     img.alt = '';
     const span = document.createElement('div');
     span.className = 'songtitle';
-    span.innerHTML = `<b>${s.song_title}</b> <span class="muted">— ${s.album || ''}</span>`;
+    const t = sanitizeText(s.song_title);
+    const a = sanitizeText(s.album || '');
+    span.innerHTML = `<b>${t}</b> <span class="muted"> - ${a}</span>`;
     div.appendChild(img); div.appendChild(span);
     div.addEventListener('click', ()=> onPick(s));
     intoEl.appendChild(div);
@@ -425,6 +461,19 @@ function launchConfetti(){
   setTimeout(()=> { layer.innerHTML = ''; layer.classList.add('hidden'); }, 2200);
 }
 
+// Text sanitizer: strip replacement char and normalize quotes/dashes
+function sanitizeText(s){
+  if (!s) return '';
+  return String(s)
+    .replace(/\uFFFD/g, '')                // remove replacement char
+    .replace(/[\u2013\u2014]/g, '-')      // en/em dash -> hyphen
+    .replace(/[\u2018\u2019]/g, "'")    // curly -> '
+    .replace(/[\u201C\u201D]/g, '"')     // curly -> "
+    .replace(/[\u00A0]/g, ' ')            // nbsp -> space
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '') // control chars
+    .trim();
+}
+
 // ===== Wiring =====
 function wireModeGate(){
   els.modeCards.forEach(card => {
@@ -432,17 +481,16 @@ function wireModeGate(){
     const mode = card.getAttribute('data-mode');
     btn.addEventListener('click', ()=>{
       if (mode === 'audio'){
-        // still show coming soon; not wired to game rounds yet
-        document.querySelector('#modeGate .modecard[data-mode="audio"] .btn').textContent = 'Coming Soon';
-        return;
+        startAudioMode();
+      } else {
+        startNewGame(mode);
       }
-      startNewGame(mode);
     });
   });
 }
 
 function wireGame(){
-  // typing clears selection
+  // typing clears selection (word modes)
   els.songSearch.addEventListener('input', (e)=>{
     selectedSong = null;
     els.btnSubmit.disabled = true;
@@ -450,7 +498,6 @@ function wireGame(){
     if (!currentWordItem) return;
     const list = filterSongs(e.target.value);
     renderResults(list, els.results, (s)=>{
-      // choose a song from results (but do not grade yet)
       selectedSong = s;
       els.songSearch.value = s.song_title;
       hideResults();
@@ -476,18 +523,6 @@ function wireGame(){
   els.btnSubmit.addEventListener('click', gradeSelection);
   els.songSearch.addEventListener('keydown', (e)=>{ if (e.key === 'Enter'){ e.preventDefault(); gradeSelection(); }});
 
-  // Reveal (marks item as correct zero points, advances)
-  els.btnReveal.addEventListener('click', ()=>{
-    if (!currentWordItem) return;
-    els.guessFeedback.innerHTML = `It was <b>${currentWordItem.song_title}</b>`;
-    // record zero-point item if not already recorded for this index
-    const curRound = game.rounds[game.roundIndex];
-    if (!curRound.items.find(it => it.word === currentWordItem.word && it.song_title === currentWordItem.song_title)){
-      curRound.items.push({ word: currentWordItem.word, song_title: currentWordItem.song_title, album: currentWordItem.album, cover_url: currentWordItem.cover_url, count_global: currentWordItem.count_global, correct:false, points:0 });
-    }
-    els.btnNext.disabled = false;
-  });
-
   // Next
   els.btnNext.addEventListener('click', nextStep);
 
@@ -497,13 +532,13 @@ function wireGame(){
   // Game over controls
   els.btnPlayAgain.addEventListener('click', ()=>{ location.reload(); });
   els.btnDownloadImage.addEventListener('click', downloadScoreImage);
+
+  // Audio mode wiring
+  wireAudio();
 }
 
 function wireFiltersAndPersist(){
-  els.scopeSelect.addEventListener('change', ()=>{
-    rebuildSongIndex();
-    // game continues but future word pools honor new scope (only impacts next game ideally)
-  });
+  els.scopeSelect.addEventListener('change', ()=>{ rebuildSongIndex(); });
   els.btnTogglePersist.addEventListener('click', ()=>{
     persistence = persistence === 'local' ? 'session' : 'local';
     els.btnTogglePersist.textContent = persistence === 'local' ? 'Using Local Storage' : 'Use Local Storage';
@@ -520,3 +555,291 @@ function init(){
   loadCSV().catch(err => console.error(err));
 }
 window.addEventListener('DOMContentLoaded', init);
+
+
+// ===== Audio Mode (Spotify) =====
+const SPOTIFY_CLIENT_ID = '01757ce8e3694d6ba472ecd373e28087'; // <-- set this
+const SPOTIFY_REDIRECT_URI = location.origin + location.pathname; // also add in Spotify Dashboard
+const SPOTIFY_SCOPES = 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state';
+
+let spotifyToken = null;
+let spotifyPlayer = null;
+let spotifyDeviceId = null;
+
+const audioState = {
+  song: null,          // chosen song object from songs[]
+  attempts: 0,
+  startMs: 0,
+  pausedMs: 0,
+  pauseStart: 0,
+  timerId: null,
+  done: false,
+  selected: null,      // chosen guess
+};
+
+function startAudioMode(){
+  els.modeGate.classList.add('hidden');
+  els.scoreBar.classList.add('hidden');
+  els.gameUI.classList.remove('hidden');
+  // hide word game card, show audio card
+  els.gameCard.classList.add('hidden');
+  els.audioUI.classList.remove('hidden');
+  els.audioFeedback.textContent = '';
+  els.audioSongSearch.value = '';
+  els.audioAttemptsBadge.textContent = 'Attempts left: ' + ATTEMPTS_MAX;
+  els.audioTimer.textContent = '0:00.0';
+  els.audioStatus.textContent = '';
+}
+
+function wireAudio(){
+  // Connect / auth
+  els.btnSpotifyConnect.addEventListener('click', beginSpotifyLogin);
+  // Start
+  els.btnAudioStart.addEventListener('click', startAudioGame);
+
+  // Search interactions
+  els.audioSongSearch.addEventListener('input', (e)=>{
+    // Pauses on first activation
+    pauseAudioForGuess();
+    audioState.selected = null;
+    els.btnAudioSubmit.disabled = true;
+    const list = filterSongs(e.target.value);
+    renderResults(list, els.audioResults, (s)=>{
+      audioState.selected = s;
+      els.audioSongSearch.value = s.song_title;
+      els.audioResults.classList.add('hidden');
+      els.btnAudioSubmit.disabled = false;
+    });
+  });
+  els.audioSongSearch.addEventListener('focus', ()=>{
+    pauseAudioForGuess();
+    const list = filterSongs(els.audioSongSearch.value);
+    renderResults(list, els.audioResults, (s)=>{
+      audioState.selected = s;
+      els.audioSongSearch.value = s.song_title;
+      els.audioResults.classList.add('hidden');
+      els.btnAudioSubmit.disabled = false;
+    });
+  });
+  document.addEventListener('click', (e)=>{
+    if (!els.audioResults.contains(e.target) && e.target !== els.audioSongSearch) els.audioResults.classList.add('hidden');
+  });
+
+  els.btnAudioSubmit.addEventListener('click', submitAudioGuess);
+  els.audioSongSearch.addEventListener('keydown', (e)=>{ if (e.key === 'Enter'){ e.preventDefault(); submitAudioGuess(); }});
+}
+
+async function startAudioGame(){
+  audioState.done = false;
+  audioState.attempts = 0;
+  els.audioAttemptsBadge.textContent = 'Attempts left: ' + ATTEMPTS_MAX;
+  els.audioFeedback.textContent = '';
+  els.btnAudioSubmit.disabled = true;
+  els.audioSongSearch.value = '';
+
+  // pick random song from scope
+  const pool = songs.filter(s => (els.scopeSelect.value === 'all' || s.is_album));
+  if (!pool.length){ els.audioFeedback.textContent = 'No songs available for this scope.'; return; }
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  audioState.song = pick;
+
+  // ensure token + player
+  try {
+    await ensureSpotifyToken();
+    await setupSpotifyPlayer();
+  } catch (e){
+    els.audioStatus.textContent = 'Spotify connection failed. Premium required.';
+    return; }
+
+  // start playback
+  audioState.startMs = performance.now();
+  audioState.pausedMs = 0;
+  audioState.pauseStart = 0;
+  startTimer();
+  try {
+    await transferAndPlay(pick.track_spotify_id);
+    els.audioStatus.textContent = 'Playing...';
+  } catch (e){
+    els.audioStatus.textContent = 'Could not start playback.';
+  }
+}
+
+function pauseAudioForGuess(){
+  if (audioState.done) return;
+  if (!audioState.startMs) return;
+  if (audioState.pauseStart) return; // already paused
+  if (!spotifyToken || !spotifyDeviceId) return;
+  // pause via Web API
+  fetch('https://api.spotify.com/v1/me/player/pause', { method:'PUT', headers:{ 'Authorization':'Bearer '+spotifyToken } });
+  audioState.pauseStart = performance.now();
+  updateTimerOnce();
+}
+
+function resumeAudio(){
+  if (audioState.done) return;
+  if (audioState.pauseStart){
+    audioState.pausedMs += performance.now() - audioState.pauseStart;
+    audioState.pauseStart = 0;
+  }
+  fetch(`https://api.spotify.com/v1/me/player/play?device_id=${encodeURIComponent(spotifyDeviceId)}`, {
+    method:'PUT',
+    headers:{ 'Authorization':'Bearer '+spotifyToken, 'Content-Type':'application/json' },
+    body: JSON.stringify({ uris:[`spotify:track:${audioState.song.track_spotify_id}`], position_ms: getElapsedMs() })
+  });
+  els.audioStatus.textContent = 'Playing...';
+}
+
+function stopAudio(){
+  if (audioState.timerId){ clearInterval(audioState.timerId); audioState.timerId = null; }
+  fetch('https://api.spotify.com/v1/me/player/pause', { method:'PUT', headers:{ 'Authorization':'Bearer '+spotifyToken } });
+}
+
+function getElapsedMs(){
+  const now = performance.now();
+  const base = now - audioState.startMs - audioState.pausedMs - (audioState.pauseStart ? (now - audioState.pauseStart) : 0);
+  return Math.max(0, Math.min(60000, Math.round(base))); // clamp at 60s
+}
+
+function startTimer(){
+  if (audioState.timerId) clearInterval(audioState.timerId);
+  audioState.timerId = setInterval(updateTimerOnce, 100);
+  updateTimerOnce();
+}
+function updateTimerOnce(){
+  const ms = getElapsedMs();
+  els.audioTimer.textContent = formatMs(ms);
+  if (ms >= 60000 && !audioState.done){
+    audioState.done = true;
+    stopAudio();
+    els.audioFeedback.textContent = 'Time up. It was ' + sanitizeText(audioState.song.song_title);
+  }
+}
+function formatMs(ms){
+  const s = Math.floor(ms/1000);
+  const m = Math.floor(s/60);
+  const r = s % 60;
+  const tenths = Math.floor((ms%1000)/100);
+  return `${m}:${String(r).padStart(2,'0')}.${tenths}`;
+}
+
+function submitAudioGuess(){
+  if (audioState.done) return;
+  if (!audioState.selected){ els.audioFeedback.textContent = 'Pick a song, then Submit.'; return; }
+  const correct = audioState.selected.song_title === audioState.song.song_title;
+  if (correct){
+    const ms = getElapsedMs();
+    audioState.done = true;
+    stopAudio();
+    els.audioFeedback.textContent = 'Correct - ' + sanitizeText(audioState.song.song_title) + ' at ' + formatMs(ms);
+    launchConfetti();
+  } else {
+    audioState.attempts += 1;
+    const left = Math.max(0, ATTEMPTS_MAX - audioState.attempts);
+    els.audioAttemptsBadge.textContent = 'Attempts left: ' + left;
+    if (audioState.attempts >= ATTEMPTS_MAX){
+      audioState.done = true;
+      stopAudio();
+      els.audioFeedback.textContent = 'Out of attempts. It was ' + sanitizeText(audioState.song.song_title);
+      return;
+    }
+    els.audioFeedback.textContent = 'Wrong - resuming...';
+    resumeAudio();
+  }
+}
+
+async function ensureSpotifyToken(){
+  const st = sessionStorage.getItem('mw_spotify_token');
+  if (st){ spotifyToken = st; return; }
+  const params = new URLSearchParams(location.search);
+  const code = params.get('code');
+  if (code && sessionStorage.getItem('spotify_code_verifier')){
+    await exchangeSpotifyCode(code);
+    params.delete('code'); params.delete('state');
+    history.replaceState({}, '', `${location.pathname}${params.toString() ? ('?'+params.toString()) : ''}`);
+    return;
+  }
+  throw new Error('No token');
+}
+
+async function beginSpotifyLogin(){
+  const verifier = generateCodeVerifier();
+  const challenge = await generateCodeChallenge(verifier);
+  sessionStorage.setItem('spotify_code_verifier', verifier);
+  const state = Math.random().toString(36).slice(2);
+  const url = new URL('https://accounts.spotify.com/authorize');
+  url.searchParams.set('client_id', SPOTIFY_CLIENT_ID);
+  url.searchParams.set('response_type', 'code');
+  url.searchParams.set('redirect_uri', SPOTIFY_REDIRECT_URI);
+  url.searchParams.set('scope', SPOTIFY_SCOPES);
+  url.searchParams.set('code_challenge_method', 'S256');
+  url.searchParams.set('code_challenge', challenge);
+  url.searchParams.set('state', state);
+  location.assign(url.toString());
+}
+
+async function exchangeSpotifyCode(code){
+  const verifier = sessionStorage.getItem('spotify_code_verifier');
+  const body = new URLSearchParams({
+    client_id: SPOTIFY_CLIENT_ID,
+    grant_type: 'authorization_code',
+    code,
+    redirect_uri: SPOTIFY_REDIRECT_URI,
+    code_verifier: verifier
+  });
+  const res = await fetch('https://accounts.spotify.com/api/token', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+    body: body.toString()
+  });
+  if (!res.ok) throw new Error('Token exchange failed');
+  const json = await res.json();
+  spotifyToken = json.access_token;
+  sessionStorage.setItem('mw_spotify_token', spotifyToken);
+}
+
+function generateCodeVerifier(){
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+  let out = '';
+  for (let i=0;i<64;i++) out += chars[Math.floor(Math.random()*chars.length)];
+  return out;
+}
+async function generateCodeChallenge(verifier){
+  const data = new TextEncoder().encode(verifier);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  const b64 = btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  return b64;
+}
+
+async function setupSpotifyPlayer(){
+  if (spotifyPlayer && spotifyDeviceId) return; // already ready
+  await new Promise((resolve)=>{
+    if (window.Spotify) return resolve();
+    const iv = setInterval(()=>{ if (window.Spotify){ clearInterval(iv); resolve(); } }, 100);
+  });
+  if (!spotifyPlayer){
+    spotifyPlayer = new Spotify.Player({
+      name: 'MW Trivia Player',
+      getOAuthToken: cb => { cb(spotifyToken); },
+      volume: 0.8
+    });
+    spotifyPlayer.addListener('ready', ({ device_id }) => { spotifyDeviceId = device_id; });
+    spotifyPlayer.addListener('initialization_error', ({message}) => { console.error(message); });
+    spotifyPlayer.addListener('authentication_error', ({message}) => { console.error(message); });
+    spotifyPlayer.addListener('account_error', ({message}) => { console.error(message); });
+    await spotifyPlayer.connect();
+  }
+}
+
+async function transferAndPlay(trackId){
+  await fetch('https://api.spotify.com/v1/me/player', {
+    method:'PUT',
+    headers:{ 'Authorization':'Bearer '+spotifyToken, 'Content-Type':'application/json' },
+    body: JSON.stringify({ device_ids: [spotifyDeviceId], play: true })
+  });
+  await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${encodeURIComponent(spotifyDeviceId)}` ,{
+    method:'PUT',
+    headers:{ 'Authorization':'Bearer '+spotifyToken, 'Content-Type':'application/json' },
+    body: JSON.stringify({ uris: [`spotify:track:${trackId}`], position_ms: 0 })
+  });
+}
