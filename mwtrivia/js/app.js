@@ -8,6 +8,7 @@ let songs = [];                         // unique song index for search box
 let currentRare = null;                 // current picked row
 let currentMode = null;                 // 'super-rare' | 'rare' | 'audio'
 let docFreq = new Map();                // word -> number of unique songs containing it
+let selectedSong = null;                // song chosen from results (must Submit to check)
 
 // ===== DOM =====
 const els = {};
@@ -19,7 +20,8 @@ function selectEls(){
     'modeLabel','scoreBubbleBest','attempts',
     'gameTitle','wordSpan','countInSong','countGlobal',
     'songSearch','results','guessFeedback',
-    'btnNewRare','btnReveal'
+    'btnNewRare','btnReveal','btnSubmit',
+    'confettiLayer','wordBox','gameCard'
   ].forEach(k => els[k] = q(k));
   els.modeCards = Array.from(document.querySelectorAll('.modecard'));
 }
@@ -43,7 +45,7 @@ async function loadCSV(){
   dataRows = parseCSV(text);
   if (!dataRows.length) throw new Error('CSV had no rows.');
   rebuildSongIndex();
-  buildDocFrequency();                 // compute songs-with-word counts
+  buildDocFrequency();
 }
 
 function parseCSV(text){
@@ -112,8 +114,7 @@ function rebuildSongIndex(){
 }
 
 function buildDocFrequency(){
-  // word -> set of unique track ids containing it
-  const sets = new Map();
+  const sets = new Map(); // word -> set(track ids)
   for (const r of dataRows){
     const w = (r.word || '').toLowerCase();
     const id = r.track_spotify_id || r.song_title;
@@ -128,8 +129,6 @@ function buildDocFrequency(){
 // ===== Mode logic =====
 function setMode(mode){
   currentMode = mode; // 'super-rare' | 'rare' | 'audio'
-
-  // UI show/hide
   els.modeGate.classList.add('hidden');
   els.gameUI.classList.remove('hidden');
   els.scoreBar.classList.remove('hidden');
@@ -145,7 +144,6 @@ function setMode(mode){
   } else if (mode === 'audio'){
     els.modeLabel.textContent = 'Guess the Song (Audio)';
     els.gameTitle.textContent = 'Guess the Song (Audio)';
-    // For now, show a friendly placeholder (Spotify hookup to be added later)
     els.wordSpan.textContent = 'Coming soon';
     els.countInSong.textContent = '0';
     els.countGlobal.textContent = '0';
@@ -158,17 +156,19 @@ function poolFilterByMode(r){
   if (!scopeOK) return false;
 
   if (currentMode === 'super-rare'){
-    // word appears in exactly one unique song across the dataset
     return (docFreq.get((r.word||'').toLowerCase()) === 1);
   }
   if (currentMode === 'rare'){
-    // word appears fewer than 10 times globally across all songs
     return r.count_global < 10;
   }
   return false;
 }
 
 function pickWordForCurrentMode(){
+  selectedSong = null;
+  els.btnSubmit.disabled = true;
+  els.songSearch.classList.remove('error');
+  els.guessFeedback.textContent = '';
   const pool = dataRows.filter(r => poolFilterByMode(r) && r.word && r.count_in_song > 0);
   if (!pool.length){
     currentRare = null;
@@ -178,7 +178,7 @@ function pickWordForCurrentMode(){
     els.guessFeedback.textContent = 'No rows match this mode/scope.';
     return;
   }
-  // Weight by rarity (inverse global count) but clamp to avoid extremes
+  // Weight by rarity (inverse global count)
   const weights = pool.map(r => 1 / Math.max(1, r.count_global));
   const total = weights.reduce((a,b)=>a+b,0);
   let pick = Math.random() * total;
@@ -189,7 +189,6 @@ function pickWordForCurrentMode(){
   els.wordSpan.textContent = chosen.word;
   els.countInSong.textContent = String(chosen.count_in_song);
   els.countGlobal.textContent = String(chosen.count_global);
-  els.guessFeedback.textContent = '';
   els.songSearch.value = '';
   hideResults();
 }
@@ -220,51 +219,89 @@ function filterSongs(query){
   return songs.filter(s => (s.song_title + ' ' + (s.album||'')).toLowerCase().includes(q)).slice(0, 20);
 }
 
+// Anim helpers
+function flash(el, className, ms=500){
+  el.classList.add(className);
+  setTimeout(()=> el.classList.remove(className), ms);
+}
+function launchConfetti(){
+  const layer = els.confettiLayer;
+  layer.classList.remove('hidden');
+  const colors = ['#10b981','#0ea5e9','#22c55e','#f59e0b','#ef4444','#a78bfa'];
+  const count = 90;
+  for (let i=0;i<count;i++){
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    const left = Math.random()*100;
+    const size = 6 + Math.random()*8;
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    const duration = 1.2 + Math.random()*0.9;
+    const delay = Math.random()*0.3;
+    piece.style.left = left + 'vw';
+    piece.style.width = size + 'px';
+    piece.style.height = (size*1.6) + 'px';
+    piece.style.background = color;
+    piece.style.animationDuration = `${duration}s, ${duration*0.8}s`;
+    piece.style.animationDelay = `${delay}s, ${delay}s`;
+    piece.style.setProperty('--twist', `rotate(${Math.random()*360}deg)`);
+    layer.appendChild(piece);
+  }
+  // Cleanup
+  setTimeout(()=> {
+    layer.innerHTML = '';
+    layer.classList.add('hidden');
+  }, 2200);
+}
+
 // ===== Wiring =====
 function wireModeGate(){
   els.modeCards.forEach(card => {
     const btn = card.querySelector('.btn');
     const mode = card.getAttribute('data-mode');
     btn.addEventListener('click', ()=>{
-      if (mode === 'audio'){
-        // Show the UI but as "coming soon" (no dead button)
-        setMode('audio');
-      } else {
-        setMode(mode);
-      }
+      if (mode === 'audio'){ setMode('audio'); }
+      else { setMode(mode); }
     });
   });
 }
 
 function wireGame(){
+  // typing clears selection
   els.songSearch.addEventListener('input', (e)=>{
+    selectedSong = null;
+    els.btnSubmit.disabled = true;
+    els.songSearch.classList.remove('error');
     if (!currentRare) return;
     const list = filterSongs(e.target.value);
     renderResults(list, els.results, (s)=>{
+      // choose a song from results (but do not grade yet)
+      selectedSong = s;
       els.songSearch.value = s.song_title;
       hideResults();
-      const correct = s.song_title === currentRare.song_title;
-      const attempts = (getScore('attempts', 0) || 0) + 1;
-      setScore('attempts', attempts);
-      if (correct){
-        els.guessFeedback.innerHTML = `Correct — <b>${currentRare.song_title}</b> <span class="muted">(${currentRare.album || ''})</span>`;
-        const pts = Math.max(50, Math.round(1000 / Math.max(1, currentRare.count_global)));
-        const best = getScore('rare_best', 0) || 0;
-        if (pts > best) setScore('rare_best', pts);
-        updateScoreUI();
-      } else {
-        updateScoreUI();
-        els.guessFeedback.textContent = 'Not that one. Try again!';
-      }
+      els.btnSubmit.disabled = false;
     });
   });
+
   els.songSearch.addEventListener('focus', ()=>{
     const list = filterSongs(els.songSearch.value);
-    renderResults(list, els.results, ()=>{});
+    renderResults(list, els.results, (s)=>{
+      selectedSong = s;
+      els.songSearch.value = s.song_title;
+      hideResults();
+      els.btnSubmit.disabled = false;
+    });
   });
+
   document.addEventListener('click', (e)=>{
     if (!els.results.contains(e.target) && e.target !== els.songSearch) hideResults();
   });
+
+  // Submit to grade
+  els.btnSubmit.addEventListener('click', submitGuess);
+  els.songSearch.addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter'){ e.preventDefault(); submitGuess(); }
+  });
+
   els.btnNewRare.addEventListener('click', pickWordForCurrentMode);
   els.btnReveal.addEventListener('click', ()=>{
     if (!currentRare) return;
@@ -272,6 +309,35 @@ function wireGame(){
   });
 }
 
+function submitGuess(){
+  if (!currentRare) return;
+  if (!selectedSong){
+    // prompt to choose
+    els.songSearch.classList.add('error');
+    flash(els.wordBox, 'shake', 450);
+    els.guessFeedback.textContent = 'Pick a song from the list, then press Submit.';
+    return;
+  }
+  const attempts = (getScore('attempts', 0) || 0) + 1;
+  setScore('attempts', attempts);
+
+  const correct = selectedSong.song_title === currentRare.song_title;
+  if (correct){
+    els.guessFeedback.innerHTML = `Correct — <b>${currentRare.song_title}</b> <span class="muted">(${currentRare.album || ''})</span>`;
+    const pts = Math.max(50, Math.round(1000 / Math.max(1, currentRare.count_global)));
+    const best = getScore('rare_best', 0) || 0;
+    if (pts > best) setScore('rare_best', pts);
+    updateScoreUI();
+    flash(els.wordBox, 'success', 500);
+    launchConfetti();
+  } else {
+    els.guessFeedback.textContent = 'Not that one. Try again!';
+    els.songSearch.classList.add('error');
+    flash(els.wordBox, 'shake', 450);
+  }
+}
+
+// Filters & persistence
 function wireFiltersAndPersist(){
   els.scopeSelect.addEventListener('change', ()=>{
     rebuildSongIndex();

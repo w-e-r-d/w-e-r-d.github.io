@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Morgan Wallen Trivia</title>
-  <link rel="stylesheet" href="./assets/style.css?v=3" />
+  <link rel="stylesheet" href="./assets/style.css?v=4" />
 </head>
 <body class="mwtrivia">
   <div class="wrap">
@@ -31,12 +31,12 @@
       </div>
     </header>
 
-    <!-- Mode gate (shown first on load) -->
+    <!-- Mode gate -->
     <section id="modeGate" class="modes">
       <div class="modecard" data-mode="super-rare">
         <div class="mode-tag">Mode 1</div>
         <h3>Super Rare Words</h3>
-        <p>Words that appear in <b>only one song</b> across the catalog.</p>
+        <p>Words that appear in <b>only one song</b>.</p>
         <button class="btn primary">Play</button>
       </div>
 
@@ -50,7 +50,7 @@
       <div class="modecard" data-mode="audio">
         <div class="mode-tag">Mode 3</div>
         <h3>Guess the Song</h3>
-        <p>Hear a random track and guess it as fast as you can.</p>
+        <p>Hear a random track and guess it fast.</p>
         <button class="btn">Coming Soon</button>
       </div>
     </section>
@@ -64,11 +64,12 @@
       </div>
     </section>
 
-    <!-- Game UI (hidden until a mode is chosen) -->
+    <!-- Game UI -->
     <main id="gameUI" class="grid hidden">
-      <section class="card">
+      <section class="card" id="gameCard">
         <h3 id="gameTitle">Least-Used Word</h3>
-        <div class="wordbox"><span id="wordSpan">—</span></div>
+
+        <div class="wordbox" id="wordBox"><span id="wordSpan">—</span></div>
         <div class="muted hint">
           Appears <span id="countInSong">0</span>× in the song, <span id="countGlobal">0</span>× across all songs
         </div>
@@ -79,13 +80,14 @@
           <input id="songSearch" class="input search" placeholder="Type to search songs…" autocomplete="off" />
           <div id="results" class="results hidden"></div>
         </div>
-        <div id="guessFeedback" class="muted feedback"></div>
 
-        <div class="spacer"></div>
         <div class="row">
-          <button id="btnNewRare" class="btn">New Word</button>
+          <button id="btnSubmit" class="btn primary" disabled>Submit</button>
           <button id="btnReveal" class="btn ghost">Reveal</button>
+          <button id="btnNewRare" class="btn">New Word</button>
         </div>
+
+        <div id="guessFeedback" class="muted feedback"></div>
       </section>
     </main>
 
@@ -94,6 +96,9 @@
     </footer>
   </div>
 
-  <script src="./js/app.js?v=3"></script>
+  <!-- Confetti overlay -->
+  <div id="confettiLayer" class="confetti hidden" aria-hidden="true"></div>
+
+  <script src="./js/app.js?v=4"></script>
 </body>
 </html>
