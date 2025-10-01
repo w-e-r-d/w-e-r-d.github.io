@@ -1,3 +1,7 @@
+// MW Trivia app.js — consolidated & fixed
+// If you see this log, the JS loaded correctly.
+console.log('MW Trivia app.js loaded', new Date().toISOString());
+
 // ===== Config =====
 const CSV_URL = './data/mw_words_rare.csv'; // your CSV path
 const ROUNDS_PER_GAME = 3;
@@ -8,7 +12,7 @@ const SCORE_BY_ATTEMPT = [1000, 500, 150]; // for word modes only
 // ===== State =====
 let persistence = 'session';            // or 'local'
 let dataRows = [];                      // raw rows from CSV
-let songs = [];                         // unique song index for search box
+let songs = [];                         // unique song index for search box / audio mode
 let docFreq = new Map();                // word -> number of unique songs containing it
 
 let currentMode = null;                 // 'super-rare' | 'rare' | 'audio'
@@ -40,7 +44,7 @@ function selectEls(){
     'roundSummary','roundSummaryTitle','roundSummaryDesc','roundBreakdown','btnNextRound',
     'gameOver','goRounds','goTotal','btnDownloadImage','btnPlayAgain','goModeScope',
     // Audio mode
-    'audioUI','btnSpotifyConnect','btnAudioStart','audioTimer','audioSongSearch','audioResults','btnAudioSubmit','audioAttemptsBadge','audioFeedback','audioStatus','spotifyPlayerContainer','btnAudioNext'
+    'audioUI','btnSpotifyConnect','btnAudioStart','btnAudioNext','audioTimer','audioSongSearch','audioResults','btnAudioSubmit','audioAttemptsBadge','audioFeedback','audioStatus','spotifyPlayerContainer'
   ].forEach(k => els[k] = q(k));
   els.modeCards = Array.from(document.querySelectorAll('.modecard'));
 }
@@ -126,10 +130,6 @@ function rebuildSongIndex(){
     }
   }
   songs = Array.from(map.values()).sort((a,b)=> a.song_title.localeCompare(b.song_title));
-});
-    }
-  }
-  songs = Array.from(map.values()).sort((a,b)=> a.song_title.localeCompare(b.song_title));
 }
 
 function buildDocFrequency(){
@@ -154,8 +154,6 @@ function updateAttemptsBadge(){
 // ===== Mode / Game helpers (word modes) =====
 function poolFilterByMode(r){
   // Scope removed: always include everything
-  const scopeOK = true;
-  if (!scopeOK) return false;
   if (currentMode === 'super-rare'){
     return (docFreq.get((r.word||'').toLowerCase()) === 1);
   }
@@ -327,10 +325,10 @@ function showRoundSummary(){
     const div = document.createElement('div');
     // Handle both word-mode and audio-mode items
     if (it.word){
-      div.innerHTML = `• <b>${sanitizeText(it.word)}</b> ? ${sanitizeText(it.song_title)} <span class=\"muted\">(+${it.points})</span>`;
+      div.innerHTML = `• <b>${sanitizeText(it.word)}</b> ? ${sanitizeText(it.song_title)} <span class="muted">(+${it.points})</span>`;
     } else {
       const t = it.time_ms != null ? ` @ ${formatMs(it.time_ms)}` : '';
-      div.innerHTML = `• ${sanitizeText(it.song_title)} <span class=\"muted\">(+${it.points}${t})</span>`;
+      div.innerHTML = `• ${sanitizeText(it.song_title)} <span class="muted">(+${it.points}${t})</span>`;
     }
     els.roundBreakdown.appendChild(div);
   });
@@ -343,9 +341,9 @@ function closeRoundSummaryAndAdvance(){
     game.roundIndex += 1;
     game.wordIndex = 0;
     if (game.mode === 'audio') {
-      // prep audio next round
       updateAudioRoundHeader();
       resetAudioUIForNextSong();
+      audioState.song = null;
     } else {
       showWord();
     }
@@ -359,7 +357,7 @@ function showGameOver(){
   let modeName = 'Rare Words';
   if (game.mode === 'super-rare') modeName = 'Super Rare Words';
   if (game.mode === 'audio') modeName = 'Guess the Song';
-  const scopeName = game.scope === 'albums' ? 'Albums only' : 'Everything';
+  const scopeName = 'Everything';
   els.goModeScope.textContent = `${modeName} · ${scopeName}`;
   game.rounds.forEach((r, idx) => {
     const div = document.createElement('div');
@@ -394,7 +392,7 @@ function downloadScoreImage(){
   let modeName = 'Rare Words';
   if (game.mode === 'super-rare') modeName = 'Super Rare Words';
   if (game.mode === 'audio') modeName = 'Guess the Song';
-  const scopeName = game.scope === 'albums' ? 'Albums only' : 'Everything';
+  const scopeName = 'Everything';
   ctx.fillStyle = '#374151';
   ctx.fillText(`${modeName} · ${scopeName}`, 76, 160);
 
@@ -443,7 +441,7 @@ function renderResults(list, intoEl, onPick){
     span.className = 'songtitle';
     const t = sanitizeText(s.song_title);
     const a = sanitizeText(s.album || '');
-    span.innerHTML = `<b>${t}</b> <span class=\"muted\"> - ${a}</span>`;
+    span.innerHTML = `<b>${t}</b> <span class="muted"> - ${a}</span>`;
     div.appendChild(img); div.appendChild(span);
     div.addEventListener('click', ()=> onPick(s));
     intoEl.appendChild(div);
@@ -560,7 +558,9 @@ function wireGame(){
 }
 
 function wireFiltersAndPersist(){
-  els.scopeSelect.addEventListener('change', ()=>{ rebuildSongIndex(); });
+  if (els.scopeSelect){
+    els.scopeSelect.addEventListener('change', rebuildSongIndex);
+  }
   if (els.btnTogglePersist){
     els.btnTogglePersist.addEventListener('click', ()=>{
       persistence = persistence === 'local' ? 'session' : 'local';
@@ -571,12 +571,16 @@ function wireFiltersAndPersist(){
 
 // ===== Init =====
 function init(){
-  selectEls();
-  wireModeGate();
-  wireFiltersAndPersist();
-  wireGame();
-  updateScoreBubble();
-  loadCSV().catch(err => console.error(err));
+  try {
+    selectEls();
+    wireModeGate();
+    wireFiltersAndPersist();
+    wireGame();
+    updateScoreBubble();
+    loadCSV().catch(err => console.error(err));
+  } catch (e){
+    console.error('Init error:', e);
+  }
 }
 window.addEventListener('DOMContentLoaded', init);
 
@@ -617,7 +621,7 @@ function startAudioMode(){
     total: 0,
   };
 
-  // Pre-sample all rounds of songs based on current scope (songs[] already respects scope)
+  // Pre-sample all rounds of songs based on full catalog (songs[] already built from ALL rows)
   for (let r = 0; r < ROUNDS_PER_GAME; r++){
     const picks = sampleAudioSongs(game.usedKeys);
     picks.forEach(p => game.usedKeys.add(p.track_spotify_id || p.song_title));
@@ -632,7 +636,7 @@ function startAudioMode(){
 }
 
 function sampleAudioSongs(excludeSet){
-  // Use the current songs[] list (already filtered by scope). Do NOT re-filter albums here.
+  // Use the current songs[] list (full catalog). Do NOT filter by album.
   const pool = songs.filter(s => !excludeSet.has(s.track_spotify_id || s.song_title));
   if (pool.length <= WORDS_PER_ROUND) return shuffle(pool.slice());
   const picks = [];
@@ -664,6 +668,7 @@ function resetAudioUIForNextSong(initial=false){
   audioState.attempts = 0;
   audioState.selected = null;
   setStartButtonState('start');
+  if (els.btnAudioNext) els.btnAudioNext.disabled = true;
 }
 
 // Score: 1000 at <=1s, then linear down to 0 at 60s
