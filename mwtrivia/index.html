@@ -1,16 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LNJ2DCY46"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  
-    gtag('config', 'G-3LNJ2DCY46');
-  </script>
-	
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Morgan Wallen Trivia</title>
@@ -38,10 +28,8 @@
         </label>
 -->
 
-        <!-- Attempts badge used by word modes -->
         <div id="attemptsBadge" class="pill badge hidden" aria-live="polite">Attempts left: 3</div>
 
-        <!-- Keep this present so JS wiring doesn't throw -->
 <!--
         <button id="btnTogglePersist" class="btn ghost" title="Toggle session vs. local storage">
           Use Local Storage
@@ -76,7 +64,7 @@
       </div>
     </section>
 
-    <!-- Score bubble shows current game total -->
+    <!-- current game total -->
     <section class="scorebar hidden" id="scoreBar">
       <div class="score-bubble">
         <div class="score-label" id="modeLabel">Mode</div>
@@ -85,9 +73,9 @@
       </div>
     </section>
 
-    <!-- Main game container -->
+    <!-- game container -->
     <main id="gameUI" class="grid hidden">
-      <!-- ===== Word modes card (existing) ===== -->
+      <!-- modes -->
       <section class="card" id="gameCard">
         <div class="roundhead">
           <div id="roundLabel" class="roundtag">Round 1 of 3</div>
@@ -117,11 +105,11 @@
         <div id="guessFeedback" class="muted feedback"></div>
       </section>
 
-      <!-- ===== Guess the Song card (hidden until Mode 3 Play) ===== -->
+      <!-- guess the song mode -->
       <section class="card hidden" id="audioUI" aria-labelledby="audioTitle">
         <h3 id="audioTitle">Guess the Song</h3>
 
-        <!-- Round / item header mirrors word modes -->
+        <!-- round/items -->
         <div class="roundhead">
           <div id="roundLabel" class="roundtag">Round 1 of 3</div>
           <div id="wordLabel" class="muted tiny">Song 1 / 5</div>
@@ -136,7 +124,6 @@
 
         <div id="audioStatus" class="muted tiny"></div>
 
-        <!-- SDK player is used; this container is here if you ever want to inject an iframe -->
         <div id="spotifyPlayerContainer" class="player-slot" aria-hidden="true"></div>
 
         <div class="spacer"></div>
@@ -155,7 +142,7 @@
       </section>
     </main>
 
-    <!-- Round summary overlay -->
+    <!-- summary overlay -->
     <section id="roundSummary" class="overlay hidden">
       <div class="overlay-card">
         <h3 id="roundSummaryTitle">Round 1 Complete</h3>
@@ -167,7 +154,7 @@
       </div>
     </section>
 
-    <!-- Game over screen -->
+    <!-- end game screen -->
     <section id="gameOver" class="overlay hidden">
       <div class="overlay-card">
         <h2>Game Over</h2>
@@ -182,17 +169,17 @@
     </section>
 
     <footer class="footer tiny">
-      <span>made for fun, for natalie &lt;3</span>
+      <span>made for fun, for natalie &lt;3 &nbsp; &nbsp; &nbsp; not a finished product :)</span>
     </footer>
   </div>
 
-  <!-- Confetti overlay -->
-  <div id="confettiLayer" class="confetti hidden" aria-hidden="true"></div>
+  <!-- partyyy -->
+<div id="confettiLayer" class="confetti hidden" aria-hidden="true"></div>
 
-  <!-- Spotify Web Playback SDK -->
+  <!-- spotify web player -->
   <script defer src="https://sdk.scdn.co/spotify-player.js"></script>
 
-  <!-- Your app logic (ensure this path & case match your project) -->
+  <!-- script -->
   <script defer src="./js/app.js?v=7"></script>
 </body>
 </html>

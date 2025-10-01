@@ -1,27 +1,25 @@
-// MW Trivia app.js — consolidated & fixed
-// If you see this log, the JS loaded correctly.
 console.log('MW Trivia app.js loaded', new Date().toISOString());
 
 // ===== Config =====
-const CSV_URL = './data/mw_words_rare.csv'; // your CSV path
+const CSV_URL = './data/mw_words_rare.csv';
 const ROUNDS_PER_GAME = 3;
 const WORDS_PER_ROUND = 5;      // used for both word and audio modes
 const ATTEMPTS_MAX = 3;         // cap per item
 const SCORE_BY_ATTEMPT = [1000, 500, 150]; // for word modes only
 
 // ===== State =====
-let persistence = 'session';            // or 'local'
-let dataRows = [];                      // raw rows from CSV
+let persistence = 'session';
+let dataRows = [];                      // raw rows from csv
 let songs = [];                         // unique song index for search box / audio mode
 let docFreq = new Map();                // word -> number of unique songs containing it
 
-let currentMode = null;                 // 'super-rare' | 'rare' | 'audio'
-let currentWordItem = null;             // the active (song,word) row (word modes)
-let selectedSong = null;                // chosen song (word modes)
-let attemptIndex = 0;                   // 0-based counter for current word (word modes)
-let wordResolved = false;               // lock once correct/revealed/exhausted (word modes)
+let currentMode = null;
+let currentWordItem = null;             // active row
+let selectedSong = null;                // chosen song
+let attemptIndex = 0;                   // 0-based counter for current word
+let wordResolved = false;               // lock once correct/exhausted
 
-// Game lifecycle state (shared across modes)
+// lifecycle state (shared across modes)
 let game = null;                        // { mode, scope, roundIndex, wordIndex, rounds:[{score, items:[], picks:[] }], total, usedKeys:Set }
 // items:
 //  - word modes: { word, song_title, album, cover_url, count_global, correct, points }
@@ -40,25 +38,25 @@ function selectEls(){
     'btnSubmit','btnReveal','btnNext',
     'confettiLayer','wordBox','gameCard',
     'roundLabel','wordLabel','attemptsBadge',
-    // Round summary + Game over
+    // round summary + game over
     'roundSummary','roundSummaryTitle','roundSummaryDesc','roundBreakdown','btnNextRound',
     'gameOver','goRounds','goTotal','btnDownloadImage','btnPlayAgain','goModeScope',
-    // Audio mode
+    // song mode
     'audioUI','btnSpotifyConnect','btnAudioStart','btnAudioNext','audioTimer','audioSongSearch','audioResults','btnAudioSubmit','audioAttemptsBadge','audioFeedback','audioStatus','spotifyPlayerContainer'
   ].forEach(k => els[k] = q(k));
   els.modeCards = Array.from(document.querySelectorAll('.modecard'));
 }
 
-// ===== Storage (bubble shows live game total) =====
+// ===== score =====
 function updateScoreBubble(){ els.scoreBubbleBest.textContent = String(game?.total || 0); }
 
-// ===== CSV parsing =====
+// ===== csv parsing =====
 async function loadCSV(){
   const res = await fetch(CSV_URL, { cache: 'no-store' });
-  if(!res.ok) throw new Error(`Fetch failed: ${res.status}`);
+  if(!res.ok) throw new Error(`fetch failed: ${res.status}`);
   const text = await res.text();
   dataRows = parseCSV(text);
-  if (!dataRows.length) throw new Error('CSV had no rows.');
+  if (!dataRows.length) throw new Error('csv had no rows.');
   rebuildSongIndex();
   buildDocFrequency();
 }
@@ -71,7 +69,7 @@ function parseCSV(text){
   const headers = splitCSVRow(lines[0]).map(h => h.trim());
   const required = ['song_title','album','release_type','is_album','is_feature','track_spotify_id','cover_url','word','count_in_song','count_global'];
   const missing = required.filter(h => !headers.includes(h));
-  if (missing.length){ throw new Error('Missing columns: ' + missing.join(', ')); }
+  if (missing.length){ throw new Error('missing columns: ' + missing.join(', ')); }
 
   for (let i=1;i<lines.length;i++){
     const cols = splitCSVRow(lines[i]);
@@ -110,9 +108,8 @@ function splitCSVRow(line){
 }
 function toBool(v){ const s = String(v).toLowerCase().trim(); return s === 'true' || s === '1'; }
 
-// ===== Indexing / frequency =====
+// ===== indexing/frequency =====
 function rebuildSongIndex(){
-  // Scope removed: always include everything (albums, singles, features)
   const map = new Map();
   for (const r of dataRows){
     const key = r.track_spotify_id || r.song_title;
@@ -151,9 +148,8 @@ function updateAttemptsBadge(){
   els.attemptsBadge.textContent = wordResolved ? 'Resolved' : ('Attempts left: ' + left);
 }
 
-// ===== Mode / Game helpers (word modes) =====
+// ===== helpers =====
 function poolFilterByMode(r){
-  // Scope removed: always include everything
   if (currentMode === 'super-rare'){
     return (docFreq.get((r.word||'').toLowerCase()) === 1);
   }
@@ -166,7 +162,6 @@ function poolFilterByMode(r){
 function sampleRoundWords(excludeSet){
   const pool = dataRows.filter(r => poolFilterByMode(r) && r.word && r.count_in_song > 0 && !excludeSet.has(r.word + '||' + r.song_title));
   if (pool.length <= WORDS_PER_ROUND) return pool.slice(0, WORDS_PER_ROUND);
-  // Weighted by rarity (inverse global count)
   const weights = pool.map(r => 1 / Math.max(1, r.count_global));
   const picks = [];
   const usedIdx = new Set();
@@ -187,7 +182,7 @@ function sampleRoundWords(excludeSet){
 }
 
 function startNewGame(mode){
-  currentMode = mode; // 'super-rare' | 'rare'
+  currentMode = mode;
   els.modeGate.classList.add('hidden');
   els.gameUI.classList.remove('hidden');
   els.scoreBar.classList.remove('hidden');
@@ -205,7 +200,6 @@ function startNewGame(mode){
     total: 0,
   };
 
-  // Pre-sample all rounds for determinism in this session
   for (let r = 0; r < ROUNDS_PER_GAME; r++){
     const picks = sampleRoundWords(game.usedKeys);
     picks.forEach(p => game.usedKeys.add(p.word + '||' + p.song_title));
@@ -239,7 +233,7 @@ function showWord(){
 
 function gradeSelection(){
   if (!currentWordItem) return;
-  if (wordResolved) return; // already resolved
+  if (wordResolved) return;
   if (!selectedSong){
     els.songSearch.classList.add('error');
     flash(els.wordBox, 'shake', 450);
@@ -276,7 +270,7 @@ function gradeSelection(){
     return;
   }
 
-  // Wrong guess path
+  // wrong guess
   attemptIndex += 1;
   updateAttemptsBadge();
   const remaining = Math.max(0, ATTEMPTS_MAX - attemptIndex);
@@ -285,7 +279,7 @@ function gradeSelection(){
   flash(els.wordBox, 'shake', 450);
 
   if (attemptIndex >= ATTEMPTS_MAX){
-    // auto reveal and record zero points
+    // auto reveal- record zero points
     const curRound = game.rounds[game.roundIndex];
     if (!curRound.items.find(it => it.word === currentWordItem.word && it.song_title === currentWordItem.song_title)){
       curRound.items.push({
@@ -312,7 +306,7 @@ function nextStep(){
     showWord();
     return;
   }
-  // Round complete
+  // round complete
   showRoundSummary();
 }
 
@@ -323,7 +317,7 @@ function showRoundSummary(){
   els.roundBreakdown.innerHTML = '';
   game.rounds[r].items.forEach(it => {
     const div = document.createElement('div');
-    // Handle both word-mode and audio-mode items
+    // handle word-mode and audio-mode items
     if (it.word){
       div.innerHTML = `• <b>${sanitizeText(it.word)}</b> ? ${sanitizeText(it.song_title)} <span class="muted">(+${it.points})</span>`;
     } else {
@@ -368,7 +362,7 @@ function showGameOver(){
   els.gameOver.classList.remove('hidden');
 }
 
-// ===== Export image =====
+// ===== export score =====
 function downloadScoreImage(){
   const W = 1200, H = 628;
   const canvas = document.createElement('canvas');
@@ -426,7 +420,7 @@ function roundRect(ctx, x, y, w, h, r, fill, stroke){
   if (stroke) ctx.stroke();
 }
 
-// ===== UI helpers =====
+// ===== ui helpers =====
 function hideResults(){ els.results.classList.add('hidden'); els.results.innerHTML = ''; }
 function renderResults(list, intoEl, onPick){
   intoEl.innerHTML = '';
@@ -454,7 +448,7 @@ function filterSongs(query){
   return songs.filter(s => (s.song_title + ' ' + (s.album||'')).toLowerCase().includes(q)).slice(0, 20);
 }
 
-// Anim helpers
+// animation helpers
 function flash(el, className, ms=500){ el.classList.add(className); setTimeout(()=> el.classList.remove(className), ms); }
 function launchConfetti(){
   const layer = els.confettiLayer;
@@ -481,20 +475,20 @@ function launchConfetti(){
   setTimeout(()=> { layer.innerHTML = ''; layer.classList.add('hidden'); }, 2200);
 }
 
-// Text sanitizer
+// sanitizer
 function sanitizeText(s){
   if (!s) return '';
   return String(s)
-    .replace(/\uFFFD/g, '')                // remove replacement char
-    .replace(/[\u2013\u2014]/g, '-')      // en/em dash -> hyphen
-    .replace(/[\u2018\u2019]/g, "'")    // curly -> '
-    .replace(/[\u201C\u201D]/g, '"')     // curly -> "
-    .replace(/[\u00A0]/g, ' ')            // nbsp -> space
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '') // control chars
+    .replace(/\uFFFD/g, '')
+    .replace(/[\u2013\u2014]/g, '-')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u00A0]/g, ' ')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
     .trim();
 }
 
-// ===== Wiring =====
+// ===== wires =====
 function wireModeGate(){
   els.modeCards.forEach(card => {
     const btn = card.querySelector('.btn');
@@ -510,7 +504,6 @@ function wireModeGate(){
 }
 
 function wireGame(){
-  // typing clears selection (word modes)
   els.songSearch.addEventListener('input', (e)=>{
     selectedSong = null;
     els.btnSubmit.disabled = true;
@@ -539,21 +532,21 @@ function wireGame(){
     if (!els.results.contains(e.target) && e.target !== els.songSearch) hideResults();
   });
 
-  // Submit to grade
+  // submit
   els.btnSubmit.addEventListener('click', gradeSelection);
   els.songSearch.addEventListener('keydown', (e)=>{ if (e.key === 'Enter'){ e.preventDefault(); gradeSelection(); }});
 
-  // Next
+  // next
   els.btnNext.addEventListener('click', nextStep);
 
-  // Round summary controls
+  // summary controls
   els.btnNextRound.addEventListener('click', closeRoundSummaryAndAdvance);
 
-  // Game over controls
+  // game over controls
   els.btnPlayAgain.addEventListener('click', ()=>{ location.reload(); });
   els.btnDownloadImage.addEventListener('click', downloadScoreImage);
 
-  // Audio mode wiring
+  // audio mode wiring
   wireAudio();
 }
 
@@ -569,7 +562,7 @@ function wireFiltersAndPersist(){
   }
 }
 
-// ===== Init =====
+// ===== init =====
 function init(){
   try {
     selectEls();
@@ -584,9 +577,9 @@ function init(){
 }
 window.addEventListener('DOMContentLoaded', init);
 
-// ===== Audio Mode (Spotify) =====
-const SPOTIFY_CLIENT_ID = '01757ce8e3694d6ba472ecd373e28087'; // <-- set this
-const SPOTIFY_REDIRECT_URI = location.origin + location.pathname; // also add in Spotify Dashboard
+// ===== audio mode =====
+const SPOTIFY_CLIENT_ID = '01757ce8e3694d6ba472ecd373e28087';
+const SPOTIFY_REDIRECT_URI = location.origin + location.pathname;
 const SPOTIFY_SCOPES = 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state';
 
 let spotifyToken = null;
@@ -610,25 +603,24 @@ function startAudioMode(){
   els.modeLabel.textContent = 'Guess the Song';
   els.gameTitle.textContent = 'Guess the Song';
 
-  // Initialize game meta for audio mode
+  // initialize game meta for audio mode
   game = {
     mode: 'audio',
     scope: 'all',
     roundIndex: 0,
-    wordIndex: 0, // acts as song index per round
+    wordIndex: 0,
     rounds: Array.from({length: ROUNDS_PER_GAME}, ()=>({ score:0, items:[], picks:[] })),
     usedKeys: new Set(),
     total: 0,
   };
 
-  // Pre-sample all rounds of songs based on full catalog (songs[] already built from ALL rows)
   for (let r = 0; r < ROUNDS_PER_GAME; r++){
     const picks = sampleAudioSongs(game.usedKeys);
     picks.forEach(p => game.usedKeys.add(p.track_spotify_id || p.song_title));
     game.rounds[r].picks = picks;
   }
 
-  // Show audio card, hide word card
+  // show audio card, hide word card
   els.gameCard.classList.add('hidden');
   els.audioUI.classList.remove('hidden');
   updateAudioRoundHeader();
@@ -636,7 +628,6 @@ function startAudioMode(){
 }
 
 function sampleAudioSongs(excludeSet){
-  // Use the current songs[] list (full catalog). Do NOT filter by album.
   const pool = songs.filter(s => !excludeSet.has(s.track_spotify_id || s.song_title));
   if (pool.length <= WORDS_PER_ROUND) return shuffle(pool.slice());
   const picks = [];
@@ -671,7 +662,7 @@ function resetAudioUIForNextSong(initial=false){
   if (els.btnAudioNext) els.btnAudioNext.disabled = true;
 }
 
-// Score: 1000 at <=1s, then linear down to 0 at 60s
+// score: 1000 at <=1s, then linear down to 0 at 60s
 function scoreFromMs(ms){
   if (ms <= 1000) return 1000;
   if (ms >= 60000) return 0;
@@ -680,7 +671,6 @@ function scoreFromMs(ms){
   return Math.max(0, Math.round(1000 * frac));
 }
 
-// Timer uses actual playback position from the SDK, not wall-clock
 async function startPlaybackAndPoll(song){
   try {
     await ensureSpotifyToken();
@@ -698,11 +688,11 @@ async function startPlaybackAndPoll(song){
     return false;
   }
 
-  // Wait until the SDK reports playing state
+  // wait until the SDK reports playing state
   await waitUntilPlaying(song.track_spotify_id, 5000);
   els.audioStatus.textContent = 'Playing...';
 
-  // Begin polling SDK position
+  // begin polling SDK position
   startPositionPolling();
   setStartButtonState('pause');
   return true;
@@ -756,7 +746,7 @@ function pauseAudioForGuess(){
 
 function resumeAudio(){
   if (!spotifyToken || !spotifyDeviceId) return;
-  // Resume current playback without resetting to 0 — no URIs or position sent.
+  // resume current playback
   fetch(`https://api.spotify.com/v1/me/player/play?device_id=${encodeURIComponent(spotifyDeviceId)}`, {
     method:'PUT',
     headers:{ 'Authorization':'Bearer '+spotifyToken }
@@ -773,7 +763,7 @@ function stopAudio(){
 }
 
 function getFrozenMsForScoring(){
-  // read once from SDK (position is frozen because we pause on input)
+  // read once from SDK
   return getCurrentPlaybackPositionMs();
 }
 
@@ -817,11 +807,11 @@ function submitAudioGuess(){
       } else {
         els.audioFeedback.textContent = 'Wrong - resuming...';
         resumeAudio();
-        return; // don't record yet
+        return;
       }
     }
 
-    // Record item to round
+    // record item to round
     const r = game.roundIndex;
     const round = game.rounds[r];
     round.items.push({ song_title: audioState.song.song_title, album: audioState.song.album, cover_url: audioState.song.cover_url, time_ms: ms, correct, points: pts });
@@ -829,7 +819,7 @@ function submitAudioGuess(){
     game.total += pts;
     updateScoreBubble();
 
-    // Enable Next
+    // enable next
     if (els.btnAudioNext) els.btnAudioNext.disabled = false;
   })();
 }
@@ -841,7 +831,7 @@ async function handleAudioStart(){
   if (!picks || !picks.length){ els.audioFeedback.textContent = 'No songs available for this scope.'; return; }
   const song = picks[idx];
 
-  // If no song started yet for this index, start it
+  // if no song started yet for this index, start it
   if (!audioState.song || (audioState.song.track_spotify_id !== song.track_spotify_id)){
     audioState.song = song;
     audioState.done = false;
@@ -854,7 +844,7 @@ async function handleAudioStart(){
     return;
   }
 
-  // Otherwise toggle play/pause based on current player state
+  // otherwise toggle play/pause based on player state
   const st = await (spotifyPlayer ? spotifyPlayer.getCurrentState() : null);
   if (st && !st.paused){
     pauseAudioForGuess();
@@ -869,24 +859,23 @@ function nextAudio(){
     game.wordIndex += 1;
     updateAudioRoundHeader();
     resetAudioUIForNextSong();
-    audioState.song = null; // force new song start on next press
+    audioState.song = null;
   } else {
-    // Round finished
     stopAudio();
     showRoundSummary();
   }
 }
 
-// ===== Audio wiring (UI) =====
+// ===== audio wires =====
 function wireAudio(){
-  // Connect / auth
+  // connect + auth
   els.btnSpotifyConnect.addEventListener('click', beginSpotifyLogin);
-  // Start/Play-Pause toggle
+  // start/playpause toglge
   els.btnAudioStart.addEventListener('click', handleAudioStart);
   // Next song
   if (els.btnAudioNext){ els.btnAudioNext.addEventListener('click', ()=>{ if (!els.btnAudioNext.disabled){ els.btnAudioNext.disabled = true; nextAudio(); } }); }
 
-  // Search interactions
+  // search
   els.audioSongSearch.addEventListener('input', (e)=>{
     pauseAudioForGuess();
     audioState.selected = null;
@@ -917,7 +906,7 @@ function wireAudio(){
   els.audioSongSearch.addEventListener('keydown', (e)=>{ if (e.key === 'Enter'){ e.preventDefault(); submitAudioGuess(); }});
 }
 
-// ===== Spotify Auth / SDK =====
+// ===== spotify auth + sdk =====
 function updateSpotifyConnectUI(connected){
   if (!els.btnSpotifyConnect) return;
   if (connected){
@@ -998,7 +987,7 @@ async function generateCodeChallenge(verifier){
 }
 
 async function setupSpotifyPlayer(){
-  if (spotifyPlayer && spotifyDeviceId) return; // already ready
+  if (spotifyPlayer && spotifyDeviceId) return;
   await new Promise((resolve)=>{
     if (window.Spotify) return resolve();
     const iv = setInterval(()=>{ if (window.Spotify){ clearInterval(iv); resolve(); } }, 100);
@@ -1030,7 +1019,7 @@ async function transferAndPlay(trackId){
   });
 }
 
-// ===== Utilities =====
+// ===== utilities =====
 function formatMs(ms){
   const s = Math.floor(ms/1000);
   const m = Math.floor(s/60);
