@@ -25,13 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const ids = SONGS.map(toId).filter(Boolean);
   if (!ids.length) return;
 
-  // ===== build film reel =====
+  // ===== build glossy strip =====
   const mount = document.querySelector('#film-reel') || document.querySelector('main') || document.body;
   mount.innerHTML = `
-    <div class="reel-wrap">
+    <div class="reel-wrap neon">
       <button class="reel-btn prev" aria-label="Previous">‹</button>
 
-      <div class="reel" tabindex="0" aria-label="Spotify film reel">
+      <div class="reel" tabindex="0" aria-label="Spotify strip">
         <div class="reel-track"></div>
       </div>
 
@@ -42,19 +42,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const track = mount.querySelector('.reel-track');
 
-  ids.forEach((id) => {
+  ids.forEach((id, idx) => {
     const frame = document.createElement('article');
-    frame.className = 'frame';
+    frame.className = 'card-frame';
+    frame.style.setProperty('--tilt', `${(idx % 3 === 0 ? -1.2 : idx % 3 === 1 ? 0.8 : -0.6)}deg`);
     frame.innerHTML = `
-      <div class="sprockets top" aria-hidden="true"></div>
-      <div class="frame-inner">
+      <div class="card">
+        <div class="card-blur"></div>
+        <div class="card-glow"></div>
+        <div class="card-sheen"></div>
         <iframe
           loading="lazy"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           src="https://open.spotify.com/embed/track/${id}?utm_source=generator"
           title="Spotify track"></iframe>
       </div>
-      <div class="sprockets bottom" aria-hidden="true"></div>
     `;
     track.appendChild(frame);
   });
@@ -65,10 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnNext = mount.querySelector('.reel-btn.next');
 
   function snapAmount() {
-    // matches one frame width + gap via CSS (frame width is responsive)
-    const anyFrame = track.querySelector('.frame');
-    if (!anyFrame) return 300;
-    const rect = anyFrame.getBoundingClientRect();
+    const any = track.querySelector('.card-frame');
+    if (!any) return 320;
+    const rect = any.getBoundingClientRect();
     const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '16');
     return rect.width + gap;
   }
@@ -90,10 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const dx = e.clientX - startX;
     reel.scrollLeft = startScroll - dx;
   });
-  ['pointerup', 'pointercancel', 'mouseleave'].forEach(ev => reel.addEventListener(ev, () => {
-    isDown = false;
-    reel.classList.remove('dragging');
-  }));
+  ['pointerup', 'pointercancel', 'mouseleave'].forEach(ev =>
+    reel.addEventListener(ev, () => { isDown = false; reel.classList.remove('dragging'); })
+  );
 
   // wheel horizontal
   reel.addEventListener('wheel', (e) => {

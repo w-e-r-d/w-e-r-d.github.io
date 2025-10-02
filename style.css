@@ -742,22 +742,21 @@ body::before {
   .download-btn .dl-label { font-size: 1rem; }
 }
 
-/* ===== Film Reel Strip ===== */
-.reel-wrap {
+/* ===== spotify strip ===== */
+.reel-wrap.neon {
   position: relative;
-  margin: 2rem auto 0.5rem;
-  width: min(1100px, 96vw);
+  margin: 2rem auto .5rem;
+  width: min(1200px, 96vw);
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .reel-btn {
   font: inherit;
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  width: 42px; height: 42px;
+  border-radius: 12px;
   border: 2px solid var(--black);
   background: #fff;
   box-shadow: 4px 4px 0 var(--black);
@@ -768,15 +767,22 @@ body::before {
 
 .reel {
   overflow: auto;
-  border-radius: 16px;
-  border: 2px solid rgba(255,255,255,0.3);
-  background:
-    linear-gradient(#252525, #1a1a1a); /* film base */
+  border-radius: 18px;
+  border: 2px solid rgba(255,255,255,0.35);
+  background: radial-gradient(1200px 400px at 20% -20%,
+              rgba(253,148,132,.24), transparent 40%),
+              radial-gradient(900px 300px at 110% 120%,
+              rgba(126,195,168,.24), transparent 40%),
+              rgba(255,255,255,0.55);
   box-shadow: 6px 6px 0 var(--black);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   scroll-snap-type: x mandatory;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
+  position: relative;
 }
 .reel::-webkit-scrollbar { display: none; }
+.reel.dragging { cursor: grabbing; }
 
 .reel-track {
   display: grid;
@@ -785,88 +791,94 @@ body::before {
   padding: clamp(14px, 2vw, 22px);
 }
 
-.frame {
+/* Card frame with subtle random tilt */
+.card-frame {
   scroll-snap-align: start;
-  width: clamp(260px, 38vw, 340px);
+  width: clamp(260px, 36vw, 360px);
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  align-items: center;
 }
-
-.frame-inner {
-  border-radius: 12px;
-  border: 2px solid var(--black);
+.card {
+  position: relative;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 4px 4px 0 var(--black);
-  background: #000;
-  transform: rotate(var(--tilt, 0deg));
-  transition: transform .2s ease, box-shadow .2s ease;
+  transform: rotate(var(--tilt, 0));
+  transition: transform .25s ease, box-shadow .25s ease;
+  /* gradient border via pseudo */
 }
-.frame-inner:hover {
+.card::before {
+  content: "";
+  position: absolute; inset: 0;
+  padding: 2px; border-radius: 18px;
+  background: linear-gradient(135deg, var(--pink), var(--green));
+  -webkit-mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+.card:hover {
   transform: rotate(0deg) translateY(-2px);
-  box-shadow: 6px 6px 0 var(--black);
+  box-shadow: 8px 8px 0 var(--black);
 }
 
-.frame:nth-child(3n+1) .frame-inner { --tilt: -1.2deg; }
-.frame:nth-child(3n+2) .frame-inner { --tilt:  0.8deg; }
-.frame:nth-child(3n+3) .frame-inner { --tilt: -0.6deg; }
-
-/* compact Spotify embed sizing */
-.frame-inner iframe {
-  display: block;
-  width: 100%;
-  height: 152px; /* triggers compact layout */
-  border: 0;
-}
-
-/* sprocket holes (top & bottom) */
-.sprockets {
-  height: 18px;
-  position: relative;
-  opacity: .85;
-  filter: saturate(110%);
-}
-.sprockets::before, .sprockets::after {
-  content: "";
+/* animated glow blob behind the iframe */
+.card-glow {
   position: absolute;
-  left: 0; right: 0; top: 50%;
-  height: 6px;
-  transform: translateY(-50%);
+  inset: -20%;
   background:
-    repeating-linear-gradient(90deg,
-      transparent 0 24px,
-      rgba(0,0,0,.7) 24px 44px);
-  border-radius: 6px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+    radial-gradient(40% 40% at 30% 40%, rgba(253,148,132,.45), transparent 60%),
+    radial-gradient(38% 38% at 70% 60%, rgba(126,195,168,.45), transparent 60%);
+  filter: blur(18px) saturate(115%);
+  animation: glowDrift 12s ease-in-out infinite alternate;
+  z-index: 0;
 }
-.sprockets.top { background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,0)); }
-.sprockets.bottom { background: linear-gradient(0deg, rgba(255,255,255,.18), rgba(255,255,255,0)); }
+@keyframes glowDrift {
+  0%   { transform: translate(-3%, -2%) rotate(0deg); }
+  50%  { transform: translate(2%, 3%) rotate(8deg); }
+  100% { transform: translate(-1%, 1%) rotate(-6deg); }
+}
 
-/* subtle “perforations” along the reel edges */
-.reel {
-  position: relative;
-}
-.reel::before,
-.reel::after {
-  content: "";
+/* subtle frost layer for glass look */
+.card-blur {
   position: absolute;
-  left: 0; right: 0;
-  height: 10px;
-  background:
-    repeating-linear-gradient(90deg,
-      #0000 0 18px,
-      rgba(0,0,0,.22) 18px 30px,
-      #0000 30px 48px);
+  inset: 0;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(255,255,255,.08);
+  z-index: 1;
+}
+
+/* sheen sweep on hover */
+.card-sheen {
+  position: absolute;
+  inset: -50% -30%;
+  background: linear-gradient(115deg, transparent 45%, rgba(255,255,255,.55) 52%, transparent 59%);
+  transform: translateX(-120%) rotate(8deg);
+  transition: transform .9s ease;
+  z-index: 3;
   pointer-events: none;
 }
-.reel::before { top: 0; }
-.reel::after  { bottom: 0; }
+.card:hover .card-sheen { transform: translateX(120%) rotate(8deg); }
 
-/* dragging feedback */
-.reel.dragging { cursor: grabbing; }
+/* the compact Spotify embed */
+.card iframe {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 152px; /* compact layout */
+  border: 0;
+  border-radius: 14px;
+}
 
-/* mobile */
+/* focus-visible for a11y */
+.card iframe:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--pink) 60%, white 40%);
+  outline-offset: 2px;
+}
+
+/* mobile tweaks */
 @media (max-width: 640px) {
   .reel-btn { width: 38px; height: 38px; }
-  .frame-inner iframe { height: 140px; }
+  .card iframe { height: 140px; }
 }
