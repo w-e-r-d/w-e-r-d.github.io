@@ -5,7 +5,7 @@ document.documentElement.style.setProperty('--active-tilt', tilt);
 document.addEventListener('DOMContentLoaded', () => {
   if (!document.body.classList.contains('home')) return;
 
-// ===== tracks =====
+  // ===== tracks =====
   const SONGS = [
     "https://open.spotify.com/track/2QqDNk4meN58jBmUn0EBUi",
     "https://open.spotify.com/track/2TugrDKkd55mfVOMVZsfO8",
@@ -26,40 +26,58 @@ document.addEventListener('DOMContentLoaded', () => {
   const ids = SONGS.map(toId).filter(Boolean);
   if (!ids.length) return;
 
-  // DOM mount
-  const mount = document.querySelector('#vinyl-player') || document.querySelector('main') || document.body;
+  // ===== mount vinyl player =====
+  const main = document.querySelector('main') || document.body;
+  let mount = document.querySelector('#vinyl-player');
+  if (!mount) {
+    mount = document.createElement('section');
+    mount.id = 'vinyl-player';
+    main.appendChild(mount);
+  }
 
-  // Build player shell
   mount.innerHTML = `
     <div class="turntable">
-      <div class="plinth">
+      <div class="plinth" style="position:relative;">
         <div class="record-wrap">
-          <div class="record">
+          <div class="record" aria-hidden="true">
             <div class="grooves"></div>
             <div class="label"></div>
             <div class="spindle"></div>
           </div>
-          <div class="tonearm">
+          <div class="tonearm" aria-hidden="true">
             <div class="headshell"></div>
           </div>
         </div>
+
         <div class="controls">
           <button class="vt-btn prev" aria-label="Previous">‹</button>
           <button class="vt-btn play" aria-label="Play/Pause">Play</button>
           <button class="vt-btn next" aria-label="Next">›</button>
         </div>
+
         <div class="track-meta">
-          <div class="t-title">Loading…</div>
+          <a class="t-title" target="_blank" rel="noopener">Loading…</a>
           <div class="t-artist"></div>
         </div>
-      </div>
-    </div>
 
-    <div class="vinyl-modal" hidden>
-      <div class="vinyl-modal-backdrop"></div>
-      <div class="vinyl-modal-card">
-        <button class="modal-close" aria-label="Close">✕</button>
-        <iframe class="vinyl-embed" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <!-- compact embed tucked in bottom-right like a little screen -->
+        <div class="mini-embed"
+             style="
+               position:absolute;
+               right:12px; bottom:12px;
+               width:280px; height:152px;
+               border:2px solid var(--black);
+               border-radius:12px;
+               overflow:hidden;
+               box-shadow:4px 4px 0 var(--black);
+               background:#000;
+             ">
+          <iframe class="spotify-mini"
+                  title="Spotify preview"
+                  style="width:100%; height:100%; border:0; display:block;"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"></iframe>
+        </div>
       </div>
     </div>
   `;
@@ -68,124 +86,113 @@ document.addEventListener('DOMContentLoaded', () => {
     record: mount.querySelector('.record'),
     label: mount.querySelector('.label'),
     tonearm: mount.querySelector('.tonearm'),
-    title: mount.querySelector('.t-title'),
+    titleLink: mount.querySelector('.t-title'),
     artist: mount.querySelector('.t-artist'),
     btnPrev: mount.querySelector('.prev'),
     btnPlay: mount.querySelector('.play'),
     btnNext: mount.querySelector('.next'),
-    modal: mount.querySelector('.vinyl-modal'),
-    modalCard: mount.querySelector('.vinyl-modal-card'),
-    modalClose: mount.querySelector('.modal-close'),
-    embed: mount.querySelector('.vinyl-embed'),
-    backdrop: mount.querySelector('.vinyl-modal-backdrop'),
+    mini: mount.querySelector('.spotify-mini'),
   };
 
   let i = 0;
-  let playing = false;
+  let spinning = false;
 
-  // Cache of metadata: { id, title, author, thumb }
+  // ===== simple oEmbed fetch for title/artist/thumb =====
   const cache = new Map();
+  const trackUrl = (id) => `https://open.spotify.com/track/${id}`;
+  const oembedUrl = (id) => `https://open.spotify.com/oembed?url=${encodeURIComponent(trackUrl(id))}`;
 
-  function oembedUrl(trackId) {
-    return `https://open.spotify.com/oembed?url=${encodeURIComponent(`https://open.spotify.com/track/${trackId}`)}`;
-  }
-
-  async function getMeta(trackId) {
-    if (cache.has(trackId)) return cache.get(trackId);
+  async function getMeta(id) {
+    if (cache.has(id)) return cache.get(id);
     try {
-      const res = await fetch(oembedUrl(trackId));
+      const res = await fetch(oembedUrl(id));
       const data = await res.json();
       const meta = {
-        id: trackId,
+        id,
         title: data.title || 'Unknown title',
         author: data.author_name || '',
         thumb: data.thumbnail_url || '',
+        url: trackUrl(id),
       };
-      cache.set(trackId, meta);
+      cache.set(id, meta);
       return meta;
     } catch {
-      const meta = { id: trackId, title: 'Unknown title', author: '', thumb: '' };
-      cache.set(trackId, meta);
+      const meta = { id, title: 'Unknown title', author: '', thumb: '', url: trackUrl(id) };
+      cache.set(id, meta);
       return meta;
     }
   }
 
-  function setEmbed(trackId) {
-    el.embed.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator`;
+  function setMiniEmbed(id) {
+    // compact embed = same URL, but the iframe height makes it compact (152px)
+    el.mini.src = `https://open.spotify.com/embed/track/${id}?utm_source=generator`;
   }
 
   async function render(index) {
     const id = ids[index];
     const meta = await getMeta(id);
 
-    // Update label art + meta
+    // update label + meta
     if (meta.thumb) {
       el.label.style.backgroundImage = `url("${meta.thumb}")`;
+      el.label.style.backgroundSize = 'cover';
+      el.label.style.backgroundPosition = 'center';
     } else {
       el.label.style.backgroundImage = 'none';
     }
-    el.title.textContent = meta.title;
+    el.titleLink.textContent = meta.title;
+    el.titleLink.href = meta.url;
     el.artist.textContent = meta.author;
 
-    // Point modal to current track
-    setEmbed(id);
+    // point compact embed to current track (resets any playing preview)
+    setMiniEmbed(id);
 
-    // Stop spin when switching
-    playing = false;
+    // stop spin when switching
+    spinning = false;
     el.record.classList.remove('spin');
     el.tonearm.classList.remove('on-record');
     el.btnPlay.textContent = 'Play';
   }
 
-  function openModal() {
-    el.modal.hidden = false;
-    // begin “spin” animation immediately for vibes; user still hits play in iframe
-    playing = true;
-    el.record.classList.add('spin');
-    el.tonearm.classList.add('on-record');
-    el.btnPlay.textContent = 'Pause';
-    // focus the iframe for accessibility
-    setTimeout(() => el.embed?.focus?.(), 0);
+  function toggleSpin() {
+    spinning = !spinning;
+    if (spinning) {
+      el.record.classList.add('spin');
+      el.tonearm.classList.add('on-record');
+      el.btnPlay.textContent = 'Pause';
+
+      // Try to give focus to the mini player so the user can press Space/Enter there
+      // (We can’t programmatically click play due to cross-origin/autoplay rules)
+      el.mini?.focus?.();
+    } else {
+      el.record.classList.remove('spin');
+      el.tonearm.classList.remove('on-record');
+      el.btnPlay.textContent = 'Play';
+
+      // "Pause" the preview by reloading the iframe (quick + reliable)
+      // (Optional) comment out if you want the preview to keep going:
+      el.mini.src = el.mini.src;
+    }
   }
 
-  function closeModal() {
-    el.modal.hidden = true;
-    // pause vibes unless you want it to keep spinning
-    playing = false;
-    el.record.classList.remove('spin');
-    el.tonearm.classList.remove('on-record');
-    el.btnPlay.textContent = 'Play';
-    // stop iframe to avoid background audio
-    el.embed.src = el.embed.src; // reload clears playback
-  }
-
-  // Controls
+  // ===== controls =====
   el.btnPrev.addEventListener('click', () => {
     i = (i - 1 + ids.length) % ids.length;
     render(i);
   });
-
   el.btnNext.addEventListener('click', () => {
     i = (i + 1) % ids.length;
     render(i);
   });
+  el.btnPlay.addEventListener('click', toggleSpin);
 
-  el.btnPlay.addEventListener('click', () => {
-    if (el.modal.hidden) {
-      openModal();
-    } else {
-      closeModal();
-    }
-  });
-
-  el.modalClose.addEventListener('click', closeModal);
-  el.backdrop.addEventListener('click', closeModal);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !el.modal.hidden) closeModal();
+  // keyboard
+  window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft')  el.btnPrev.click();
     if (e.key === 'ArrowRight') el.btnNext.click();
+    if (e.code === 'Space') { e.preventDefault(); toggleSpin(); }
   });
 
-  // Initialize
+  // init
   render(i);
 });
