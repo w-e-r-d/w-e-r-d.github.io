@@ -5,7 +5,7 @@ document.documentElement.style.setProperty('--active-tilt', tilt);
 document.addEventListener('DOMContentLoaded', () => {
   if (!document.body.classList.contains('home')) return;
 
-  // ===== tracks =====
+  // ===== your tracks =====
   const SONGS = [
     "https://open.spotify.com/track/2QqDNk4meN58jBmUn0EBUi",
     "https://open.spotify.com/track/2TugrDKkd55mfVOMVZsfO8",
@@ -22,82 +22,69 @@ document.addEventListener('DOMContentLoaded', () => {
     if (s.includes('/track/')) return s.split('/track/')[1].split('?')[0].split('/')[0];
     return s; // assume raw ID
   };
-
   const ids = SONGS.map(toId).filter(Boolean);
   if (!ids.length) return;
 
-  // ===== mount vinyl player =====
-  const main = document.querySelector('main') || document.body;
-  let mount = document.querySelector('#vinyl-player');
-  if (!mount) {
-    mount = document.createElement('section');
-    mount.id = 'vinyl-player';
-    main.appendChild(mount);
-  }
-
+  // ===== build boombox shell =====
+  const mount = document.querySelector('#boombox-player') || document.querySelector('main') || document.body;
   mount.innerHTML = `
-    <div class="turntable">
-      <div class="plinth" style="position:relative;">
-        <div class="record-wrap">
-          <div class="record" aria-hidden="true">
-            <div class="grooves"></div>
-            <div class="label"></div>
-            <div class="spindle"></div>
+    <div class="boombox">
+      <div class="bb-handle" aria-hidden="true"></div>
+
+      <div class="bb-face">
+        <div class="bb-speaker left">
+          <div class="cone"></div>
+        </div>
+
+        <div class="bb-center">
+          <div class="bb-brand">drew.</div>
+
+          <div class="bb-screen">
+            <iframe class="bb-spotify"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"></iframe>
           </div>
-          <div class="tonearm" aria-hidden="true">
-            <div class="headshell"></div>
+
+          <div class="bb-controls">
+            <button class="bb-btn prev" aria-label="Previous">‹</button>
+            <button class="bb-btn play" aria-label="Play/Pause">Play</button>
+            <button class="bb-btn next" aria-label="Next">›</button>
+          </div>
+
+          <div class="bb-meta">
+            <a class="bb-title" target="_blank" rel="noopener">Loading…</a>
+            <div class="bb-artist"></div>
+          </div>
+
+          <div class="bb-vu">
+            <span></span><span></span><span></span><span></span>
           </div>
         </div>
 
-        <div class="controls">
-          <button class="vt-btn prev" aria-label="Previous">‹</button>
-          <button class="vt-btn play" aria-label="Play/Pause">Play</button>
-          <button class="vt-btn next" aria-label="Next">›</button>
-        </div>
-
-        <div class="track-meta">
-          <a class="t-title" target="_blank" rel="noopener">Loading…</a>
-          <div class="t-artist"></div>
-        </div>
-
-        <!-- compact embed tucked in bottom-right like a little screen -->
-        <div class="mini-embed"
-             style="
-               position:absolute;
-               right:12px; bottom:12px;
-               width:280px; height:152px;
-               border:2px solid var(--black);
-               border-radius:12px;
-               overflow:hidden;
-               box-shadow:4px 4px 0 var(--black);
-               background:#000;
-             ">
-          <iframe class="spotify-mini"
-                  title="Spotify preview"
-                  style="width:100%; height:100%; border:0; display:block;"
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  loading="lazy"></iframe>
+        <div class="bb-speaker right">
+          <div class="cone"></div>
         </div>
       </div>
+
+      <div class="bb-feet" aria-hidden="true"></div>
     </div>
   `;
 
+  // ===== refs =====
   const el = {
-    record: mount.querySelector('.record'),
-    label: mount.querySelector('.label'),
-    tonearm: mount.querySelector('.tonearm'),
-    titleLink: mount.querySelector('.t-title'),
-    artist: mount.querySelector('.t-artist'),
+    frame: mount.querySelector('.bb-spotify'),
     btnPrev: mount.querySelector('.prev'),
     btnPlay: mount.querySelector('.play'),
     btnNext: mount.querySelector('.next'),
-    mini: mount.querySelector('.spotify-mini'),
+    title:   mount.querySelector('.bb-title'),
+    artist:  mount.querySelector('.bb-artist'),
+    vuBars:  Array.from(mount.querySelectorAll('.bb-vu span')),
   };
 
   let i = 0;
-  let spinning = false;
+  let spinning = false; // just for the fake VU/Play button label
 
-  // ===== simple oEmbed fetch for title/artist/thumb =====
+  // ===== metadata via oEmbed (title/artist/thumbnail link only) =====
   const cache = new Map();
   const trackUrl = (id) => `https://open.spotify.com/track/${id}`;
   const oembedUrl = (id) => `https://open.spotify.com/oembed?url=${encodeURIComponent(trackUrl(id))}`;
@@ -109,70 +96,52 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       const meta = {
         id,
-        title: data.title || 'Unknown title',
+        title:  data.title || 'Unknown title',
         author: data.author_name || '',
-        thumb: data.thumbnail_url || '',
-        url: trackUrl(id),
+        url:    trackUrl(id)
       };
       cache.set(id, meta);
       return meta;
     } catch {
-      const meta = { id, title: 'Unknown title', author: '', thumb: '', url: trackUrl(id) };
-      cache.set(id, meta);
-      return meta;
+      const fall = { id, title: 'Unknown title', author: '', url: trackUrl(id) };
+      cache.set(id, fall);
+      return fall;
     }
   }
 
-  function setMiniEmbed(id) {
-    // compact embed = same URL, but the iframe height makes it compact (152px)
-    el.mini.src = `https://open.spotify.com/embed/track/${id}?utm_source=generator`;
+  function setEmbed(id) {
+    // compact embed — size handled by CSS, Spotify renders the smaller UI
+    el.frame.src = `https://open.spotify.com/embed/track/${id}?utm_source=generator`;
+  }
+
+  function setVU(active) {
+    // playful fake VU animation — keeps page lively without audio hooks
+    if (active) {
+      el.vuBars.forEach((b, idx) => {
+        b.style.animation = `vuPulse ${900 + idx * 120}ms ease-in-out infinite`;
+      });
+    } else {
+      el.vuBars.forEach((b) => {
+        b.style.animation = 'none';
+        b.style.transform = 'scaleY(0.2)';
+      });
+    }
   }
 
   async function render(index) {
     const id = ids[index];
     const meta = await getMeta(id);
 
-    // update label + meta
-    if (meta.thumb) {
-      el.label.style.backgroundImage = `url("${meta.thumb}")`;
-      el.label.style.backgroundSize = 'cover';
-      el.label.style.backgroundPosition = 'center';
-    } else {
-      el.label.style.backgroundImage = 'none';
-    }
-    el.titleLink.textContent = meta.title;
-    el.titleLink.href = meta.url;
+    el.title.textContent = meta.title;
+    el.title.href = meta.url;
     el.artist.textContent = meta.author;
 
-    // point compact embed to current track (resets any playing preview)
-    setMiniEmbed(id);
+    setEmbed(id);
 
-    // stop spin when switching
+    // reset UI
     spinning = false;
-    el.record.classList.remove('spin');
-    el.tonearm.classList.remove('on-record');
     el.btnPlay.textContent = 'Play';
-  }
-
-  function toggleSpin() {
-    spinning = !spinning;
-    if (spinning) {
-      el.record.classList.add('spin');
-      el.tonearm.classList.add('on-record');
-      el.btnPlay.textContent = 'Pause';
-
-      // Try to give focus to the mini player so the user can press Space/Enter there
-      // (We can’t programmatically click play due to cross-origin/autoplay rules)
-      el.mini?.focus?.();
-    } else {
-      el.record.classList.remove('spin');
-      el.tonearm.classList.remove('on-record');
-      el.btnPlay.textContent = 'Play';
-
-      // "Pause" the preview by reloading the iframe (quick + reliable)
-      // (Optional) comment out if you want the preview to keep going:
-      el.mini.src = el.mini.src;
-    }
+    setVU(false);
   }
 
   // ===== controls =====
@@ -184,13 +153,20 @@ document.addEventListener('DOMContentLoaded', () => {
     i = (i + 1) % ids.length;
     render(i);
   });
-  el.btnPlay.addEventListener('click', toggleSpin);
+  el.btnPlay.addEventListener('click', () => {
+    // can't control iframe playback — use this to toggle the VU + button label
+    spinning = !spinning;
+    el.btnPlay.textContent = spinning ? 'Pause' : 'Play';
+    setVU(spinning);
+    // focus iframe so users can immediately press Space/Enter/play inside it
+    el.frame?.focus?.();
+  });
 
-  // keyboard
+  // Keyboard affordances
   window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft')  el.btnPrev.click();
     if (e.key === 'ArrowRight') el.btnNext.click();
-    if (e.code === 'Space') { e.preventDefault(); toggleSpin(); }
+    if (e.code === 'Space') { e.preventDefault(); el.btnPlay.click(); }
   });
 
   // init
