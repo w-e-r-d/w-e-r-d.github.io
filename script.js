@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "https://open.spotify.com/track/1cQNiVIM9uxnWZ1nkg0z3u", // Voices - LEAVE.
 	"https://open.spotify.com/track/6cOGSlZKf1nJMiNs13qZnq", // HONEYMOON - Jo Hill
 	"https://open.spotify.com/track/0OHZI4XXFZ5zrVIwL0JQNk", // Do You Ever Wonder? - Meltt
+	"https://open.spotify.com/track/4TzGD5Pryq8DTjv5QRuJaW", // Nowhere To Go - Bad Omens
 	"https://open.spotify.com/track/7shaHtNeaR9wolLuJOLqfH", // Headlights - In Color
   ];
 
