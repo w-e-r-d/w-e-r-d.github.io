@@ -7,13 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== tracks =====
   const SONGS = [
-    "https://open.spotify.com/track/2QqDNk4meN58jBmUn0EBUi",
-    "https://open.spotify.com/track/2TugrDKkd55mfVOMVZsfO8",
-    "https://open.spotify.com/track/6QanbknK7HJMOaUqlNCxhz",
-    "https://open.spotify.com/track/25ywKtUww26ABFd0tiGt9D",
-    "https://open.spotify.com/track/47ojH5LeQhl1ZltSAHBEFF",
-    "https://open.spotify.com/track/3RmFPuTTAjSQ2pbEd2j9oA",
-    "https://open.spotify.com/track/0oBAbUchoN02dIccY8oZh6",
+    "https://open.spotify.com/track/2QqDNk4meN58jBmUn0EBUi", // Hollywood Hopeful - Loudon Wainwright III
+    "https://open.spotify.com/track/3CptguqWjLoOwMoO2DCHWm", // MANIAC - Eddie Benjamin
+    "https://open.spotify.com/track/6QanbknK7HJMOaUqlNCxhz", // A Brand New Start - Ross from Friends
+    "https://open.spotify.com/track/6GCcY6dVDVGxo52OZq9HVW", // Sideways - Balu Brigada
+    "https://open.spotify.com/track/7pugmRsHRy1fnug9NqH5cA", // can u see me in the dark? - Halestorm, I Prevail
+    "https://open.spotify.com/track/6rfk3CBKQ8J30Vn2gihtS4", // LITERALLY JUST A GIRL - verygently
+    "https://open.spotify.com/track/1cQNiVIM9uxnWZ1nkg0z3u", // Voices - LEAVE.
+	"https://open.spotify.com/track/6cOGSlZKf1nJMiNs13qZnq", // HONEYMOON - Jo Hill
+	"https://open.spotify.com/track/0OHZI4XXFZ5zrVIwL0JQNk", // Do You Ever Wonder? - Meltt
+	"https://open.spotify.com/track/7shaHtNeaR9wolLuJOLqfH", // Headlights - In Color
   ];
 
   const toId = (s) => {
