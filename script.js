@@ -5,7 +5,7 @@ document.documentElement.style.setProperty('--active-tilt', tilt);
 document.addEventListener('DOMContentLoaded', () => {
   if (!document.body.classList.contains('home')) return;
 
-  // ===== your tracks =====
+  // ===== tracks =====
   const SONGS = [
     "https://open.spotify.com/track/2QqDNk4meN58jBmUn0EBUi",
     "https://open.spotify.com/track/2TugrDKkd55mfVOMVZsfO8",
@@ -25,150 +25,87 @@ document.addEventListener('DOMContentLoaded', () => {
   const ids = SONGS.map(toId).filter(Boolean);
   if (!ids.length) return;
 
-  // ===== build boombox shell =====
-  const mount = document.querySelector('#boombox-player') || document.querySelector('main') || document.body;
+  // ===== build film reel =====
+  const mount = document.querySelector('#film-reel') || document.querySelector('main') || document.body;
   mount.innerHTML = `
-    <div class="boombox">
-      <div class="bb-handle" aria-hidden="true"></div>
+    <div class="reel-wrap">
+      <button class="reel-btn prev" aria-label="Previous">‹</button>
 
-      <div class="bb-face">
-        <div class="bb-speaker left">
-          <div class="cone"></div>
-        </div>
-
-        <div class="bb-center">
-          <div class="bb-brand">drew.</div>
-
-          <div class="bb-screen">
-            <iframe class="bb-spotify"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"></iframe>
-          </div>
-
-          <div class="bb-controls">
-            <button class="bb-btn prev" aria-label="Previous">‹</button>
-            <button class="bb-btn play" aria-label="Play/Pause">Play</button>
-            <button class="bb-btn next" aria-label="Next">›</button>
-          </div>
-
-          <div class="bb-meta">
-            <a class="bb-title" target="_blank" rel="noopener">Loading…</a>
-            <div class="bb-artist"></div>
-          </div>
-
-          <div class="bb-vu">
-            <span></span><span></span><span></span><span></span>
-          </div>
-        </div>
-
-        <div class="bb-speaker right">
-          <div class="cone"></div>
-        </div>
+      <div class="reel" tabindex="0" aria-label="Spotify film reel">
+        <div class="reel-track"></div>
       </div>
 
-      <div class="bb-feet" aria-hidden="true"></div>
+      <button class="reel-btn next" aria-label="Next">›</button>
     </div>
+    <p class="carousel-hint more-text">Drag, scroll, or use arrows to browse.</p>
   `;
 
-  // ===== refs =====
-  const el = {
-    frame: mount.querySelector('.bb-spotify'),
-    btnPrev: mount.querySelector('.prev'),
-    btnPlay: mount.querySelector('.play'),
-    btnNext: mount.querySelector('.next'),
-    title:   mount.querySelector('.bb-title'),
-    artist:  mount.querySelector('.bb-artist'),
-    vuBars:  Array.from(mount.querySelectorAll('.bb-vu span')),
-  };
+  const track = mount.querySelector('.reel-track');
 
-  let i = 0;
-  let spinning = false; // just for the fake VU/Play button label
+  ids.forEach((id) => {
+    const frame = document.createElement('article');
+    frame.className = 'frame';
+    frame.innerHTML = `
+      <div class="sprockets top" aria-hidden="true"></div>
+      <div class="frame-inner">
+        <iframe
+          loading="lazy"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          src="https://open.spotify.com/embed/track/${id}?utm_source=generator"
+          title="Spotify track"></iframe>
+      </div>
+      <div class="sprockets bottom" aria-hidden="true"></div>
+    `;
+    track.appendChild(frame);
+  });
 
-  // ===== metadata via oEmbed (title/artist/thumbnail link only) =====
-  const cache = new Map();
-  const trackUrl = (id) => `https://open.spotify.com/track/${id}`;
-  const oembedUrl = (id) => `https://open.spotify.com/oembed?url=${encodeURIComponent(trackUrl(id))}`;
+  // smooth buttons
+  const reel = mount.querySelector('.reel');
+  const btnPrev = mount.querySelector('.reel-btn.prev');
+  const btnNext = mount.querySelector('.reel-btn.next');
 
-  async function getMeta(id) {
-    if (cache.has(id)) return cache.get(id);
-    try {
-      const res = await fetch(oembedUrl(id));
-      const data = await res.json();
-      const meta = {
-        id,
-        title:  data.title || 'Unknown title',
-        author: data.author_name || '',
-        url:    trackUrl(id)
-      };
-      cache.set(id, meta);
-      return meta;
-    } catch {
-      const fall = { id, title: 'Unknown title', author: '', url: trackUrl(id) };
-      cache.set(id, fall);
-      return fall;
+  function snapAmount() {
+    // matches one frame width + gap via CSS (frame width is responsive)
+    const anyFrame = track.querySelector('.frame');
+    if (!anyFrame) return 300;
+    const rect = anyFrame.getBoundingClientRect();
+    const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '16');
+    return rect.width + gap;
+  }
+
+  btnPrev.addEventListener('click', () => reel.scrollBy({ left: -snapAmount(), behavior: 'smooth' }));
+  btnNext.addEventListener('click', () => reel.scrollBy({ left:  snapAmount(), behavior: 'smooth' }));
+
+  // drag-to-scroll
+  let isDown = false, startX = 0, startScroll = 0;
+  reel.addEventListener('pointerdown', (e) => {
+    isDown = true;
+    reel.setPointerCapture(e.pointerId);
+    startX = e.clientX;
+    startScroll = reel.scrollLeft;
+    reel.classList.add('dragging');
+  });
+  reel.addEventListener('pointermove', (e) => {
+    if (!isDown) return;
+    const dx = e.clientX - startX;
+    reel.scrollLeft = startScroll - dx;
+  });
+  ['pointerup', 'pointercancel', 'mouseleave'].forEach(ev => reel.addEventListener(ev, () => {
+    isDown = false;
+    reel.classList.remove('dragging');
+  }));
+
+  // wheel horizontal
+  reel.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      reel.scrollBy({ left: e.deltaY, behavior: 'auto' });
+      e.preventDefault();
     }
-  }
+  }, { passive: false });
 
-  function setEmbed(id) {
-    // compact embed — size handled by CSS, Spotify renders the smaller UI
-    el.frame.src = `https://open.spotify.com/embed/track/${id}?utm_source=generator`;
-  }
-
-  function setVU(active) {
-    // playful fake VU animation — keeps page lively without audio hooks
-    if (active) {
-      el.vuBars.forEach((b, idx) => {
-        b.style.animation = `vuPulse ${900 + idx * 120}ms ease-in-out infinite`;
-      });
-    } else {
-      el.vuBars.forEach((b) => {
-        b.style.animation = 'none';
-        b.style.transform = 'scaleY(0.2)';
-      });
-    }
-  }
-
-  async function render(index) {
-    const id = ids[index];
-    const meta = await getMeta(id);
-
-    el.title.textContent = meta.title;
-    el.title.href = meta.url;
-    el.artist.textContent = meta.author;
-
-    setEmbed(id);
-
-    // reset UI
-    spinning = false;
-    el.btnPlay.textContent = 'Play';
-    setVU(false);
-  }
-
-  // ===== controls =====
-  el.btnPrev.addEventListener('click', () => {
-    i = (i - 1 + ids.length) % ids.length;
-    render(i);
+  // keyboard
+  reel.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); btnNext.click(); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); btnPrev.click(); }
   });
-  el.btnNext.addEventListener('click', () => {
-    i = (i + 1) % ids.length;
-    render(i);
-  });
-  el.btnPlay.addEventListener('click', () => {
-    // can't control iframe playback — use this to toggle the VU + button label
-    spinning = !spinning;
-    el.btnPlay.textContent = spinning ? 'Pause' : 'Play';
-    setVU(spinning);
-    // focus iframe so users can immediately press Space/Enter/play inside it
-    el.frame?.focus?.();
-  });
-
-  // Keyboard affordances
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft')  el.btnPrev.click();
-    if (e.key === 'ArrowRight') el.btnNext.click();
-    if (e.code === 'Space') { e.preventDefault(); el.btnPlay.click(); }
-  });
-
-  // init
-  render(i);
 });
