@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LNJ2DCY46"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-3LNJ2DCY46');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>music</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="music">
+  <div class="container">
+    <header class="blob-header">
+      <h1>music.</h1>
+      <nav>
+        <a href="/" class="blob-link home">home</a>
+        <a href="/about.html" class="blob-link about">about</a>
+        <a href="/now/" class="blob-link now">now</a>
+        <a href="/spools.html" class="blob-link spools">spools</a>
+        <a href="/music/" class="blob-link music" data-active="true">music</a>
+      </nav>
+    </header>
+
+    <main class="music-hero">
+      <!-- blurb -->
+      <section class="music-blurb">
+        <p>Playlists I’m sharing and notes on what I’m into lately. The first section is featured. Hover other folders to peek; click to open fully.</p>
+      </section>
+
+      <!-- FEATURED: always open -->
+      <details class="playlist-panel bio-panel featured" open>
+        <summary>
+          <h2>10.06.25</h2>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8.12 4.71L6.7 6.12L12.58 12L6.7 17.88L8.12 19.29L15.41 12Z"/></svg>
+        </summary>
+        <div class="panel-content">
+          <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/1Zi7q33uAy8aruaykmqK8D" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+          <p>testing.</p>
+        </div>
+      </details>
+
+      <!-- FOLDER: collapsed by default -->
+      <details class="playlist-panel bio-panel peekable">
+        <summary>
+          <h2>09.29.25 — songs of the week</h2>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8.12 4.71L6.7 6.12L12.58 12L6.7 17.88L8.12 19.29L15.41 12Z"/></svg>
+        </summary>
+        <div class="panel-content">
+          <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/PUT_PLAYLIST_ID" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+          <p>testing.</p>
+        </div>
+      </details>
+
+      <details class="playlist-panel bio-panel peekable">
+        <summary>
+          <h2>09.22.25 — songs of the week</h2>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8.12 4.71L6.7 6.12L12.58 12L6.7 17.88L8.12 19.29L15.41 12Z"/></svg>
+        </summary>
+        <div class="panel-content">
+          <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/PUT_PLAYLIST_ID" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+          <p>testing.</p>
+        </div>
+      </details>
+    </main>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+</html>

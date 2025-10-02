@@ -67,6 +67,7 @@ nav a::before {
 nav a.home::before   { border-radius: 42% 58% 55% 45% / 52% 38% 60% 50%; }
 nav a.about::before  { border-radius: 60% 40% 35% 65% / 40% 60% 45% 55%; }
 nav a.spools::before { border-radius: 70% 30% 60% 40% / 50% 50% 60% 40%; }
+nav a.music::before  { border-radius: 48% 54% 34% 55% / 60% 32% 45% 40%; }
 
 nav a[data-active="true"]::before { transform: rotate(-2deg) scale(1.05); }
 
@@ -884,3 +885,67 @@ body::before {
   .reel-btn { width: 38px; height: 38px; }
   .card iframe { height: 140px; }
 }
+
+/* Music page layout */
+body.music .music-hero {
+  display: grid;
+  gap: 16px;            /* vertical spacing between panels */
+}
+
+/* Let details panels use bio-panel visuals but add interactivity */
+.playlist-panel {
+  /* .bio-panel styles already apply; these are just enhancements */
+  width: 100%;
+  overflow: clip;       /* keeps rounded corners clean while animating */
+  border-radius: inherit;
+}
+
+/* Clickable header (summary) */
+.playlist-panel > summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  list-style: none;
+  padding: 12px 16px;   /* match your bio-panel inner spacing */
+}
+.playlist-panel > summary::-webkit-details-marker { display: none; }
+
+/* Chevron rotate when open */
+.playlist-panel .chev { transition: transform 160ms ease; }
+.playlist-panel[open] .chev { transform: rotate(90deg); }
+
+/* Content area */
+.playlist-panel .panel-content {
+  display: grid;
+  gap: 12px;
+  padding: 0 16px 16px 16px; /* match your panel padding */
+}
+
+/* Spotify embed */
+.spotify-embed {
+  width: 100%;
+  height: 352px;        /* default Spotify embed */
+  border: 0;
+  border-radius: 12px;
+}
+
+/* Hover-to-peek (collapsed preview) */
+.playlist-panel.peekable:not([open]) .panel-content {
+  max-height: 0;
+  overflow: hidden;
+  padding-bottom: 0;
+  transition: max-height 300ms ease;
+}
+/* how tall the hover preview can get without opening */
+.playlist-panel.peekable:hover .panel-content {
+  max-height: 520px;
+}
+
+/* Accessibility niceties */
+.playlist-panel > summary:focus {
+  outline: 2px solid rgba(255,255,255,0.35);
+  outline-offset: 2px;
+}
+
