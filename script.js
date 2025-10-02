@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "https://open.spotify.com/track/6GCcY6dVDVGxo52OZq9HVW", // Sideways - Balu Brigada
     "https://open.spotify.com/track/7pugmRsHRy1fnug9NqH5cA", // can u see me in the dark? - Halestorm, I Prevail
     "https://open.spotify.com/track/6rfk3CBKQ8J30Vn2gihtS4", // LITERALLY JUST A GIRL - verygently
-    "https://open.spotify.com/track/1cQNiVIM9uxnWZ1nkg0z3u", // Voices - LEAVE.
+    "https://open.spotify.com/track/19vHgVS1aukRiQWhTqfKnE", // DArkSide - Bring Me The Horizon
 	"https://open.spotify.com/track/6cOGSlZKf1nJMiNs13qZnq", // HONEYMOON - Jo Hill
 	"https://open.spotify.com/track/0OHZI4XXFZ5zrVIwL0JQNk", // Do You Ever Wonder? - Meltt
 	"https://open.spotify.com/track/4TzGD5Pryq8DTjv5QRuJaW", // Nowhere To Go - Bad Omens
