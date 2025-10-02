@@ -30,18 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
   mount.innerHTML = `
     <div class="reel-wrap neon">
       <button class="reel-btn prev" aria-label="Previous">‹</button>
-
       <div class="reel" tabindex="0" aria-label="Spotify strip">
         <div class="reel-track"></div>
       </div>
-
       <button class="reel-btn next" aria-label="Next">›</button>
     </div>
-    <p class="carousel-hint more-text">Drag, scroll, or use arrows to browse.</p>
   `;
 
   const track = mount.querySelector('.reel-track');
-
   ids.forEach((id, idx) => {
     const frame = document.createElement('article');
     frame.className = 'card-frame';
@@ -61,21 +57,40 @@ document.addEventListener('DOMContentLoaded', () => {
     track.appendChild(frame);
   });
 
-  // smooth buttons
   const reel = mount.querySelector('.reel');
   const btnPrev = mount.querySelector('.reel-btn.prev');
   const btnNext = mount.querySelector('.reel-btn.next');
 
+  const frames = Array.from(track.querySelectorAll('.card-frame'));
+  let current = Math.floor(frames.length / 2); // start centered
+
+  function scrollToIndex(idx, behavior = 'smooth') {
+    const target = frames[idx];
+    if (!target) return;
+    const reelRect = reel.getBoundingClientRect();
+    const cardRect = target.getBoundingClientRect();
+    // position so the card centers inside the visible reel
+    const offset = (cardRect.left + reel.scrollLeft) - reelRect.left - (reelRect.width / 2 - cardRect.width / 2);
+    reel.scrollTo({ left: offset, behavior });
+  }
+
   function snapAmount() {
-    const any = track.querySelector('.card-frame');
+    const any = frames[0];
     if (!any) return 320;
     const rect = any.getBoundingClientRect();
     const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '16');
     return rect.width + gap;
   }
 
-  btnPrev.addEventListener('click', () => reel.scrollBy({ left: -snapAmount(), behavior: 'smooth' }));
-  btnNext.addEventListener('click', () => reel.scrollBy({ left:  snapAmount(), behavior: 'smooth' }));
+  // buttons move one frame at a time
+  btnPrev.addEventListener('click', () => {
+    current = Math.max(0, current - 1);
+    scrollToIndex(current);
+  });
+  btnNext.addEventListener('click', () => {
+    current = Math.min(frames.length - 1, current + 1);
+    scrollToIndex(current);
+  });
 
   // drag-to-scroll
   let isDown = false, startX = 0, startScroll = 0;
@@ -108,4 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight') { e.preventDefault(); btnNext.click(); }
     if (e.key === 'ArrowLeft')  { e.preventDefault(); btnPrev.click(); }
   });
+
+  // center on load & keep centered on resize
+  window.addEventListener('load', () => scrollToIndex(current, 'auto'));
+  window.addEventListener('resize', () => scrollToIndex(current, 'auto'));
 });

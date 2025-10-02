@@ -745,10 +745,11 @@ body::before {
 /* ===== spotify strip ===== */
 .reel-wrap.neon {
   position: relative;
-  margin: 2rem auto .5rem;
-  width: min(1200px, 96vw);
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 48px 1fr 48px;
   align-items: center;
   gap: 12px;
 }
@@ -780,6 +781,7 @@ body::before {
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   position: relative;
+  width: 100%;
 }
 .reel::-webkit-scrollbar { display: none; }
 .reel.dragging { cursor: grabbing; }
