@@ -949,3 +949,46 @@ body.music .music-hero {
   outline-offset: 2px;
 }
 
+.container {
+  min-height: 100svh;         /* full viewport height, handles mobile UI chrome better */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Let the main content take the available vertical space */
+.container > main {
+  flex: 1;
+}
+
+/* Footer spacing + subtle divider */
+.site-footer {
+  margin-top: 24px;            /* space above footer */
+  padding: 18px 0 36px;        /* extra bottom padding = breathing room */
+  border-top: 1px solid rgba(255, 255, 255, 0.12); /* adjust for light/dark if needed */
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+/* Layout inside footer */
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Stack on small screens */
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .site-footer {
+    padding-bottom: 44px; /* a touch more space on mobile */
+  }
+}
+
+.site-footer p,
+.site-footer small {
+  color: var(--muted, #ffffff);
+}
