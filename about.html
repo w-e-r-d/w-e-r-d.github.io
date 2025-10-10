@@ -63,14 +63,35 @@
       <section class="buttons">
         <h3>let's connect</h3>
       </section>
+
       <section class="buttons">
-          <button class ="button" onclick="window.location.href='mailto:drew@lefebvre.us';"><strong>email</strong></button>
+          <button class="button" id="email" data-copied='["email","copied"]'>
+        <span><strong>email</strong></span>
+          </button>
           <a class="button" href="https://www.linkedin.com/in/dlefeb/" target="_blank" rel="noopener">
-            <strong>linkedin</strong>
+        <strong>linkedin</strong>
           </a>
           <a class="button" href="https://open.spotify.com/user/31cyhtrjqch2wfacsjoaabpjnjyu?si=6b94794930354d6e" target="_blank" rel="noopener">
-            <strong>spotify</strong>
+        <strong>spotify</strong>
           </a>
+
+        <!-- copy email to clipboard -->
+        <script>
+          const emailBtn = document.getElementById('email');
+          const emailText = JSON.parse(emailBtn.getAttribute('data-copied'));
+          let toggle = false;
+
+          emailBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText('drew@lefebvre.us');
+            toggle = !toggle;
+            emailBtn.innerHTML = `<span><strong>${toggle ? emailText[1] : emailText[0]}</strong></span>`;
+            setTimeout(() => {
+          toggle = false;
+          emailBtn.innerHTML = `<span><strong>${emailText[0]}</strong></span>`;
+            }, 2000);
+          });
+        </script>
+
       </section>
     </main>
 
