@@ -195,6 +195,7 @@ nav a:before {
   transition-duration: 0.3s;
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
+  transform: scaleY(0);
 }
 
 /* nav hover animation */
@@ -214,6 +215,22 @@ nav a:hover:before, nav a:focus:before, nav a:active:before {
   margin-bottom: 0.5rem;
   font-size: 2;
 }
+
+/* adjustment for mobile */
+@media (max-width: 640px) {
+  .nav-title-box nav {
+    flex-wrap: wrap;
+    white-space: normal;
+    gap: 0.5rem 0.75rem;
+  }
+  .nav-title-box nav a {
+    flex: 1 1 calc(33.33% - 0.75rem);
+    min-width: 90px;
+    font-size: 1rem;
+    padding: 0.4rem 0.4rem;
+  }
+}
+
 
 /* werd. hover animation */
 .slide-text {
