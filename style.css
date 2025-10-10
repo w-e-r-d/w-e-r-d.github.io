@@ -271,49 +271,6 @@
   font-size: .95rem;
 }
 
-.bio-panel {
-  background: rgba(255, 255, 255, 0.6);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 18px;
-  padding: 1.25rem 1.25rem 1.1rem;
-
-  box-shadow: 6px 6px 0 var(--black);
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  color: var(--black);
-  text-align: left;
-}
-.bio-panel h2 {
-  margin: 0 0 .6rem;
-  font-size: 1.6rem;
-  text-transform: lowercase;
-  position: relative;
-}
-.bio-panel h2::after {
-  content: "";
-  display: block;
-  height: 8px;
-  width: 120px;
-  margin-top: .2rem;
-  background: linear-gradient(90deg, var(--pink), var(--green));
-  border-radius: 6px;
-}
-.bio-panel h3 {
-  margin: 1rem 0 .4rem;
-  font-size: 1.1rem;
-  text-transform: lowercase;
-}
-.bio-list { margin: 0; padding-left: 1.1rem; }
-.bio-list li { margin: .25rem 0; }
-
-@media (max-width: 880px) {
-  .about-hero {
-    grid-template-columns: 1fr;
-  }
-  .about-photo img { transform: none; }
-}
 
 html, body {
   height: 100%;
@@ -764,7 +721,7 @@ body.music .music-hero {
 }
 
 .container {
-  min-height: 100svh;         /* full viewport height, handles mobile UI chrome better */
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
 }
@@ -777,7 +734,7 @@ body.music .music-hero {
 /* Footer spacing + subtle divider */
 .site-footer {
   margin-top: 24px;            /* space above footer */
-  padding: 18px 0 36px;        /* extra bottom padding = breathing room */
+  padding: 0px 0px 1px;        /* extra bottom padding = breathing room */
   border-top: 1px solid rgba(255, 255, 255, 0.12); /* adjust for light/dark if needed */
   opacity: 0.9;
   font-size: 0.95rem;
@@ -791,23 +748,12 @@ body.music .music-hero {
   gap: 12px;
 }
 
-/* Stack on small screens */
-@media (max-width: 640px) {
-  .footer-inner {
-    flex-direction: column;
-    text-align: center;
-  }
-  .site-footer {
-    padding-bottom: 44px; /* a touch more space on mobile */
-  }
-}
-
 .site-footer p,
 .site-footer small {
   color: var(--muted, #ffffff);
 }
 
-/* NEW CSS BELOW HERE - OCTOBER 2025 - SITE RE-WORK */
+/* NEW CSS BELOW HERE - OCTOBER 2025 - SITE RE-WRITE - no gpt this time */
 /* NEW NEW NEW */
 /* NEW NEW NEW */
 /* NEW NEW NEW */
@@ -854,6 +800,7 @@ body::before {
 
 .container {
   text-align: left;
+  min-height: 100svh;
   max-width: 1000000px;
   width: 100%;
 }
@@ -1036,4 +983,57 @@ nav a[data-active="true"]:hover::before {
 ::selection {
   background: transparent;
   color: #F8BFC8;
+}
+
+
+/* ABOUT PAGE */
+/* bio panel */
+
+.bio-card {
+  width: 500px;
+  height: 360px;
+  margin: 10px;
+  padding: 1rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0px 0px rgba(255, 255, 255, 0);
+  position: relative;
+  overflow: hidden;
+}
+
+.bio-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+}
+
+.bio-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8),
+    transparent,
+    rgba(255, 255, 255, 0.3)
+  );
 }
