@@ -4,74 +4,31 @@
   --green: #7ec3a8;
 }
 
-* { box-sizing: border-box; }
+/* * { box-sizing: border-box; } */
 
-body {
+/* body {
   margin: 0;
   font-family: Arial, system-ui, sans-serif;
   background: #fff;
   display: flex;
   justify-content: center;
   padding: 2rem;
-}
+} */
 
-.container {
+/* .container {
   text-align: center;
   max-width: 800px;
   width: 100%;
-}
+} */
 
-.blob-header {
+/* .blob-header {
   background: var(--black);
   color: #fff;
   padding: 2rem 1rem;
   margin-bottom: 2rem;
 
   border-radius: 20px;
-}
-
-.blob-header h1 {
-  margin: 0 0 1rem;
-  font-size: 2rem;
-}
-
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-nav a {
-  position: relative;
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.2rem;
-  padding: 0.25rem 0.5rem;
-  z-index: 1;
-}
-
-nav a::before {
-  content: "";
-  position: absolute;
-  left: -0.35rem;
-  right: -0.35rem;
-  top: -0.25rem;
-  bottom: -0.25rem;
-  background: var(--pink);
-  z-index: -1;
-  transition: transform 120ms ease;
-}
-
-nav a.home::before   { border-radius: 42% 58% 55% 45% / 52% 38% 60% 50%; }
-nav a.about::before  { border-radius: 60% 40% 35% 65% / 40% 60% 45% 55%; }
-nav a.spools::before { border-radius: 70% 30% 60% 40% / 50% 50% 60% 40%; }
-nav a.music::before  { border-radius: 48% 54% 34% 55% / 60% 32% 45% 40%; }
-
-nav a[data-active="true"]::before { transform: rotate(-2deg) scale(1.05); }
-
-nav a:hover::before { transform: rotate(2deg) scale(1.06); }
+} */
 
 .image-placeholder {
   background: var(--green);
@@ -87,24 +44,6 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   font-size: 1.1rem;
   color: var(--black);
   margin-top: 1rem;
-}
-
-@media (max-width: 600px) {
-  body { padding: 1rem; }
-
-  .blob-header { padding: 1.5rem 1rem; }
-
-  nav {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  nav a { font-size: 1.25rem; }
-
-  .image-placeholder {
-    max-width: 90%;
-    padding: 3rem;
-  }
 }
 
 .canvas-btn {
@@ -280,20 +219,6 @@ nav a:hover::before { transform: rotate(2deg) scale(1.06); }
   .now-card::before, .now-card::after { width: 72px; }
 }
 
-
-nav a.now::before {
-  border-radius: 50% 40% 60% 50% / 55% 45% 65% 35%;
-}
-
-nav a[data-active="true"]::before {
-  border-radius: 0;
-  transform: rotate(var(--active-tilt, 0));
-}
-
-nav a[data-active="true"]:hover::before {
-  transform: rotate(calc(var(--active-tilt, 0) + 2deg)) scale(1.06);
-}
-
 .about-hero {
   display: grid;
   grid-template-columns: 1.05fr 1.2fr;
@@ -399,121 +324,10 @@ body {
   background: transparent;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-
-  background: linear-gradient(90deg, #fd9484, #7ec3a8, #f1cb62, #708c50);
-  background-size: 200% 200%;
-
-  animation: gradientShift 20s ease-in-out infinite alternate;
-  filter: blur(2px) saturate(108%);
-}
-
 @keyframes gradientShift {
   0%   { background-position:   0% 50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position:   0% 50%; }
-}
-
-::-moz-selection {
-  background: transparent;
-  color: #fff;
-}
-::selection {
-  background: transparent;
-  color: #FFFFFF;
-}
-
-/* Spotify bubbles */
-.bubble-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.bubble {
-  position: absolute;
-  pointer-events: auto;
-  border-radius: 999px;
-  /* soft orb look using your colors */
-  background:
-    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.75), rgba(255,255,255,0.35)),
-    radial-gradient(circle at 70% 60%, rgba(253,148,132,0.35), rgba(126,195,168,0.25));
-  box-shadow: 0 8px 18px rgba(0,0,0,0.18), 4px 4px 0 var(--black);
-  overflow: hidden;
-  transform: translateZ(0);
-  transition: transform .25s ease, box-shadow .25s ease, width .25s ease, height .25s ease, border-radius .25s ease, left .25s ease, top .25s ease;
-  animation: bubbleFloat var(--floatDur, 18s) ease-in-out infinite;
-}
-
-.bubble .icon {
-  width: 60%;
-  height: 60%;
-  opacity: .9;
-  filter: drop-shadow(1px 1px 0 var(--black));
-}
-
-.bubble .embed {
-  display: none;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.bubble.open {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 14px;
-  padding: 0;
-  overflow: hidden;
-
-  width: clamp(480px, 92vw, 820px);
-  height: clamp(370px, 80vh, 520px);
-
-  box-shadow: 8px 8px 0 var(--black), 0 18px 38px rgba(0,0,0,0.22);
-  animation-play-state: paused;
-}
-
-.bubble .embed {
-  display: none;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  border-radius: 0;
-}
-
-.bubble.open .embed { display: block; }
-
-@media (max-width: 700px) {
-  .bubble.open {
-    width: min(96vw, 560px);
-    height: min(70vh, 440px);
-  }
-}
-
-
-.bubble.open .icon { display: none; }
-.bubble.open .embed { display: block; }
-
-@keyframes bubbleFloat {
-  0%   { transform: translate3d(0, 0, 0) rotate(0.2deg); }
-  25%  { transform: translate3d(10px, -12px, 0) rotate(-0.6deg); }
-  50%  { transform: translate3d(0, -20px, 0) rotate(0.4deg); }
-  75%  { transform: translate3d(-10px, -8px, 0) rotate(-0.2deg); }
-  100% { transform: translate3d(0, 0, 0) rotate(0.2deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bubble { animation: none; }
 }
 
 .about-right {
@@ -991,4 +805,235 @@ body.music .music-hero {
 .site-footer p,
 .site-footer small {
   color: var(--muted, #ffffff);
+}
+
+/* NEW CSS BELOW HERE - OCTOBER 2025 - SITE RE-WORK */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW NEW NEW */
+/* NEW CSS BELOW HERE - OCTOBER 2025 - SITE RE-WORK */
+
+/* font, general */
+body {
+  margin: 0px;
+  font-family: 'Segoe UI';
+  background: #fff;
+  display: flex;
+  justify-content: left;
+  padding: 2rem;
+}
+
+/* background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #e5e5f7;
+  opacity: 0.8;
+  background: linear-gradient(90deg, #f17e90, #ea8a78, #db9768, #c7a463, #b1b06a, #9cb97b, #89bf90, #7ec3a8);
+  background-size: 200% 200%;
+  background-image:  linear-gradient(#f17e90 14px, transparent 1.3px), linear-gradient(to right, #f17e90 1.3px, #e5e5f7 400px);
+  background-size: 26px 26px;
+}
+
+.container {
+  text-align: left;
+  max-width: 1000000px;
+  width: 100%;
+}
+
+/* werd. page title box and nav box */
+.nav-title-box {
+  text-align: left;
+  color: #fff;
+  padding: 1rem 1rem;
+  margin-bottom: 2rem;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0px 0px rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-title-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+}
+
+.nav-title-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8),
+    transparent,
+    rgba(255, 255, 255, 0.3)
+  );
+}
+
+/* nav setup */
+nav {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  flex: 0 0 200px;
+  white-space: nowrap;
+  line-height: 1.2;
+  gap: 1rem;
+  min-width: 2.2rem;
+
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  overflow: hidden;
+}
+
+/* individual nav buttons */
+nav a {
+  position: relative;
+  flex: 0 0 50px;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-weight: lighter;
+  font-size: 1.2rem;
+  padding: 0.5rem 0.5rem;
+}
+
+/* NAV ANIMATION */
+nav a:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fffef2;
+  height: 4px;
+
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);
+  -webkit-transition-property: transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+
+/* nav hover animation */
+nav a:hover, nav a:focus, nav a:active {
+  text-shadow: 0px 0px 5px #f8bfc8bc;
+  transform: scale(1.05);
+}
+
+nav a:hover:before, nav a:focus:before, nav a:active:before {
+  -webkit-transform: scaleY(1);
+  transform: scaleY(1);
+}
+
+.nav-title-box h1 {
+  text-align: right;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-size: 2;
+}
+
+/* werd. hover animation */
+.slide-text {
+  text-align: right;
+  margin-bottom: 0.5rem;
+  font-size: 2;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  line-height: 1em;
+  height: 1em;
+  margin: 0;
+}
+
+.slide-text .line {
+  display: block;
+  margin: 0;
+  transition: transform 0.5s cubic-bezier(.78,.12,.49,.94),
+              top 0.5s cubic-bezier(.78,.12,.49,.94);
+}
+
+/* werd modifier */
+.slide-text .front {
+  transform: translateY(0);
+}
+
+/* drew modifier */
+.slide-text .back {
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+
+/* hover animation */
+.slide-text:hover .front {
+  transform: translateY(-100%);
+}
+.slide-text:hover .back {
+  top: 0;
+}
+
+/* END NAV ANIMATION */
+
+/* nav current indicator */
+nav a[data-active="true"]::before {
+  border-radius: 0;
+  transform: rotate(var(--active-tilt, 0));
+}
+
+nav a[data-active="true"]:hover::before {
+  transform: rotate(calc(var(--active-tilt, 0) + 2deg)) scale(1.06);
+}
+
+/* selection color */
+::selection {
+  background: transparent;
+  color: #F8BFC8;
 }
