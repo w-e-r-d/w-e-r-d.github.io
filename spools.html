@@ -30,17 +30,19 @@
         <a href="/now/index.html" class="nav-link now">now</a>
         <a href="/spools.html" class="nav-link spools" data-active="true">spools</a>
         <a href="/music/" class="nav-link music">music</a>
+        <a href="" class="nav-link projects">projects</a>
+        <a href="" class="nav-link tools">tools</a>
       </nav>
     </header>
 
   <main>
-      <p class="more-text">
+      <p>
         spools is a utility for spotify power users.  it's goal is to make analytics, discovery, and organization more accessible and efficient.
       </p>
-      <p class="more-text">
-        you can download a primitive version below.  it's not pretty, but it (should) work. i may eventually update it, i've got some new features/tools ready, i just haven't bothered to re-build it since i'm working on a web-app version.
+      <p>
+        you can download a primitive version below.  it's not pretty, but it *should* work. i may eventually update it, i've got some new features/tools ready, i just haven't bothered to re-build it since i'm working on a web-app version.
       </p>
-      <p class="more-text">
+      <p>
         it's not intuitive, and i have no documentation on how to use it.  but if you'd like to try it, please email me or message me on linkedin and i'll help you set it up. or ask chatGPT, it can probably help you set up your API credentials.
       </p>
       <br>
@@ -49,21 +51,35 @@
               <strong>download spools-desktop here</strong>
         </a>
       </section>
-      <p class="more-text">
+      <p>
         note: it only works on windows and may have unresolved bugs.  it can also be destructive to your spotify library if you don't know what you're doing.
       </p>
-      <p class="more-text">
+      <p>
         if you use it, please let me know if you have any suggestions/feedback.  would love to hear as i build the web app version.
       </p>
   </main>
   
 <!-- footer -->
     <footer class="site-footer">
-        <div class="footer-inner">
-          <p>© <span id="footer-year"></span> drew lefebvre</p>
-          <small class="footer-quote">i hear and i forget. i see and i remember. i do and i understand. ― confucius</small>
-      </div>
-    </footer>
-  </div>
+  		<div class="footer-inner">
+    		<span id="copyright"
+            data-text='["© drew lefebvre","i don&#39;t know how copyright works","i just put this here because it looked cool","don&#39;t steal my stuff","please and thanks"]'>
+            © drew lefebvre
+        </span>
+    		<small class="footer-quote">you can't take it in, driving by stuff.  that's not satisfying.  don't be afraid to just sit and watch. - anthony bourdain</small>
+	  </div>
+
+    <script>
+      const el = document.getElementById('copyright');
+      const text = JSON.parse(el.getAttribute('data-text'));
+      let i = 0;
+
+      el.addEventListener('click', () => {
+        i = (i + 1) % text.length;
+        el.textContent = text[i];
+      });
+    </script>
+
+	</footer>
 </body>
 </html>
