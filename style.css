@@ -80,7 +80,7 @@ body::before {
   pointer-events: none;
   background-color: #e5e5f7;
   opacity: 0.8;
-  background: linear-gradient(90deg, #f17e90, #ea8a78, #db9768, #c7a463, #b1b06a, #9cb97b, #89bf90, #7ec3a8);
+  background: linear-gradient(90deg, #f17e8f, #ea8a78, #db9768, #c7a463, #b1b06a, #9cb97b, #89bf90, #7ec3a8);
   background-size: 200% 200%;
   background-image:  linear-gradient(#f17e90 14px, transparent 1.3px), linear-gradient(to right, #f17e90 1.3px, #e5e5f7 400px);
   background-size: 26px 26px;
