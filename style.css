@@ -88,7 +88,7 @@ body::before {
 
 .container {
   text-align: left;
-  min-height: 100svh;
+  min-height: 90svh;
   max-width: 1000000px;
   width: 100%;
 }
@@ -382,3 +382,9 @@ nav a[data-active="true"]:hover::before {
   user-select: none;
 }
 
+/* TOOLS PAGE */
+.tools-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
