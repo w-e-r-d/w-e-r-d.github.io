@@ -32,15 +32,9 @@
       </nav>
     </header>
 
-    <main class="about-hero">
-      <section class="about-photo">
-        <figure>
-          <img src="https://www.dropbox.com/scl/fi/4r2okqz9uycvoifteto8y/IMG_0353.jpg?rlkey=9bid259o1ar8cti5n547qb1ji&st=vdrkhel0&dl=1" alt="pic of me at grand canyon" />
-        </figure>
-      </section>
-
-      <section class="bio-card">
-        <h2>bio</h2>
+    <main>
+      <section>
+        <h1>bio</h1>
         <p>
           i'm a 23 year old Indianapolitan who likes to create things, ride my bike, hike, climb, and spend time with all the cool people i know.  
           by day i'm an analyst at a consulting firm based out of Indianapolis.  
@@ -50,22 +44,35 @@
           random ideas into small, useful things.
         </p>
 
-        <h3>quick bits</h3>
-        <ul class="bio-list">
-          <li>stack: python, js, ruby, html, css</li>
-          <li>current rabbit hole: spotify API</a></li>
+        <h3>stack:</h3>
+        <ul>
+          <li>python</li>
+          <li>js</li>
+          <li>ruby</li>
+          <li>html</li>
+          <li>css</li>
+          <li>sql</li>
+          <li>adobe suite</li>
+          <li>msft off suite</li>
+          <li>esri gis suite</li>
         </ul>
       </section>
 
-      <section class="x">
-        <h2>contact</h2>
-        <ul class="contact-list">
-          <li><a href="mailto:drew@lefebvre.us">email</a></li>
-          <li><a href="https://www.linkedin.com/in/dlefeb/" target="_blank" rel="noopener">linkedin</a></li>
-          <li><a href="https://open.spotify.com/user/31cyhtrjqch2wfacsjoaabpjnjyu?si=6b94794930354d6e" target="_blank" rel="noopener">spotify</a></li>
-        </ul>
+      <section class="contact-buttons">
+        <h3>let's connect</h3>
+      </section>
+      <section class="contact-buttons">
+          <button class ="contact-button" onclick="window.location.href='mailto:drew@lefebvre.us';"><strong>email</strong></button>
+          <a class="contact-button" href="https://www.linkedin.com/in/dlefeb/" target="_blank" rel="noopener">
+            <strong>linkedin</strong>
+          </a>
+          <a class="contact-button" href="https://open.spotify.com/user/31cyhtrjqch2wfacsjoaabpjnjyu?si=6b94794930354d6e" target="_blank" rel="noopener">
+            <strong>spotify</strong>
+          </a>
       </section>
     </main>
+
+<!-- footer -->
 	<footer class="site-footer">
   		<div class="footer-inner">
     		<p>© <span id="footer-year"></span> drew lefebvre</p>
@@ -74,8 +81,5 @@
 	</footer>
   </div>
 
-  
-  <!-- global behavior (tilt for active tab, etc.) -->
-  <script src="/script.js"></script>
 </body>
 </html>
