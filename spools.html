@@ -16,83 +16,54 @@
   <title>spools</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<script src="/script.js"></script>
-<body class="spools">
+
+<body class="home">
   <div class="container">
-    <header class="blob-header">
-      <h1>spools.</h1>
+    <header class="nav-title-box">
+      <h1 class="slide-text ">
+        <span class="line back">w<span class="flip">e</span><span class="flip">r</span>d</span>
+        <span class="line front">spools</span>
+      </h1>
       <nav>
-        <a href="index.html" class="blob-link home">home</a>
-        <a href="about.html" class="blob-link about">about</a>
-        <a href="now/index.html" class="blob-link now">now</a>
-		<a href="spools.html" class="blob-link spools" data-active="true">spools</a>
-		<a href="/music/" class="blob-link music">music</a>
+        <a href="/index.html" class="nav-link home">home</a>
+        <a href="/about.html" class="nav-link about">about</a>
+        <a href="/now/index.html" class="nav-link now">now</a>
+        <a href="/spools.html" class="nav-link spools" data-active="true">spools</a>
+        <a href="/music/" class="nav-link music">music</a>
       </nav>
     </header>
 
-    <main>
+  <main>
       <p class="more-text">
-        spools is a utility for spotify power users to do all sorts of cool things for analytics, music discovery, and organization.  you can download the desktop version below.  but i'm working on a much more polished web-app version that i'll hopefully release soon.
+        spools is a utility for spotify power users.  it's goal is to make analytics, discovery, and organization more accessible and efficient.
       </p>
       <p class="more-text">
-        you can download a very primative version below via google drive.  you'll have to create your own spotify API cridentials to use it.  and i have no documentation on how to use it.  but if you have any questions you can email me via my about page.  also, it only works on windows, may have unresolved bugs, and may require you to install python.
+        you can download a primitive version below.  it's not pretty, but it (should) work. i may eventually update it, i've got some new features/tools ready, i just haven't bothered to re-build it since i'm working on a web-app version.
       </p>
-    </main>
-    <div class="download-wrap">
-      <a class="download-btn" href="https://drive.google.com/file/d/1Ydis-IBhdniZRedPd0l8f2K7Xsu3nEo_/view?usp=sharing" target="_blank" rel="noopener">
-        <svg aria-hidden="true" class="dl-ic" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M12 3v10.586l3.293-3.293 1.414 1.414L12 17.414l-4.707-4.707 1.414-1.414L11 13.586V3h1z"></path>
-          <path d="M5 19h14v2H5z"></path>
-        </svg>
-        <span class="dl-label">spools desktop</span>
-        <span class="dl-badge">google drive</span>
-      </a>
-      <p class="download-note more-text">hosted on google drive cuz it's too much work to host it on here</p>
-    </div>
-	<footer class="site-footer">
-  		<div class="footer-inner">
-    		<p>© <span id="footer-year"></span> drew lefebvre</p>
-    		<small class="footer-quote">i hear and i forget. i see and i remember. i do and i understand. ― confucius</small>
-	  </div>
-	</footer>
+      <p class="more-text">
+        it's not intuitive, and i have no documentation on how to use it.  but if you'd like to try it, please email me or message me on linkedin and i'll help you set it up. or ask chatGPT, it can probably help you set up your API credentials.
+      </p>
+      <br>
+      <section class="buttons">
+        <a class="button" href="https://drive.google.com/file/d/1Ydis-IBhdniZRedPd0l8f2K7Xsu3nEo_/view?usp=sharing" target="_blank" rel="noopener">
+              <strong>download spools-desktop here</strong>
+        </a>
+      </section>
+      <p class="more-text">
+        note: it only works on windows and may have unresolved bugs.  it can also be destructive to your spotify library if you don't know what you're doing.
+      </p>
+      <p class="more-text">
+        if you use it, please let me know if you have any suggestions/feedback.  would love to hear as i build the web app version.
+      </p>
+  </main>
+  
+<!-- footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+          <p>© <span id="footer-year"></span> drew lefebvre</p>
+          <small class="footer-quote">i hear and i forget. i see and i remember. i do and i understand. ― confucius</small>
+      </div>
+    </footer>
   </div>
-
-
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('download-btn');
-    if (!btn) return;
-
-    btn.addEventListener('click', function (e) {
-      // If it’s a normal link, let GA fire before we leave the page
-      const href = this.getAttribute('href');
-      if (href) {
-        e.preventDefault();
-        let navigated = false;
-        const go = () => { if (!navigated) { navigated = true; window.location.href = href; } };
-
-        // Send a custom GA4 event with useful params
-        window.gtag?.('event', 'button_click', {
-          button_id: this.id || null,
-          button_text: (this.textContent || '').trim(),
-          link_url: href,
-          page_path: location.pathname,
-          event_callback: go,    // navigate after GA fires
-          event_timeout: 2000    // fallback if blocked/slow
-        });
-
-        // Extra safety in case gtag is blocked
-        setTimeout(go, 700);
-      } else {
-        // For <button> without navigation
-        window.gtag?.('event', 'button_click', {
-          button_id: this.id || null,
-          button_text: (this.textContent || '').trim(),
-          page_path: location.pathname
-        });
-      }
-    });
-  });
-</script>
 </body>
 </html>
