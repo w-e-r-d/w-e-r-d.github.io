@@ -31,24 +31,54 @@
         <a href="/spools.html" class="nav-link spools" data-active="true">spools</a>
         <a href="/music/" class="nav-link music">music</a>
         <a href="/projects/" class="nav-link projects">projects</a>
-        <a href="/spools/" class="nav-link tools">tools</a>
+        <a href="/tools/" class="nav-link tools">tools</a>
       </nav>
     </header>
 
   <main>
+    <h1>
+      spools.fm
+    </h1>  
+    <p>
+      web app is live!  check it out <a href="https://spools.fm" target="_blank">here</a>.
+    </p>
+    <p>
+      it's still in development, so it's slow, ugly, and buggy.
+    </p>
+    <p>
+      if you consider yourself a spotify power user and want to help test it, please email me to get whitelist access.
+    </p>
+    <button class="button" id="email" data-copied='["beta@spools.fm","copied"]'>
+        <span><strong>beta@spools.fm</strong></span>
+    </button>
+
+    <script>
+          const emailBtn = document.getElementById('email');
+          const emailText = JSON.parse(emailBtn.getAttribute('data-copied'));
+          let toggle = false;
+
+          emailBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText('beta@spools.fm');
+            toggle = !toggle;
+            emailBtn.innerHTML = `<span><strong>${toggle ? emailText[1] : emailText[0]}</strong></span>`;
+            setTimeout(() => {
+          toggle = false;
+          emailBtn.innerHTML = `<span><strong>${emailText[0]}</strong></span>`;
+            }, 2000);
+          });
+    </script>
+
+    <br></br>
+    <h2>spools desktop</h2>
       <p>
-        spools is a utility for spotify power users.  it's goal is to make analytics, discovery, and organization more accessible and efficient.
-      </p>
-      <p>
-        you can download a primitive version below.  it's not pretty, but it *should* work. i may eventually update it, i've got some new features/tools ready, i just haven't bothered to re-build it since i'm working on a web-app version.
+        you can also download a primitive desktop version below.  it's not pretty, but it *should* work. i may eventually update it, i've got some new features/tools ready, i just haven't bothered to re-build it since i'm working on a web-app version.
       </p>
       <p>
         it's not intuitive, and i have no documentation on how to use it.  but if you'd like to try it, please email me or message me on linkedin and i'll help you set it up. or ask chatGPT, it can probably help you set up your API credentials.
       </p>
-      <br>
       <section class="buttons">
         <a class="button" href="https://drive.google.com/file/d/1Ydis-IBhdniZRedPd0l8f2K7Xsu3nEo_/view?usp=sharing" target="_blank" rel="noopener">
-              <strong>download spools-desktop here</strong>
+              <strong>download</strong>
         </a>
       </section>
       <p>
