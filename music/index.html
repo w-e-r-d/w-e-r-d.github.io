@@ -35,11 +35,33 @@
 
     <main>
       <p>
-        i think i have a cool idea for this page.  but might take me a while to get enough data for it.
+        i had a cool idea for this page.  but turns out spotify removed preview_url endpoint from their API, so in order to provide a way for you to listen to these tracks, i have to have the iframe visible (boo!).  i've still got some ideas to make this more fun, but for now, it is what it is:
+      </p>
+      <h2>drew's hall of fame</h2>
+      <p>
+        some songs i love, some i used to love, and some i will always love.
       </p>
       <p>
-        stay tuned.
+        i'll probably add more songs weekly until i've sorted through all my saved songs (at my current pace, this will take about 1.4 years from today, 10.24.25).  after that, i'll add new songs as i find them.
       </p>
+      <iframe 
+        data-testid="embed-iframe" 
+        style="border-radius:12px" 
+        src="https://open.spotify.com/embed/track/6GCcY6dVDVGxo52OZq9HVW?utm_source=generator&theme=0" 
+        width="500px" 
+        height="152" 
+        frameBorder="0" 
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+      </iframe>
+      <br><br>
+      <div class="col">
+        <div class="row">
+        </div>
+      </div>
+    
+      <p style="color: white">note: i do not own any of the artwork shown above.  artwork belongs to its respective owners.</p>
     </main>
 
 
@@ -53,6 +75,7 @@
 	  </div>
 
     <script>
+      // copyright click behavior
       const el = document.getElementById('copyright');
       const text = JSON.parse(el.getAttribute('data-text'));
       let i = 0;
@@ -60,6 +83,72 @@
       el.addEventListener('click', () => {
         i = (i + 1) % text.length;
         el.textContent = text[i];
+      });
+
+      // shuffle
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+      
+      // album grid generator
+      (async function buildAlbumGrid() {
+        try {
+      const response = await fetch('/music/songs.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Failed to load songs.json');
+      const albums = await response.json();
+
+      const row = document.querySelector('.col .row');
+      const frag = document.createDocumentFragment();
+
+      shuffle(albums).forEach(album => {
+        const container = document.createElement('div');
+        container.className = 'album-art-container';
+        container.setAttribute('data-track', album.embed);
+
+        const img = document.createElement('img');
+        img.src = album.cover;
+        img.alt = `${album.title} by ${album.artist}`;
+        img.className = 'album-art';
+        img.loading = 'lazy';
+
+        const overlay = document.createElement('div');
+        overlay.className = 'album-overlay';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'song-title';
+        titleDiv.textContent = album.title;
+
+        const artistDiv = document.createElement('div');
+        artistDiv.className = 'song-artist';
+        artistDiv.textContent = album.artist;
+
+        overlay.appendChild(titleDiv);
+        overlay.appendChild(artistDiv);
+        container.appendChild(img);
+        container.appendChild(overlay);
+        frag.appendChild(container);
+      });
+
+      row.appendChild(frag);
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+ 
+      // album art click behaivor
+      document.addEventListener('click', (e) => {
+        const container = e.target.closest('.album-art-container');
+        if (!container) return;
+
+        const newSrc = container.getAttribute('data-track');
+        const iframe = document.getElementById('spotify-iframe') || document.querySelector('iframe[data-testid="embed-iframe"]');
+        if (iframe && newSrc) {
+          iframe.src = newSrc;
+        }
       });
     </script>
 

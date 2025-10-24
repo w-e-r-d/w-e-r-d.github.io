@@ -388,3 +388,74 @@ nav a[data-active="true"]:hover::before {
   padding: 0;
   margin: 0;
 }
+
+
+/* MUSIC PAGE */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+.col {
+  flex: 50%;
+  padding: 0 4px;
+}
+
+.col img {
+  margin-top: 0px;
+  vertical-align: middle;
+  width: 100px;
+}
+
+.album-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #d97182;
+}
+
+.album-art-container {
+  position: relative;
+  width: 100%;
+  max-width: 100px;
+  margin-bottom: 0;
+}
+
+.album-art-container:hover .album-overlay {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.album-art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.song-title {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  position: relative;
+  top: 5%;
+  left: 0%;
+  text-align: center;
+  padding: 5px;
+}
+
+.song-artist {
+  color: white;
+  font-size: 12px;
+  position: relative;
+  top: 0%;
+  left: 0%;
+  text-align: center;
+  padding: 3px;
+}
