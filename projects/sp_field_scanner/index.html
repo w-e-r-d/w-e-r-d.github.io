@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LNJ2DCY46"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-3LNJ2DCY46');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>spotify field scanner</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body class="home">
+  <div class="container">
+    <header class="nav-title-box">
+      <h1 class="slide-text ">
+        <span class="line back">w<span class="flip">e</span><span class="flip">r</span>d</span>
+        <span class="line front">/now</span>
+      </h1>
+      <nav>
+        <a href="/index.html" class="nav-link home">home</a>
+        <a href="/about.html" class="nav-link about">about</a>
+        <a href="/now/index.html" class="nav-link now">now</a>
+        <a href="/spools.html" class="nav-link spools">spools</a>
+        <a href="/music/" class="nav-link music">music</a>
+        <a href="/projects/" class="nav-link projects" data-active="true">projects</a>
+        <a href="/tools/" class="nav-link tools">tools</a>
+      </nav>
+    </header>
+
+
+    <main>
+      <section>
+        <h2>spotify field scanner</h2>
+        <p>why did i make this?</p>
+        <p>the primary reason is that when i'm in my car, i'm listening to spotify.  i hear a song i like, i want to save it.  to save it: i open my phone, open spotify, click the like button, click the like button again and search for a playlist, click the playlist, click back to maps.  that’s too much work.  so, i made the "spotify field scanner."   press the action button on my phone and, if i'm listening to spotify, it will save the song currently playing to a designated playlist.  couple times a week i sort through the playlist to move what i like to the right playlists and unsave the rest.</p>
+        <p>another reason is that i'll often shazam songs when i'm out and about, but i'll forget to go back to the shazam app and search for it on spotify to save it.  so, i gave the spotify field scanner a second feature.  if i'm not listening to spotify then the script pulls up shazam.  it takes the shazam result and searches spotify, finds the best match, and saves that song to the same playlist so i can sort it later.</p>
+
+        <img src="/projects/sp_field_scanner/assets/sp_field_scanner_diagram.png" style="max-width: 700px; height: auto;">
+        <p>the future is here folks!  here's how to get the spotify field scanner working on your phone:</p>
+      </section>
+
+      <section>
+        <h4>step one: install apps</h4>
+        <p>you need a-shell, it's free on app store.  icon is yellow with black swirl.  warning!  it's 2 gigabytes lol, sorry! it's the only way to do this for free.</p>
+        <p>you also need a text editor. i use runestone, it's free if you don't pay for premium and you won't need premium for this.</p>
+        
+        <h4>step two: install spotipy and create script file</h4>
+        <p>open a-shell and type: <code style="color: #df5551">python3 -m pip install spotipy</code> and press enter to install the python package that can talk to spotify.</p>
+        <p>then, still in a-shell, type: <code style="color: #df5551">touch sp_field_scanner.py</code> and press enter to create your script file.  it will save to your files app > on my phone > a-shell</p>
+        
+        <h4>step three: write your script</h4>
+        <p>open <code style="color: #df5551">sp_field_scanner.py </code> in your text editor and paste this code into it:</p>
+        <pre><code class="language-python" style="color: #fffef2">
+            import os, sys
+            import spotipy
+            from spotipy.oauth2 import SpotifyOAuth
+            from spotipy.exceptions import SpotifyException
+
+            # ==== CONFIG ====
+            CLIENT_ID = "REPLACE ME WITH YOUR OWN"
+            CLIENT_SECRET = "REPLACE ME WITH YOUR OWN"
+            REDIRECT_URI = "http://127.0.0.1:8765/callback"
+
+            PLAYLIST_ID = "REPLACE ME WITH YOUR OWN"
+            CACHE_PATH = os.path.expanduser("~/Documents/.spotipy_cache")
+            SCOPE = "user-read-currently-playing playlist-modify-public playlist-modify-private"
+            # =================================
+
+            def build_client():
+                auth = SpotifyOAuth(
+                    client_id=CLIENT_ID,
+                    client_secret=CLIENT_SECRET,
+                    redirect_uri=REDIRECT_URI,
+                    scope=SCOPE,
+                    cache_path=CACHE_PATH,
+                    open_browser=False,
+                    show_dialog=False
+                )
+                return spotipy.Spotify(auth_manager=auth)
+
+            def playlist_contains(sp, playlist_id, track_id):
+                offset = 0
+                while True:
+                    res = sp.playlist_items(
+                        playlist_id,
+                        fields="items(track(id)),next",
+                        limit=100,
+                        offset=offset,
+                        additional_types=["track"]
+                    )
+                    for it in res.get("items", []):
+                        t = it.get("track") or {}
+                        if t.get("id") == track_id:
+                            return True
+                    if not res.get("next"):
+                        return False
+                    offset += 100
+
+            def add_to_playlist(sp, playlist_id, track_id):
+                if not track_id:
+                    return False, "no track id"
+                if playlist_contains(sp, playlist_id, track_id):
+                    return True, "in playlist already"
+                sp.playlist_add_items(playlist_id, [track_id])
+                return True, "added to playlist"
+
+            def from_current(sp):
+                cur = sp.current_user_playing_track()
+                if not cur or not cur.get("is_playing"):
+                    return None, "NOT_PLAYING"
+                item = cur.get("item")
+                if not item or item.get("type") != "track":
+                    return None, "NOT_TRACK"
+                track_id = item.get("id")
+                title = item.get("name")
+                artists = ", ".join(a.get("name") for a in item.get("artists", []))
+                ok, msg = add_to_playlist(sp, PLAYLIST_ID, track_id)
+                return (title, artists, ok, msg), None
+
+            def search_and_add(sp, title, artist=""):
+                title = (title or "").strip()
+                artist = (artist or "").strip()
+                if not title:
+                    return None, "no title recieved"
+
+                q = f'track:"{title}"' + (f' artist:"{artist}"' if artist else "")
+                res = sp.search(q=q, type="track", limit=5)
+                items = res.get("tracks", {}).get("items", [])
+
+                if not items:
+                    q2 = f"{title} {artist}".strip()
+                    res = sp.search(q=q2, type="track", limit=10)
+                    items = res.get("tracks", {}).get("items", [])
+                    if not items:
+                        return None, f"no match for: {title}" + (f" {artist}" if artist else "")
+
+                best = max(items, key=lambda t: (t.get("popularity") or 0))
+                track_id = best.get("id")
+                tname = best.get("name")
+                artists = ", ".join(a.get("name") for a in best.get("artists", []))
+                ok, msg = add_to_playlist(sp, PLAYLIST_ID, track_id)
+                return (tname, artists, ok, msg), None
+
+            def main():
+                sp = build_client()
+
+                args = sys.argv[1:]
+                if args:
+                    title = args[0]
+                    artist = args[1] if len(args) > 1 else ""
+                    info, err = search_and_add(sp, title, artist)
+                    if info:
+                        tname, artists, ok, msg = info
+                        print(f"SHZ_OK: {tname} {artists} | {msg}")
+                    else:
+                        print(f"SHZ_FAIL: {err}")
+                    return
+
+                info, errcode = from_current(sp)
+                if info:
+                    tname, artists, ok, msg = info
+                    print(f"CURR_OK: {tname} {artists} | {msg}")
+                else:
+                    if errcode == "NOT_PLAYING":
+                        print("CURR_NO: not playing")
+                    else:
+                        print("CURR_NO: podcast/audiobook, no song")
+
+            if __name__ == "__main__":
+                main()
+        </code></pre>
+        
+        <h4>step four: set up the spotify stuff</h4>
+            <p>go to developer.spotify.com and sign in with your spotify account.  then go to your dashboard.</p>
+            <p>in dashboard, click create app</p>
+            <p>name it whatever you want, describe it however you want.  leave website blank.  put this exactly into redirect uri: <code style="color: #df5551">http://127.0.0.1:8765/callback</code> then press add.</p>
+            <p>check web API box</p>
+            <p>check that you understand all the stuff</p>
+            <p>press save</p>
+            <p>copy the client id from spotify developer dashboard exactly as it's shown into your script, under the config section, where it says <code style="color: #df5551">CLIENT_ID = "REPLACE ME WITH YOUR OWN"</code> leaving the quotes there.</p>
+            <p>do the same for your client secret.  note you'll have to click the "view client secret" button in the developer dashboard</p>
+            <p>choose your destination playlist in spotify (where your scanned songs will be saved), click the three dots > share > copy link</p>
+            <p>paste the link somewhere so you can see it, it should look something like this: <code>https://open.spotify.com/playlist/<code style="color: #df5551">3DdxDdbEjcQpHDv6PqEEHa</code>?si=0dd435756e7542a0&pt=754f443576542c2d24e6be2401a19bdb</code></p>
+            <p>copy the playlist id.  that's the red part of the link above.  everything after /playlist/ but before the question mark.</p>
+            <p>put the playlist id in the code where it says <code style="color:#df5551">PLAYLIST_ID = "REPLACE ME WITH YOUR OWN"</code> leaving the quotes there.</p>
+        
+        <h4>step five: authenticate your script</h4>
+            <p>this is the most annoying and tedious part.  open a-shell and type <code style="color: #df5551">python3 sp_field_scanner.py</code> then press enter.</p>
+            <p>it will spit out instructions to "go to the following url:"  you need to copy that url one line at a time into a notepad or something and stick it all together so you can copy the whole thing at once (for some reason a-shell can't copy multiple lines at once, it's very finnecky).  once you get the full link, open safari, paste it, click enter.  then copy the new url it took you to, and paste it back into a-shell, and press enter.  don't worry, you only have to do this once.</p>
+    
+        <h4>step six: create shortcut! you're so close to being done!</h4>
+            <p>you can either just save my shortcut directly to your phone <a href="https://www.icloud.com/shortcuts/0253355594e14b538d55312e36ecd9ef" target="_blank">here</a> or follow along with <a href="https://youtube.com/shorts/VqWReYlTaao?si=813RiShJBlkss3ut" target="_blank">this screen recording</a> of me building it.</p>
+
+        <h4>step seven: activate action button</h4>
+            <p>on ur phone.  go to settings > action button.  swipe all the way to shorcut.  choose the shortcut you just saved/made.</p>
+
+        <h4>step eight: enjoy! start collecting music without even thinking about it!</h4>
+            <p>or email me if you got stuck somewhere and need some help: support@spools.fm</p>
+    </section>
+    </main>
+
+<!-- footer -->
+	<footer class="site-footer">
+  		<div class="footer-inner">
+    		<span id="copyright"
+            data-text='["© drew lefebvre","i don&#39;t know how copyright works","i just put this here because it looked cool","don&#39;t steal my stuff","please and thanks"]'>
+            © drew lefebvre
+        </span>
+    		<small class="footer-quote">...all that we need to make us happy is something to be enthusiastic about. - charles kingsley</small>
+	  </div>
+
+    <script>
+      const el = document.getElementById('copyright');
+      const text = JSON.parse(el.getAttribute('data-text'));
+      let i = 0;
+
+      el.addEventListener('click', () => {
+        i = (i + 1) % text.length;
+        el.textContent = text[i];
+      });
+    </script>
+
+	</footer>
+</body>
+</html>

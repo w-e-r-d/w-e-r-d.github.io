@@ -459,3 +459,23 @@ nav a[data-active="true"]:hover::before {
   text-align: center;
   padding: 3px;
 }
+
+/* PROJECT PAGE */
+.project-tag {
+  display: inline-block;
+  background-color: #f1cb62;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+pre {
+  background: #333674;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  max-width: 700px;
+} 
