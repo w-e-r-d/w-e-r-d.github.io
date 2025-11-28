@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LNJ2DCY46"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}    
+    gtag('js', new Date());  
+    gtag('config', 'G-3LNJ2DCY46');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>about</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body class="home">
+  <div class="container">
+    <header class="nav-title-box">
+      <h1 class="slide-text">
+        <span class="line back">BROTHER</span>
+        <span class="line front">about</span>
+      </h1>
+      <nav>
+        <a href="/index.html" class="nav-link home">home</a>
+        <a href="/about.html" class="nav-link about">about</a>
+        <a href="/now/index.html" class="nav-link now">now</a>
+        <a href="/spools.html" class="nav-link spools">spools</a>
+        <a href="/music/" class="nav-link music">music</a>
+        <a href="/projects/" class="nav-link projects">projects</a>
+        <a href="/tools/" class="nav-link tools">tools</a>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h1>HAPPY BIRTHDAY RACHEL !!!!</h1>
+        <p>
+          there's a gift for u on this page. you gotta find the clues tho :)
+        </p>
+        <p>
+          somewhere on this page IS a <strong>secret phrase</strong>. when you figure it out and type it in below,
+          your present will appear. the phrase is four words.
+        </p>
+      </section>
+
+      <section id="puzzle">
+        <h3>unlock your gift</h3>
+        <p>
+          enter the secret phrase (four words, lowercase, separated by spaces):
+        </p>
+        <div class="puzzle-input">
+          <input id="phraseInput" type="text" autocomplete="off" placeholder="secret phrase goes here" />
+          <button id="checkPhrase" class="button">unlock</button>
+        </div>
+        <p id="resultMessage"></p>
+        <div id="giftLink" style="display:none; margin-top: 1rem;">
+          <p>here's your present 🎁:</p>
+          <p><a href="https://eGft.in/PAz1IB1UCWx-rBz" target="_blank" rel="noopener">click here</a></p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- footer -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span id="copyright"
+          data-text='["© drew lefebvre","© drew lefebvr","© drew lefebv","© drew lefe","© drew l","© drew","© DREW"]'>
+          © drew lefebvre
+        </span>
+        <span id="quote"
+            data-text2='["dont be so busy making a living that you forget to make a life. - dolly parton","dont BE so buSy making a living that you forgeT to make a life. - dolly parton"]'>
+            don't be so busy making a living that you forget to make a life. - dolly parton
+        </span>
+      </div>
+
+      <script>
+        const el = document.getElementById('copyright');
+        const text = JSON.parse(el.getAttribute('data-text'));
+        let i = 0;
+
+        el.addEventListener('click', () => {
+          i = (i + 1) % text.length;
+          el.textContent = text[i];
+        });
+
+        const al = document.getElementById('quote');
+        const text2 = JSON.parse(al.getAttribute('data-text2'));
+        let p = 0;
+
+        al.addEventListener('click', () => {
+          p = (p + 1) % text2.length;
+          al.textContent = text2[p];
+        });
+      </script>
+    </footer>
+  </div>
+
+  <!-- secret phrase logic -->
+  <script>
+    const secretPhrase = 'drew is best brother';
+    const phraseInput = document.getElementById('phraseInput');
+    const checkBtn = document.getElementById('checkPhrase');
+    const resultMessage = document.getElementById('resultMessage');
+    const giftLink = document.getElementById('giftLink');
+
+    function checkSecretPhrase() {
+      const guess = (phraseInput.value || '').trim().toLowerCase();
+
+      if (!guess) {
+        resultMessage.textContent = 'type your guess first :)';
+        giftLink.style.display = 'none';
+        return;
+      }
+
+      if (guess === secretPhrase) {
+        resultMessage.textContent = 'correct!! happy birthday!!';
+        giftLink.style.display = 'block';
+      } else {
+        resultMessage.textContent = 'nope try again';
+        giftLink.style.display = 'none';
+      }
+    }
+
+    checkBtn.addEventListener('click', checkSecretPhrase);
+
+    phraseInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        checkSecretPhrase();
+      }
+    });
+  </script>
+</body>
+</html>
