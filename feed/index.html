@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LNJ2DCY46"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-3LNJ2DCY46');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>feed</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body class="home">
+  <div class="container">
+    <header class="nav-title-box">
+      <h1 class="slide-text">
+        <span class="line back">w<span class="flip">e</span><span class="flip">r</span>d</span>
+        <span class="line front">feed</span>
+      </h1>
+      <nav>
+        <a href="/index.html" class="nav-link home">home</a>
+        <a href="/about.html" class="nav-link about">about</a>
+        <a href="/now/index.html" class="nav-link now">now</a>
+        <a href="/spools.html" class="nav-link spools">spools</a>
+        <a href="/music/" class="nav-link music">music</a>
+        <a href="/projects/" class="nav-link projects">projects</a>
+        <a href="/tools/" class="nav-link tools">tools</a>
+        <a href="/feed/" class="nav-link feed" data-active="true">feed</a>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h1>feed</h1>
+        <p>
+          i don't use instagram or facebook (except for marketplace), or any other social media.  so this is where i post pictures and updates about life for friends and family to view (and/or random internet visitors).
+        </p>
+      </section>
+    </main>
+
+<!-- footer -->
+ 	<footer class="site-footer">
+  		<div class="footer-inner">
+    		<span id="copyright"
+            data-text='["© drew lefebvre","i don&#39;t know how copyright works","i just put this here because it looked cool","don&#39;t steal my stuff","please and thanks"]'>
+            © drew lefebvre
+        </span>
+    		<small class="footer-quote">don't be so busy making a living that you forget to make a life.  - dolly parton</small>
+	  </div>
+
+    <script>
+      const el = document.getElementById('copyright');
+      const text = JSON.parse(el.getAttribute('data-text'));
+      let i = 0;
+
+      el.addEventListener('click', () => {
+        i = (i + 1) % text.length;
+        el.textContent = text[i];
+      });
+    </script>
+
+	</footer>
+
+
+</body>
+</html>
