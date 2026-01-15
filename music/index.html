@@ -44,7 +44,9 @@
       <h2>drew's hall of fame</h2>
       <i>last updated: jan 10, 2026</i>
       <br><br>
+      <button class="button" id="random" style="margin-bottom:12px;">random</button>
       <iframe 
+        id="spotify-iframe"
         data-testid="embed-iframe" 
         style="border-radius:12px" 
         src="https://open.spotify.com/embed/track/32GhlLgrx9mXXKHf2ltF7U?utm_source=generator&theme=0" 
@@ -100,6 +102,7 @@
       const response = await fetch('/music/songs.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('Failed to load songs.json');
       const albums = await response.json();
+      window.__albums = albums;
 
       const row = document.querySelector('.col .row');
       const frag = document.createDocumentFragment();
@@ -138,7 +141,18 @@
       console.error(e);
     }
   })();
- 
+        
+      document.getElementById('random')?.addEventListener('click', () => {
+        if (!window.__albums || !window.__albums.length) return;
+
+        const rand = window.__albums[Math.floor(Math.random() * window.__albums.length)];
+        const iframe = document.getElementById('spotify-iframe');
+        if (iframe && rand.embed) {
+          iframe.src = rand.embed;
+        }
+      });
+
+
       // album art click behaivor
       document.addEventListener('click', (e) => {
         const container = e.target.closest('.album-art-container');
