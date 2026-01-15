@@ -1238,5 +1238,421 @@
     "embed": "https://open.spotify.com/embed/track/7j31rVgGX9Q2blT92VBEA0?utm_source=generator",
     "cover": "assets/020 - My Chemical Romance - Teenagers - The Black Parade.jpg",
     "alt": "Teenagers by My Chemical Romance"
+  },
+  {
+    "title": "King of Everything",
+    "artist": "Dominic Fike",
+    "album": "Don't Forget About Me, Demos",
+    "embed": "https://open.spotify.com/embed/track/0lO1yt6M1l1OAs80M3vEfM?utm_source=generator",
+    "cover": "assets/136 - Dominic Fike - King of Everything - Don't Forget About Me, Demos.jpg",
+    "alt": "King of Everything by Dominic Fike"
+  },
+  {
+    "title": "Love U Like That",
+    "artist": "Lauv",
+    "album": "Love U Like That",
+    "embed": "https://open.spotify.com/embed/track/3rmqiQbzPDx7A8p88IRFKg?utm_source=generator",
+    "cover": "assets/137 - Lauv - Love U Like That - Love U Like That.jpg",
+    "alt": "Love U Like That by Lauv"
+  },
+  {
+    "title": "Only Lovers Left Alive",
+    "artist": "DOPE LEMON",
+    "album": "Hounds Tooth",
+    "embed": "https://open.spotify.com/embed/track/1Bw9sLUvtmlaK3MklhYx0c?utm_source=generator",
+    "cover": "assets/138 - DOPE LEMON - Only Lovers Left Alive - Hounds Tooth.jpg",
+    "alt": "Only Lovers Left Alive by DOPE LEMON"
+  },
+  {
+    "title": "Hush",
+    "artist": "BYRNE",
+    "album": "Hush",
+    "embed": "https://open.spotify.com/embed/track/4iXqSVXVzaldHOsQgHtzOD?utm_source=generator",
+    "cover": "assets/139 - BYRNE - Hush - Hush.jpg",
+    "alt": "Hush by BYRNE"
+  },
+  {
+    "title": "Going Gets Tough",
+    "artist": "The Growlers",
+    "album": "Chinese Fountain",
+    "embed": "https://open.spotify.com/embed/track/0dEhydwCE5Og4PLKyjfqMR?utm_source=generator",
+    "cover": "assets/140 - The Growlers - Going Gets Tough - Chinese Fountain.jpg",
+    "alt": "Going Gets Tough by The Growlers"
+  },
+  {
+    "title": "A Lingering Love",
+    "artist": "Fruit Bats",
+    "album": "Gold Past Life",
+    "embed": "https://open.spotify.com/embed/track/1vX5qdTsxb0Gedzmyc8UV2?utm_source=generator",
+    "cover": "assets/141 - Fruit Bats - A Lingering Love - Gold Past Life.jpg",
+    "alt": "A Lingering Love by Fruit Bats"
+  },
+  {
+    "title": "When U Love Somebody",
+    "artist": "Fruit Bats",
+    "album": "Mouthfuls",
+    "embed": "https://open.spotify.com/embed/track/68Euox5QCQrf0sMI847CfC?utm_source=generator",
+    "cover": "assets/142 - Fruit Bats - When U Love Somebody - Mouthfuls.jpg",
+    "alt": "When U Love Somebody by Fruit Bats"
+  },
+  {
+    "title": "Heatstroke",
+    "artist": "Khalid",
+    "album": "Sincere",
+    "embed": "https://open.spotify.com/embed/track/5zjS49hh8KF7mnbvgUtiJa?utm_source=generator",
+    "cover": "assets/143 - Khalid - Heatstroke - Sincere.jpg",
+    "alt": "Heatstroke by Khalid"
+  },
+  {
+    "title": "can't slow down",
+    "artist": "almost monday",
+    "album": "DIVE (deluxe)",
+    "embed": "https://open.spotify.com/embed/track/1Qo0I5GmDG3IYM3tXCiVIs?utm_source=generator",
+    "cover": "assets/144 - almost monday - can't slow down - DIVE (deluxe).jpg",
+    "alt": "can't slow down by almost monday"
+  },
+  {
+    "title": "coast to coast",
+    "artist": "almost monday",
+    "album": "coast to coast",
+    "embed": "https://open.spotify.com/embed/track/3MDFRerrTl5CyeVsb71XId?utm_source=generator",
+    "cover": "assets/145 - almost monday - coast to coast - coast to coast.jpg",
+    "alt": "coast to coast by almost monday"
+  },
+  {
+    "title": "Welcome to Your Life",
+    "artist": "GROUPLOVE",
+    "album": "Big Mess",
+    "embed": "https://open.spotify.com/embed/track/4hAhyE1iL07EIUJnqw2bsV?utm_source=generator",
+    "cover": "assets/148 - GROUPLOVE - Welcome to Your Life - Big Mess.jpg",
+    "alt": "Welcome to Your Life by GROUPLOVE"
+  },
+  {
+    "title": "saturday",
+    "artist": "Yot Club",
+    "album": "saturday",
+    "embed": "https://open.spotify.com/embed/track/4d76CU49i79iiV1JulIWqq?utm_source=generator",
+    "cover": "assets/149 - Yot Club - saturday - saturday.jpg",
+    "alt": "saturday by Yot Club"
+  },
+  {
+    "title": "Tastes Like Forever",
+    "artist": "Daily J",
+    "album": "Tastes Like Forever",
+    "embed": "https://open.spotify.com/embed/track/33xgQAHpWcbY8B45sakPCn?utm_source=generator",
+    "cover": "assets/150 - Daily J - Tastes Like Forever - Tastes Like Forever.jpg",
+    "alt": "Tastes Like Forever by Daily J"
+  },
+  {
+    "title": "Tell Me I'm A Wreck",
+    "artist": "Every Avenue",
+    "album": "Picture Perfect",
+    "embed": "https://open.spotify.com/embed/track/203zTFd1zbfG0fiOG9OREv?utm_source=generator",
+    "cover": "assets/151 - Every Avenue - Tell Me I'm A Wreck - Picture Perfect.jpg",
+    "alt": "Tell Me I'm A Wreck by Every Avenue"
+  },
+  {
+    "title": "Harlem",
+    "artist": "New Politics",
+    "album": "A Bad Girl In Harlem",
+    "embed": "https://open.spotify.com/embed/track/573latfTMO7SpGtStVrQx5?utm_source=generator",
+    "cover": "assets/152 - New Politics - Harlem - A Bad Girl In Harlem.jpg",
+    "alt": "Harlem by New Politics"
+  },
+  {
+    "title": "1985",
+    "artist": "Bowling For Soup",
+    "album": "A Hangover You Don't Deserve",
+    "embed": "https://open.spotify.com/embed/track/5oQcOu1omDykbIPSdSQQNJ?utm_source=generator",
+    "cover": "assets/153 - Bowling For Soup - 1985 - A Hangover You Don't Deserve.jpg",
+    "alt": "1985 by Bowling For Soup"
+  },
+  {
+    "title": "Love Drunk",
+    "artist": "BOYS LIKE GIRLS",
+    "album": "Love Drunk",
+    "embed": "https://open.spotify.com/embed/track/20X9OeC606XNwEtDBOym5u?utm_source=generator",
+    "cover": "assets/154 - BOYS LIKE GIRLS - Love Drunk - Love Drunk.jpg",
+    "alt": "Love Drunk by BOYS LIKE GIRLS"
+  },
+  {
+    "title": "Teenagers",
+    "artist": "My Chemical Romance",
+    "album": "The Black Parade",
+    "embed": "https://open.spotify.com/embed/track/7j31rVgGX9Q2blT92VBEA0?utm_source=generator",
+    "cover": "assets/155 - My Chemical Romance - Teenagers - The Black Parade.jpg",
+    "alt": "Teenagers by My Chemical Romance"
+  },
+  {
+    "title": "All Of The Time",
+    "artist": "Wilmah",
+    "album": "All Of The Time",
+    "embed": "https://open.spotify.com/embed/track/4hllJRapkwQbIDGnaqeN6F?utm_source=generator",
+    "cover": "assets/156 - Wilmah - All Of The Time - All Of The Time.jpg",
+    "alt": "All Of The Time by Wilmah"
+  },
+  {
+    "title": "Most of All",
+    "artist": "Oracle Sisters",
+    "album": "Most of All",
+    "embed": "https://open.spotify.com/embed/track/6WqImyDAHzc4J9n4Qn5p3O?utm_source=generator",
+    "cover": "assets/157 - Oracle Sisters - Most of All - Most of All.jpg",
+    "alt": "Most of All by Oracle Sisters"
+  },
+  {
+    "title": "Blinding Sights",
+    "artist": "Yellow House",
+    "album": "A Carnival of Fears",
+    "embed": "https://open.spotify.com/embed/track/7mb5XTIMvNZa2N0Mdx68Xi?utm_source=generator",
+    "cover": "assets/158 - Yellow House - Blinding Sights - A Carnival of Fears.jpg",
+    "alt": "Blinding Sights by Yellow House"
+  },
+  {
+    "title": "decay",
+    "artist": "Ethan Regan",
+    "album": "decay",
+    "embed": "https://open.spotify.com/embed/track/7HDXpYf4Eloe0NtQKOyt6j?utm_source=generator",
+    "cover": "assets/159 - Ethan Regan - decay - decay.jpg",
+    "alt": "decay by Ethan Regan"
+  },
+  {
+    "title": "get by",
+    "artist": "Ethan Regan",
+    "album": "get by",
+    "embed": "https://open.spotify.com/embed/track/3vGuwAV3rxD4189HC3p0SD?utm_source=generator",
+    "cover": "assets/160 - Ethan Regan - get by - get by.jpg",
+    "alt": "get by by Ethan Regan"
+  },
+  {
+    "title": "Emergence",
+    "artist": "Sleep Token",
+    "album": "Even In Arcadia",
+    "embed": "https://open.spotify.com/embed/track/2OMjHcniFxzijWX7EaBrXE?utm_source=generator",
+    "cover": "assets/161 - Sleep Token - Emergence - Even In Arcadia.jpg",
+    "alt": "Emergence by Sleep Token"
+  },
+  {
+    "title": "Not Me Anymore",
+    "artist": "POLYDRIVE",
+    "album": "Not Me Anymore",
+    "embed": "https://open.spotify.com/embed/track/46gcml0UNQm0C3bzAHgbV3?utm_source=generator",
+    "cover": "assets/162 - POLYDRIVE - Not Me Anymore - Not Me Anymore.jpg",
+    "alt": "Not Me Anymore by POLYDRIVE"
+  },
+  {
+    "title": "Kissing Days",
+    "artist": "Sumbuck",
+    "album": "Oh Sweet Cafe Racer",
+    "embed": "https://open.spotify.com/embed/track/6la3SrbNxWQ9K10OfIQOTr?utm_source=generator",
+    "cover": "assets/163 - Sumbuck - Kissing Days - Oh Sweet Cafe Racer.jpg",
+    "alt": "Kissing Days by Sumbuck"
+  },
+  {
+    "title": "Don't Mind Me",
+    "artist": "Styrofoam Winos",
+    "album": "Real Time",
+    "embed": "https://open.spotify.com/embed/track/4Gr28QyljEPj2FNKhyaSqX?utm_source=generator",
+    "cover": "assets/164 - Styrofoam Winos - Don't Mind Me - Real Time.jpg",
+    "alt": "Don't Mind Me by Styrofoam Winos"
+  },
+  {
+    "title": "Bullet",
+    "artist": "Teddy and The Rough Riders",
+    "album": "Down Home",
+    "embed": "https://open.spotify.com/embed/track/5PsTq1nBaB7CynumBOJaGM?utm_source=generator",
+    "cover": "assets/165 - Teddy and The Rough Riders - Bullet - Down Home.jpg",
+    "alt": "Bullet by Teddy and The Rough Riders"
+  },
+  {
+    "title": "CHEMICALS!",
+    "artist": "Jonah Kagen",
+    "album": "georgia got colder",
+    "embed": "https://open.spotify.com/embed/track/2ZLdPwznoSFQGZflBC04oL?utm_source=generator",
+    "cover": "assets/166 - Jonah Kagen - CHEMICALS! - georgia got colder.jpg",
+    "alt": "CHEMICALS! by Jonah Kagen"
+  },
+  {
+    "title": "Mexico",
+    "artist": "Husbands",
+    "album": "After the Gold Rush Party",
+    "embed": "https://open.spotify.com/embed/track/7xUtTW7HuiwSANiKLz8VHE?utm_source=generator",
+    "cover": "assets/167 - Husbands - Mexico - After the Gold Rush Party.jpg",
+    "alt": "Mexico by Husbands"
+  },
+  {
+    "title": "How To Live",
+    "artist": "Del Water Gap",
+    "album": "Chasing The Chimera",
+    "embed": "https://open.spotify.com/embed/track/4M97EBNl6eCzroqazkYClC?utm_source=generator",
+    "cover": "assets/168 - Del Water Gap - How To Live - Chasing The Chimera.jpg",
+    "alt": "How To Live by Del Water Gap"
+  },
+  {
+    "title": "graveyard shift",
+    "artist": "Jonah Kagen",
+    "album": "georgia got colder",
+    "embed": "https://open.spotify.com/embed/track/32GhlLgrx9mXXKHf2ltF7U?utm_source=generator",
+    "cover": "assets/169 - Jonah Kagen - graveyard shift - georgia got colder.jpg",
+    "alt": "graveyard shift by Jonah Kagen"
+  },
+  {
+    "title": "Better Views",
+    "artist": "Yellow House",
+    "album": "Better Views",
+    "embed": "https://open.spotify.com/embed/track/5PE2TkQKrgcLZupVGe5Pxu?utm_source=generator",
+    "cover": "assets/170 - Yellow House - Better Views - Better Views.jpg",
+    "alt": "Better Views by Yellow House"
+  },
+  {
+    "title": "Always, Everytime",
+    "artist": "The Wrecks",
+    "album": "Speed",
+    "embed": "https://open.spotify.com/embed/track/0m23mCa7VRx73ec3JbPv75?utm_source=generator",
+    "cover": "assets/171 - The Wrecks - Always, Everytime - Speed.jpg",
+    "alt": "Always, Everytime by The Wrecks"
+  },
+  {
+    "title": "Younger",
+    "artist": "The Hails",
+    "album": "He Seems Upset",
+    "embed": "https://open.spotify.com/embed/track/6kE3BJhZYLIfGLQY2hSzaM?utm_source=generator",
+    "cover": "assets/172 - The Hails - Younger - He Seems Upset.jpg",
+    "alt": "Younger by The Hails"
+  },
+  {
+    "title": "Joyride",
+    "artist": "Roxette",
+    "album": "Joyride",
+    "embed": "https://open.spotify.com/embed/track/4wBcEq9lBQo8TR7CgKdf0i?utm_source=generator",
+    "cover": "assets/173 - Roxette - Joyride - Joyride.jpg",
+    "alt": "Joyride by Roxette"
+  },
+  {
+    "title": "Smoke Machine",
+    "artist": "Jesse Woods",
+    "album": "Autoflower",
+    "embed": "https://open.spotify.com/embed/track/0YwaIqzVJcWsFHqT7oaiVq?utm_source=generator",
+    "cover": "assets/174 - Jesse Woods - Smoke Machine - Autoflower.jpg",
+    "alt": "Smoke Machine by Jesse Woods"
+  },
+  {
+    "title": "U.F.O.",
+    "artist": "Jesse Woods",
+    "album": "Autoflower",
+    "embed": "https://open.spotify.com/embed/track/45LStTENF92V5WirCZvRlc?utm_source=generator",
+    "cover": "assets/175 - Jesse Woods - U.F.O. - Autoflower.jpg",
+    "alt": "U.F.O. by Jesse Woods"
+  },
+  {
+    "title": "Rhythm From A Red Car",
+    "artist": "Hardline",
+    "album": "Double Eclipse",
+    "embed": "https://open.spotify.com/embed/track/57IGjyH1P26YUEGjKJWSNe?utm_source=generator",
+    "cover": "assets/176 - Hardline - Rhythm From A Red Car - Double Eclipse.jpg",
+    "alt": "Rhythm From A Red Car by Hardline"
+  },
+  {
+    "title": "Old Recliners",
+    "artist": "ROLE MODEL",
+    "album": "Kansas Anymore (The Longest Goodbye)",
+    "embed": "https://open.spotify.com/embed/track/1PewwBauzqbg7VGp2JHyKZ?utm_source=generator",
+    "cover": "assets/177 - ROLE MODEL - Old Recliners - Kansas Anymore (The Longest Goodbye).jpg",
+    "alt": "Old Recliners by ROLE MODEL"
+  },
+  {
+    "title": "Lost in Time",
+    "artist": "Daily J",
+    "album": "Lost in Time (feat. Boo Seeka)",
+    "embed": "https://open.spotify.com/embed/track/09FOF3hUR4VM1jKHKfgR2R?utm_source=generator",
+    "cover": "assets/178 - Daily J - Lost in Time - Lost in Time (feat. Boo Seeka).jpg",
+    "alt": "Lost in Time by Daily J"
+  },
+  {
+    "title": "who’s your boyfriend",
+    "artist": "Royel Otis",
+    "album": "hickey",
+    "embed": "https://open.spotify.com/embed/track/1FrmEoNfKBx7Z6nU05KW5w?utm_source=generator",
+    "cover": "assets/179 - Royel Otis - who’s your boyfriend - hickey.jpg",
+    "alt": "who’s your boyfriend by Royel Otis"
+  },
+  {
+    "title": "Crocodile",
+    "artist": "Goth Babe",
+    "album": "Lola",
+    "embed": "https://open.spotify.com/embed/track/27NPOgyYpnRjfVRWgNRTG9?utm_source=generator",
+    "cover": "assets/180 - Goth Babe - Crocodile - Lola.jpg",
+    "alt": "Crocodile by Goth Babe"
+  },
+  {
+    "title": "Light My Fire",
+    "artist": "Caye",
+    "album": "Light My Fire",
+    "embed": "https://open.spotify.com/embed/track/6GM7Tngzr6tK5whGLnsUEx?utm_source=generator",
+    "cover": "assets/181 - Caye - Light My Fire - Light My Fire.jpg",
+    "alt": "Light My Fire by Caye"
+  },
+  {
+    "title": "Whateverrrr",
+    "artist": "Spacey Jane",
+    "album": "If That Makes Sense",
+    "embed": "https://open.spotify.com/embed/track/7rmqj2wCUD7rmeFLrcEfNC?utm_source=generator",
+    "cover": "assets/182 - Spacey Jane - Whateverrrr - If That Makes Sense.jpg",
+    "alt": "Whateverrrr by Spacey Jane"
+  },
+  {
+    "title": "One Of Your Girls",
+    "artist": "Troye Sivan",
+    "album": "Something To Give Each Other",
+    "embed": "https://open.spotify.com/embed/track/5Eh1nj7IjV9lwpcKAkidyY?utm_source=generator",
+    "cover": "assets/183 - Troye Sivan - One Of Your Girls - Something To Give Each Other.jpg",
+    "alt": "One Of Your Girls by Troye Sivan"
+  },
+  {
+    "title": "Astronaut",
+    "artist": "Sir Sly",
+    "album": "Don't You Worry, Honey",
+    "embed": "https://open.spotify.com/embed/track/3q5Zm5NnYcpXKLNmTO1tyo?utm_source=generator",
+    "cover": "assets/184 - Sir Sly - Astronaut - Don't You Worry, Honey.jpg",
+    "alt": "Astronaut by Sir Sly"
+  },
+  {
+    "title": "Crossed",
+    "artist": "brady",
+    "album": "Crossed",
+    "embed": "https://open.spotify.com/embed/track/5GQjbqE2o7GfYUSXYPpNlq?utm_source=generator",
+    "cover": "assets/185 - brady - Crossed - Crossed.jpg",
+    "alt": "Crossed by brady"
+  },
+  {
+    "title": "Cemetery",
+    "artist": "COIN",
+    "album": "Dreamland",
+    "embed": "https://open.spotify.com/embed/track/7fc5kWes8Og0UNQM1TxuAQ?utm_source=generator",
+    "cover": "assets/186 - COIN - Cemetery - Dreamland.jpg",
+    "alt": "Cemetery by COIN"
+  },
+  {
+    "title": "The Blue Door",
+    "artist": "Angus Stone",
+    "album": "Broken Brights (Bonus Track Version)",
+    "embed": "https://open.spotify.com/embed/track/3LQ7Rd8SswMtsIzALPUOZY?utm_source=generator",
+    "cover": "assets/187 - Angus Stone - The Blue Door - Broken Brights (Bonus Track Version).jpg",
+    "alt": "The Blue Door by Angus Stone"
+  },
+  {
+    "title": "Sweet True Lies",
+    "artist": "Beast In Black",
+    "album": "From Hell With Love",
+    "embed": "https://open.spotify.com/embed/track/2cyJkqB2OYHwWWvKGtrJ0r?utm_source=generator",
+    "cover": "assets/188 - Beast In Black - Sweet True Lies - From Hell With Love.jpg",
+    "alt": "Sweet True Lies by Beast In Black"
+  },
+  {
+    "title": "Melody",
+    "artist": "Sigala",
+    "album": "Every Cloud - Silver Linings",
+    "embed": "https://open.spotify.com/embed/track/4ZofmEdvs4mQqZ756GQhSY?utm_source=generator",
+    "cover": "assets/189 - Sigala - Melody - Every Cloud - Silver Linings.jpg",
+    "alt": "Melody by Sigala"
   }
 ]
