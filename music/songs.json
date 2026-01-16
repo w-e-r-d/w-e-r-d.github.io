@@ -5,7 +5,8 @@
     "album": "M.A.G.S.",
     "embed": "https://open.spotify.com/embed/track/5T545E02gCrnhkPoHXJPxK?utm_source=generator",
     "cover": "assets/001 - M.A.G.S. - Drugs - M.A.G.S..jpg",
-    "alt": "Drugs by M.A.G.S."
+    "alt": "Drugs by M.A.G.S.",
+    "is_metal": false
   },
   {
     "title": "Honey",
@@ -13,7 +14,8 @@
     "album": "Good Grief",
     "embed": "https://open.spotify.com/embed/track/23miqxlSbIVu7tkHscwKjz?utm_source=generator",
     "cover": "assets/002 - Far Places - Honey - Good Grief.jpg",
-    "alt": "Honey by Far Places"
+    "alt": "Honey by Far Places",
+    "is_metal": false
   },
   {
     "title": "Euclid",
@@ -21,7 +23,8 @@
     "album": "Take Me Back To Eden",
     "embed": "https://open.spotify.com/embed/track/3hZIvVYZWsuFpdWdXQFgKx?utm_source=generator",
     "cover": "assets/003 - Sleep Token - Euclid - Take Me Back To Eden.jpg",
-    "alt": "Euclid by Sleep Token"
+    "alt": "Euclid by Sleep Token",
+    "is_metal": true
   },
   {
     "title": "Silver",
@@ -29,7 +32,8 @@
     "album": "THE GLOW",
     "embed": "https://open.spotify.com/embed/track/73bf444yJ2NgCmlY0z9UR1?utm_source=generator",
     "cover": "assets/004 - DMA'S - Silver - THE GLOW.jpg",
-    "alt": "Silver by DMA'S"
+    "alt": "Silver by DMA'S",
+    "is_metal": false
   },
   {
     "title": "Baby Blue",
@@ -37,7 +41,8 @@
     "album": "When Facing the Things We Turn Away From",
     "embed": "https://open.spotify.com/embed/track/4FSIfpGQEdJsLXIbufqvOo?utm_source=generator",
     "cover": "assets/005 - Luke Hemmings - Baby Blue - When Facing the Things We Turn Away From.jpg",
-    "alt": "Baby Blue by Luke Hemmings"
+    "alt": "Baby Blue by Luke Hemmings",
+    "is_metal": false
   },
   {
     "title": "Way It Goes",
@@ -45,7 +50,8 @@
     "album": "Landmark",
     "embed": "https://open.spotify.com/embed/track/6CES1554HcWMIVroJfmmBm?utm_source=generator",
     "cover": "assets/006 - Hippo Campus - Way It Goes - Landmark.jpg",
-    "alt": "Way It Goes by Hippo Campus"
+    "alt": "Way It Goes by Hippo Campus",
+    "is_metal": false
   },
   {
     "title": "Yet",
@@ -53,7 +59,8 @@
     "album": "Here Comes Everybody (Deluxe)",
     "embed": "https://open.spotify.com/embed/track/2CHASUeqcgLBAzIF44L0xF?utm_source=generator",
     "cover": "assets/007 - Spacey Jane - Yet - Here Comes Everybody (Deluxe).jpg",
-    "alt": "Yet by Spacey Jane"
+    "alt": "Yet by Spacey Jane",
+    "is_metal": false
   },
   {
     "title": "Surfing in Iceland",
@@ -61,7 +68,8 @@
     "album": "Surfing in Iceland",
     "embed": "https://open.spotify.com/embed/track/1z5oBUPtPK58v4slX1AlTx?utm_source=generator",
     "cover": "assets/008 - Goth Babe - Surfing in Iceland - Surfing in Iceland.jpg",
-    "alt": "Surfing in Iceland by Goth Babe"
+    "alt": "Surfing in Iceland by Goth Babe",
+    "is_metal": false
   },
   {
     "title": "Pulling Through",
@@ -69,7 +77,8 @@
     "album": "Here Comes Everybody",
     "embed": "https://open.spotify.com/embed/track/03OFKv857PXCFgUlpah8Tc?utm_source=generator",
     "cover": "assets/009 - Spacey Jane - Pulling Through - Here Comes Everybody.jpg",
-    "alt": "Pulling Through by Spacey Jane"
+    "alt": "Pulling Through by Spacey Jane",
+    "is_metal": false
   },
   {
     "title": "Oregon",
@@ -77,7 +86,8 @@
     "album": "Oregon / Harvard",
     "embed": "https://open.spotify.com/embed/track/0Z250T6pdgYBawnGvmAY13?utm_source=generator",
     "cover": "assets/010 - Briston Maroney - Oregon - Oregon _ Harvard.jpg",
-    "alt": "Oregon by Briston Maroney"
+    "alt": "Oregon by Briston Maroney",
+    "is_metal": false
   },
   {
     "title": "The Emotion",
@@ -85,7 +95,8 @@
     "album": "Dopamine",
     "embed": "https://open.spotify.com/embed/track/03YZnK3XQWKpvo9TyNZzXf?utm_source=generator",
     "cover": "assets/011 - BORNS - The Emotion - Dopamine.jpg",
-    "alt": "The Emotion by BØRNS"
+    "alt": "The Emotion by BØRNS",
+    "is_metal": false
   },
   {
     "title": "Seeds",
@@ -93,7 +104,8 @@
     "album": "Seeds",
     "embed": "https://open.spotify.com/embed/track/4BwGU8l91SQWeVqnWqWClh?utm_source=generator",
     "cover": "assets/012 - Bennett Coast - Seeds - Seeds.jpg",
-    "alt": "Seeds by Bennett Coast"
+    "alt": "Seeds by Bennett Coast",
+    "is_metal": false
   },
   {
     "title": "Slow Song",
@@ -101,7 +113,8 @@
     "album": "HISTORY",
     "embed": "https://open.spotify.com/embed/track/6zTbYrkYJSiNOw6jL7nM5H?utm_source=generator",
     "cover": "assets/013 - The Knocks, Dragonette - Slow Song (with Dragonette) - HISTORY.jpg",
-    "alt": "Slow Song by The Knocks"
+    "alt": "Slow Song by The Knocks",
+    "is_metal": false
   },
   {
     "title": "Into the Mystic - 2013 Remaster",
@@ -109,7 +122,8 @@
     "album": "Moondance",
     "embed": "https://open.spotify.com/embed/track/3lh3iiiJeiBXHSZw6u0kh6?utm_source=generator",
     "cover": "assets/014 - Van Morrison - Into the Mystic - 2013 Remaster - Moondance.jpg",
-    "alt": "Into the Mystic - 2013 Remaster by Van Morrison"
+    "alt": "Into the Mystic - 2013 Remaster by Van Morrison",
+    "is_metal": false
   },
   {
     "title": "Drugs",
@@ -117,7 +131,8 @@
     "album": "Drugs",
     "embed": "https://open.spotify.com/embed/track/5BkCDt5w0WOGgBgDC7T39i?utm_source=generator",
     "cover": "assets/015 - Falling In Reverse - Drugs - Drugs.jpg",
-    "alt": "Drugs by Falling In Reverse"
+    "alt": "Drugs by Falling In Reverse",
+    "is_metal": true
   },
   {
     "title": "Sideways",
@@ -125,7 +140,8 @@
     "album": "Portal",
     "embed": "https://open.spotify.com/embed/track/6GCcY6dVDVGxo52OZq9HVW?utm_source=generator",
     "cover": "assets/016 - Balu Brigada - Sideways - Portal.jpg",
-    "alt": "Sideways by Balu Brigada"
+    "alt": "Sideways by Balu Brigada",
+    "is_metal": false
   },
   {
     "title": "Nowhere To Go",
@@ -133,7 +149,8 @@
     "album": "THE DEATH OF PEACE OF MIND",
     "embed": "https://open.spotify.com/embed/track/4TzGD5Pryq8DTjv5QRuJaW?utm_source=generator",
     "cover": "assets/017 - Bad Omens - Nowhere To Go - THE DEATH OF PEACE OF MIND.jpg",
-    "alt": "Nowhere To Go by Bad Omens"
+    "alt": "Nowhere To Go by Bad Omens",
+    "is_metal": true
   },
   {
     "title": "Time",
@@ -141,7 +158,8 @@
     "album": "Time",
     "embed": "https://open.spotify.com/embed/track/43a8g8EIyTpbGRMqidIplO?utm_source=generator",
     "cover": "assets/018 - In Color - Time - Time.jpg",
-    "alt": "Time by In Color"
+    "alt": "Time by In Color",
+    "is_metal": false
   },
   {
     "title": "99",
@@ -149,7 +167,8 @@
     "album": "Burning Daylight",
     "embed": "https://open.spotify.com/embed/track/22CKFavEurPuJJsOFaobac?utm_source=generator",
     "cover": "assets/019 - Noah Rinker - 99 - Burning Daylight.jpg",
-    "alt": "99 by Noah Rinker"
+    "alt": "99 by Noah Rinker",
+    "is_metal": false
   },
   {
     "title": "JENNY - 2024 Remaster",
@@ -157,7 +176,8 @@
     "album": "NOTHING MORE - 10th Anniversary (2024 Remaster)",
     "embed": "https://open.spotify.com/embed/track/7HTWL0x06bvSDMD9yh5J03?utm_source=generator",
     "cover": "assets/020 - NOTHING MORE - JENNY - 2024 Remaster - NOTHING MORE - 10th Anniversary (2024 Remaster).jpg",
-    "alt": "JENNY - 2024 Remaster by NOTHING MORE"
+    "alt": "JENNY - 2024 Remaster by NOTHING MORE",
+    "is_metal": true
   },
   {
     "title": "can u see me in the dark?",
@@ -165,7 +185,8 @@
     "album": "can u see me in the dark?",
     "embed": "https://open.spotify.com/embed/track/7pugmRsHRy1fnug9NqH5cA?utm_source=generator",
     "cover": "assets/021 - Halestorm, I Prevail - can u see me in the dark_ - can u see me in the dark_.jpg",
-    "alt": "can u see me in the dark? by Halestorm"
+    "alt": "can u see me in the dark? by Halestorm",
+    "is_metal": true
   },
   {
     "title": "LITERALLY JUST A GIRL",
@@ -173,7 +194,8 @@
     "album": "FAME!",
     "embed": "https://open.spotify.com/embed/track/6rfk3CBKQ8J30Vn2gihtS4?utm_source=generator",
     "cover": "assets/022 - verygently - LITERALLY JUST A GIRL - FAME!.jpg",
-    "alt": "LITERALLY JUST A GIRL by verygently"
+    "alt": "LITERALLY JUST A GIRL by verygently",
+    "is_metal": false
   },
   {
     "title": "Teenage Love",
@@ -181,7 +203,8 @@
     "album": "Rad Horror: The Album",
     "embed": "https://open.spotify.com/embed/track/1aaJXpcT4jMJhhWmXPnTMg?utm_source=generator",
     "cover": "assets/023 - Rad Horror - Teenage Love - Rad Horror_ The Album.jpg",
-    "alt": "Teenage Love by Rad Horror"
+    "alt": "Teenage Love by Rad Horror",
+    "is_metal": false
   },
   {
     "title": "Asc. Scorpio",
@@ -189,7 +212,8 @@
     "album": "Asc. Scorpio",
     "embed": "https://open.spotify.com/embed/track/13zkVsNIyXsagdlbg7ulWO?utm_source=generator",
     "cover": "assets/024 - Oracle Sisters - Asc. Scorpio - Asc. Scorpio.jpg",
-    "alt": "Asc. Scorpio by Oracle Sisters"
+    "alt": "Asc. Scorpio by Oracle Sisters",
+    "is_metal": false
   },
   {
     "title": "Shotput",
@@ -197,7 +221,8 @@
     "album": "Loveseat",
     "embed": "https://open.spotify.com/embed/track/4nUIq4IuoIiHKYdov9A4Yg?utm_source=generator",
     "cover": "assets/025 - Still Woozy - Shotput - Loveseat.jpg",
-    "alt": "Shotput by Still Woozy"
+    "alt": "Shotput by Still Woozy",
+    "is_metal": false
   },
   {
     "title": "You'll Love It",
@@ -205,7 +230,8 @@
     "album": "You'll Love It",
     "embed": "https://open.spotify.com/embed/track/1l5VfyPMwAv8Vibd2baoD2?utm_source=generator",
     "cover": "assets/026 - BYRNE - You'll Love It - You'll Love It.jpg",
-    "alt": "You'll Love It by BYRNE"
+    "alt": "You'll Love It by BYRNE",
+    "is_metal": false
   },
   {
     "title": "Melt",
@@ -213,7 +239,8 @@
     "album": "Quinn XCII Presents: Mustard Mike's Breakfast, Lunch, and Dinner",
     "embed": "https://open.spotify.com/embed/track/0FM9o1Y88Lr9b2WXB4NliH?utm_source=generator",
     "cover": "assets/027 - Quinn XCII - Melt - Quinn XCII Presents_ Mustard Mike's Breakfast, Lunch, and Dinner.jpg",
-    "alt": "Melt by Quinn XCII"
+    "alt": "Melt by Quinn XCII",
+    "is_metal": false
   },
   {
     "title": "Maggie's Moonshine",
@@ -221,7 +248,8 @@
     "album": "Golden Wolf",
     "embed": "https://open.spotify.com/embed/track/7mbgzAdmlWf1Zgtay5OVzU?utm_source=generator",
     "cover": "assets/028 - DOPE LEMON - Maggie's Moonshine - Golden Wolf.jpg",
-    "alt": "Maggie's Moonshine by DOPE LEMON"
+    "alt": "Maggie's Moonshine by DOPE LEMON",
+    "is_metal": false
   },
   {
     "title": "Pink Lady",
@@ -229,7 +257,8 @@
     "album": "Hope We Have Fun",
     "embed": "https://open.spotify.com/embed/track/72MFKUYtXb8q0Q17REhtCx?utm_source=generator",
     "cover": "assets/029 - Mt. Joy - Pink Lady - Hope We Have Fun.jpg",
-    "alt": "Pink Lady by Mt. Joy"
+    "alt": "Pink Lady by Mt. Joy",
+    "is_metal": false
   },
   {
     "title": "Espionage",
@@ -237,7 +266,8 @@
     "album": "Espionage",
     "embed": "https://open.spotify.com/embed/track/6GuVLubDfYlFVc1YKWmEVR?utm_source=generator",
     "cover": "assets/030 - Rainbow Kitten Surprise - Espionage - Espionage.jpg",
-    "alt": "Espionage by Rainbow Kitten Surprise"
+    "alt": "Espionage by Rainbow Kitten Surprise",
+    "is_metal": false
   },
   {
     "title": "Trajic Majic",
@@ -245,7 +275,8 @@
     "album": "Trajic Majic",
     "embed": "https://open.spotify.com/embed/track/5MANw6Uyd21GaRX37LhDP0?utm_source=generator",
     "cover": "assets/031 - Stop Light Observations - Trajic Majic - Trajic Majic.jpg",
-    "alt": "Trajic Majic by Stop Light Observations"
+    "alt": "Trajic Majic by Stop Light Observations",
+    "is_metal": false
   },
   {
     "title": "Baby Blue",
@@ -253,7 +284,8 @@
     "album": "Baby Blue",
     "embed": "https://open.spotify.com/embed/track/1eA6HGJ1qZXEL7NIFKYrXK?utm_source=generator",
     "cover": "assets/032 - Rence - Baby Blue - Baby Blue.jpg",
-    "alt": "Baby Blue by Rence"
+    "alt": "Baby Blue by Rence",
+    "is_metal": false
   },
   {
     "title": "Commas",
@@ -261,7 +293,8 @@
     "album": "The Year I Turned 21",
     "embed": "https://open.spotify.com/embed/track/4GXW3Ne1jzdORKHvHjK31V?utm_source=generator",
     "cover": "assets/033 - Ayra Starr - Commas - The Year I Turned 21.jpg",
-    "alt": "Commas by Ayra Starr"
+    "alt": "Commas by Ayra Starr",
+    "is_metal": false
   },
   {
     "title": "Honey",
@@ -269,7 +302,8 @@
     "album": "Honey",
     "embed": "https://open.spotify.com/embed/track/658qcSLPvoU4IZJhjxPHRo?utm_source=generator",
     "cover": "assets/034 - Rook Monroe - Honey - Honey.jpg",
-    "alt": "Honey by Rook Monroe"
+    "alt": "Honey by Rook Monroe",
+    "is_metal": false
   },
   {
     "title": "Ily the Most",
@@ -277,7 +311,8 @@
     "album": "If That Makes Sense",
     "embed": "https://open.spotify.com/embed/track/3z9edWp4Ypn0FBRykRMRjP?utm_source=generator",
     "cover": "assets/035 - Spacey Jane - Ily the Most - If That Makes Sense.jpg",
-    "alt": "Ily the Most by Spacey Jane"
+    "alt": "Ily the Most by Spacey Jane",
+    "is_metal": false
   },
   {
     "title": "French Bay Hotel",
@@ -285,7 +320,8 @@
     "album": "French Bay Hotel",
     "embed": "https://open.spotify.com/embed/track/3EgwH4fbHkApMWLuQ3BSlD?utm_source=generator",
     "cover": "assets/036 - The Ocho - French Bay Hotel - French Bay Hotel.jpg",
-    "alt": "French Bay Hotel by The Ocho"
+    "alt": "French Bay Hotel by The Ocho",
+    "is_metal": false
   },
   {
     "title": "Quiet Talkers",
@@ -293,7 +329,8 @@
     "album": "Quiet Talkers",
     "embed": "https://open.spotify.com/embed/track/3i14gY5jFmHrQ7tD0Qnfod?utm_source=generator",
     "cover": "assets/037 - Ken Yates - Quiet Talkers - Quiet Talkers.jpg",
-    "alt": "Quiet Talkers by Ken Yates"
+    "alt": "Quiet Talkers by Ken Yates",
+    "is_metal": false
   },
   {
     "title": "Stonecutters",
@@ -301,7 +338,8 @@
     "album": "Honey Bones",
     "embed": "https://open.spotify.com/embed/track/5D8IX5heYT1d6ZowqjMUnn?utm_source=generator",
     "cover": "assets/038 - DOPE LEMON - Stonecutters - Honey Bones.jpg",
-    "alt": "Stonecutters by DOPE LEMON"
+    "alt": "Stonecutters by DOPE LEMON",
+    "is_metal": false
   },
   {
     "title": "Judy You Hung the Moon",
@@ -309,7 +347,8 @@
     "album": "Heatwave",
     "embed": "https://open.spotify.com/embed/track/10oDDj46J0IMYBPSloeJ4Z?utm_source=generator",
     "cover": "assets/039 - HARBOUR - Judy You Hung the Moon - Heatwave.jpg",
-    "alt": "Judy You Hung the Moon by HARBOUR"
+    "alt": "Judy You Hung the Moon by HARBOUR",
+    "is_metal": false
   },
   {
     "title": "Lost Myself",
@@ -317,7 +356,8 @@
     "album": "Lost Myself",
     "embed": "https://open.spotify.com/embed/track/75fbzYs01Qy6v7PQFCuRn4?utm_source=generator",
     "cover": "assets/040 - SYML, Guy Garvey - Lost Myself - Lost Myself.jpg",
-    "alt": "Lost Myself by SYML"
+    "alt": "Lost Myself by SYML",
+    "is_metal": false
   },
   {
     "title": "can't slow down",
@@ -325,7 +365,8 @@
     "album": "DIVE",
     "embed": "https://open.spotify.com/embed/track/15IF4wSCMrAo2Rq0eytARR?utm_source=generator",
     "cover": "assets/041 - almost monday - can't slow down - DIVE.jpg",
-    "alt": "can't slow down by almost monday"
+    "alt": "can't slow down by almost monday",
+    "is_metal": false
   },
   {
     "title": "Snow on The Bluff",
@@ -333,7 +374,8 @@
     "album": "Snow on The Bluff",
     "embed": "https://open.spotify.com/embed/track/5HmxSV5SnaGwYMTngh1xV6?utm_source=generator",
     "cover": "assets/042 - Evening Elephants - Snow on The Bluff - Snow on The Bluff.jpg",
-    "alt": "Snow on The Bluff by Evening Elephants"
+    "alt": "Snow on The Bluff by Evening Elephants",
+    "is_metal": false
   },
   {
     "title": "Beautiful Strangers",
@@ -341,7 +383,8 @@
     "album": "Beautiful Strangers b/w No Place to Fall",
     "embed": "https://open.spotify.com/embed/track/0prVUHQu2xr6pI5iEbKtxo?utm_source=generator",
     "cover": "assets/043 - Kevin Morby - Beautiful Strangers - Beautiful Strangers b_w No Place to Fall.jpg",
-    "alt": "Beautiful Strangers by Kevin Morby"
+    "alt": "Beautiful Strangers by Kevin Morby",
+    "is_metal": false
   },
   {
     "title": "Not The 1975",
@@ -349,7 +392,8 @@
     "album": "Not The 1975",
     "embed": "https://open.spotify.com/embed/track/6dDx0UwyR8bL64xRfr2XI5?utm_source=generator",
     "cover": "assets/044 - Knox - Not The 1975 - Not The 1975.jpg",
-    "alt": "Not The 1975 by Knox"
+    "alt": "Not The 1975 by Knox",
+    "is_metal": false
   },
   {
     "title": "I've Only Started Running",
@@ -357,7 +401,8 @@
     "album": "To Chase My Dreams, or to Just Lie Down?",
     "embed": "https://open.spotify.com/embed/track/4k3S5I4TK1Ip7OUUDHrp3l?utm_source=generator",
     "cover": "assets/045 - HARBOUR - I've Only Started Running - To Chase My Dreams, or to Just Lie Down_.jpg",
-    "alt": "I've Only Started Running by HARBOUR"
+    "alt": "I've Only Started Running by HARBOUR",
+    "is_metal": false
   },
   {
     "title": "MILFORD SOUND",
@@ -365,7 +410,8 @@
     "album": "WE LOVE",
     "embed": "https://open.spotify.com/embed/track/0BPQVbYRkTjt6Dxdk0iYsS?utm_source=generator",
     "cover": "assets/046 - Caye - MILFORD SOUND - WE LOVE.jpg",
-    "alt": "MILFORD SOUND by Caye"
+    "alt": "MILFORD SOUND by Caye",
+    "is_metal": false
   },
   {
     "title": "Serenity",
@@ -373,7 +419,8 @@
     "album": "Serenity",
     "embed": "https://open.spotify.com/embed/track/6Y4Z2Gehxo4ciCIXmt72a8?utm_source=generator",
     "cover": "assets/047 - High Moments - Serenity - Serenity.jpg",
-    "alt": "Serenity by High Moments"
+    "alt": "Serenity by High Moments",
+    "is_metal": false
   },
   {
     "title": "Blue World",
@@ -381,7 +428,8 @@
     "album": "After Party - Laidback Rap",
     "embed": "https://open.spotify.com/embed/track/4mYljd8YXdaMLBWtl1UFpn?utm_source=generator",
     "cover": "assets/048 - Mac Miller - Blue World - After Party - Laidback Rap.jpg",
-    "alt": "Blue World by Mac Miller"
+    "alt": "Blue World by Mac Miller",
+    "is_metal": false
   },
   {
     "title": "Spotlight",
@@ -389,7 +437,8 @@
     "album": "Think It's Real",
     "embed": "https://open.spotify.com/embed/track/309uh0Iph3eOdLtxK8WhFw?utm_source=generator",
     "cover": "assets/049 - Ryan Gebhardt, Stanley - Spotlight - Think It's Real.jpg",
-    "alt": "Spotlight by Ryan Gebhardt"
+    "alt": "Spotlight by Ryan Gebhardt",
+    "is_metal": false
   },
   {
     "title": "New York Times",
@@ -397,7 +446,8 @@
     "album": "Memory Palace EP",
     "embed": "https://open.spotify.com/embed/track/642bauGx0W2wy4UtinTYnh?utm_source=generator",
     "cover": "assets/050 - Communicant, Syndie Jo - New York Times - Memory Palace EP.jpg",
-    "alt": "New York Times by Communicant"
+    "alt": "New York Times by Communicant",
+    "is_metal": false
   },
   {
     "title": "who’s your boyfriend",
@@ -405,7 +455,8 @@
     "album": "hickey",
     "embed": "https://open.spotify.com/embed/track/2TugrDKkd55mfVOMVZsfO8?utm_source=generator",
     "cover": "assets/051 - Royel Otis - who_s your boyfriend - hickey.jpg",
-    "alt": "who’s your boyfriend by Royel Otis"
+    "alt": "who’s your boyfriend by Royel Otis",
+    "is_metal": false
   },
   {
     "title": "How To Live",
@@ -413,7 +464,8 @@
     "album": "How To Live",
     "embed": "https://open.spotify.com/embed/track/25ywKtUww26ABFd0tiGt9D?utm_source=generator",
     "cover": "assets/052 - Del Water Gap - How To Live - How To Live.jpg",
-    "alt": "How To Live by Del Water Gap"
+    "alt": "How To Live by Del Water Gap",
+    "is_metal": false
   },
   {
     "title": "Rouge",
@@ -421,7 +473,8 @@
     "album": "Where Are You Going?",
     "embed": "https://open.spotify.com/embed/track/1EtuMOssvtZhPEWPB3VWzw?utm_source=generator",
     "cover": "assets/053 - Bennett Coast - Rouge - Where Are You Going_.jpg",
-    "alt": "Rouge by Bennett Coast"
+    "alt": "Rouge by Bennett Coast",
+    "is_metal": false
   },
   {
     "title": "Don't Come Down",
@@ -429,7 +482,8 @@
     "album": "Lovely Little Lonely",
     "embed": "https://open.spotify.com/embed/track/47ojH5LeQhl1ZltSAHBEFF?utm_source=generator",
     "cover": "assets/054 - The Maine - Don't Come Down - Lovely Little Lonely.jpg",
-    "alt": "Don't Come Down by The Maine"
+    "alt": "Don't Come Down by The Maine",
+    "is_metal": false
   },
   {
     "title": "Barcelona",
@@ -437,7 +491,8 @@
     "album": "Slow",
     "embed": "https://open.spotify.com/embed/track/0GQoSNObZitW9vxdYhEwcX?utm_source=generator",
     "cover": "assets/055 - Henry Green - Barcelona - Slow.jpg",
-    "alt": "Barcelona by Henry Green"
+    "alt": "Barcelona by Henry Green",
+    "is_metal": false
   },
   {
     "title": "Superstar",
@@ -445,7 +500,8 @@
     "album": "Love Hate Music Box",
     "embed": "https://open.spotify.com/embed/track/2H28TK2PMVBeRZKelRJewg?utm_source=generator",
     "cover": "assets/056 - Rainbow Kitten Surprise - Superstar - Love Hate Music Box.jpg",
-    "alt": "Superstar by Rainbow Kitten Surprise"
+    "alt": "Superstar by Rainbow Kitten Surprise",
+    "is_metal": false
   },
   {
     "title": "OK",
@@ -453,7 +509,8 @@
     "album": "OK (with Remi Wolf & Solomonophonic)",
     "embed": "https://open.spotify.com/embed/track/2LqczHHyVkIN9WlaQyFG1R?utm_source=generator",
     "cover": "assets/057 - Wallows, Remi Wolf, Solomonophonic - OK - with Remi Wolf & Solomonophonic - OK (with Remi Wolf & Solomonophonic).jpg",
-    "alt": "OK - with Remi Wolf & Solomonophonic by Wallows"
+    "alt": "OK - with Remi Wolf & Solomonophonic by Wallows",
+    "is_metal": false
   },
   {
     "title": "New Gold",
@@ -461,7 +518,8 @@
     "album": "New Gold (feat. Tame Impala and Bootie Brown)",
     "embed": "https://open.spotify.com/embed/track/64dLd6rVqDLtkXFYrEUHIU?utm_source=generator",
     "cover": "assets/058 - Gorillaz, Tame Impala, Bootie Brown - New Gold (feat. Tame Impala and Bootie Brown) - New Gold (feat. Tame Impala and Bootie Brown).jpg",
-    "alt": "New Gold by Gorillaz"
+    "alt": "New Gold by Gorillaz",
+    "is_metal": false
   },
   {
     "title": "On The 5",
@@ -469,7 +527,8 @@
     "album": "On The 5",
     "embed": "https://open.spotify.com/embed/track/3jz7ycF3AlGpJ1EDgxqK5G?utm_source=generator",
     "cover": "assets/059 - Winnetka Bowling League - On The 5 - On The 5.jpg",
-    "alt": "On The 5 by Winnetka Bowling League"
+    "alt": "On The 5 by Winnetka Bowling League",
+    "is_metal": false
   },
   {
     "title": "Briggs",
@@ -477,7 +536,8 @@
     "album": "When We Were in Love (Deluxe Edition)",
     "embed": "https://open.spotify.com/embed/track/4PoZ2aNmIz1EEE9W0l0rk0?utm_source=generator",
     "cover": "assets/060 - Mike Mains & The Branches - Briggs - When We Were in Love (Deluxe Edition).jpg",
-    "alt": "Briggs by Mike Mains & The Branches"
+    "alt": "Briggs by Mike Mains & The Branches",
+    "is_metal": false
   },
   {
     "title": "Let's Go Back",
@@ -485,7 +545,8 @@
     "album": "Let's Go Back",
     "embed": "https://open.spotify.com/embed/track/3fvZo45Y28ly1QBo05pujJ?utm_source=generator",
     "cover": "assets/061 - Jungle - Let's Go Back - Let's Go Back.jpg",
-    "alt": "Let's Go Back by Jungle"
+    "alt": "Let's Go Back by Jungle",
+    "is_metal": false
   },
   {
     "title": "See the World",
@@ -493,7 +554,8 @@
     "album": "See the World",
     "embed": "https://open.spotify.com/embed/track/0ioDZn2JL53ictGJMMkETC?utm_source=generator",
     "cover": "assets/062 - Brett Dennen - See the World - See the World.jpg",
-    "alt": "See the World by Brett Dennen"
+    "alt": "See the World by Brett Dennen",
+    "is_metal": false
   },
   {
     "title": "Honey",
@@ -501,7 +563,8 @@
     "album": "Something To Give Each Other",
     "embed": "https://open.spotify.com/embed/track/0GMZYC6lcrpnwjDiEtDO8i?utm_source=generator",
     "cover": "assets/063 - Troye Sivan - Honey - Something To Give Each Other.jpg",
-    "alt": "Honey by Troye Sivan"
+    "alt": "Honey by Troye Sivan",
+    "is_metal": false
   },
   {
     "title": "Roses",
@@ -509,7 +572,8 @@
     "album": "Roses",
     "embed": "https://open.spotify.com/embed/track/0ENeHRSBanLL2ADpdcElbR?utm_source=generator",
     "cover": "assets/064 - Nathan Colberg - Roses - Roses.jpg",
-    "alt": "Roses by Nathan Colberg"
+    "alt": "Roses by Nathan Colberg",
+    "is_metal": false
   },
   {
     "title": "A Brand New Start",
@@ -517,7 +581,8 @@
     "album": "Tread",
     "embed": "https://open.spotify.com/embed/track/6QanbknK7HJMOaUqlNCxhz?utm_source=generator",
     "cover": "assets/065 - Ross from Friends - A Brand New Start - Tread.jpg",
-    "alt": "A Brand New Start by Ross from Friends"
+    "alt": "A Brand New Start by Ross from Friends",
+    "is_metal": false
   },
   {
     "title": "Rocket",
@@ -525,7 +590,8 @@
     "album": "Venus Ate Mars",
     "embed": "https://open.spotify.com/embed/track/2tf15sXrdAFhszsDivYSaJ?utm_source=generator",
     "cover": "assets/066 - Daily J - Rocket - Venus Ate Mars.jpg",
-    "alt": "Rocket by Daily J"
+    "alt": "Rocket by Daily J",
+    "is_metal": false
   },
   {
     "title": "baby bye bye",
@@ -533,7 +599,8 @@
     "album": "baby bye bye",
     "embed": "https://open.spotify.com/embed/track/0PmWqF3kWiBPhQQ6Y9CGX1?utm_source=generator",
     "cover": "assets/067 - Glitter Party - baby bye bye - baby bye bye.jpg",
-    "alt": "baby bye bye by Glitter Party"
+    "alt": "baby bye bye by Glitter Party",
+    "is_metal": false
   },
   {
     "title": "Life's a Bitch",
@@ -541,7 +608,8 @@
     "album": "Life's a Bitch",
     "embed": "https://open.spotify.com/embed/track/1KyA5lXW7cAgMLwxRdVAu3?utm_source=generator",
     "cover": "assets/068 - Accept - Life's a Bitch - Life's a Bitch.jpg",
-    "alt": "Life's a Bitch by Accept"
+    "alt": "Life's a Bitch by Accept",
+    "is_metal": true
   },
   {
     "title": "Careful What You Wish For",
@@ -549,7 +617,8 @@
     "album": "Finding God Before God Finds Me",
     "embed": "https://open.spotify.com/embed/track/2gtmkmCRxmQFAr2xOPTdBo?utm_source=generator",
     "cover": "assets/069 - Bad Omens - Careful What You Wish For - Finding God Before God Finds Me.jpg",
-    "alt": "Careful What You Wish For by Bad Omens"
+    "alt": "Careful What You Wish For by Bad Omens",
+    "is_metal": true
   },
   {
     "title": "Kingdom Of Cards",
@@ -557,7 +626,8 @@
     "album": "Finding God Before God Finds Me",
     "embed": "https://open.spotify.com/embed/track/3WgSSo4SoHQjodjiRG71eX?utm_source=generator",
     "cover": "assets/070 - Bad Omens - Kingdom Of Cards - Finding God Before God Finds Me.jpg",
-    "alt": "Kingdom Of Cards by Bad Omens"
+    "alt": "Kingdom Of Cards by Bad Omens",
+    "is_metal": true
   },
   {
     "title": "Like A Villain",
@@ -565,7 +635,8 @@
     "album": "THE DEATH OF PEACE OF MIND",
     "embed": "https://open.spotify.com/embed/track/0xoyUiHhxVH4gwb0CRgNmg?utm_source=generator",
     "cover": "assets/071 - Bad Omens - Like A Villain - THE DEATH OF PEACE OF MIND.jpg",
-    "alt": "Like A Villain by Bad Omens"
+    "alt": "Like A Villain by Bad Omens",
+    "is_metal": true
   },
   {
     "title": "The Diary of Jane",
@@ -573,7 +644,8 @@
     "album": "Phobia (Explicit Version)",
     "embed": "https://open.spotify.com/embed/track/5pvJ59i7JxylN8VB24xdMs?utm_source=generator",
     "cover": "assets/072 - Breaking Benjamin - The Diary of Jane - Single Version - Phobia (Explicit Version).jpg",
-    "alt": "The Diary of Jane - Single Version by Breaking Benjamin"
+    "alt": "The Diary of Jane - Single Version by Breaking Benjamin",
+    "is_metal": true
   },
   {
     "title": "Lost in Echoes",
@@ -581,7 +653,8 @@
     "album": "Lost Souls",
     "embed": "https://open.spotify.com/embed/track/13YWByXibBltt3T5u3IcT7?utm_source=generator",
     "cover": "assets/073 - Caskets - Lost in Echoes - Lost Souls.jpg",
-    "alt": "Lost in Echoes by Caskets"
+    "alt": "Lost in Echoes by Caskets",
+    "is_metal": true
   },
   {
     "title": "21 Gun Salute",
@@ -589,7 +662,8 @@
     "album": "Shame On Me",
     "embed": "https://open.spotify.com/embed/track/20Ov4hI7Z5xh9NkLMMf0db?utm_source=generator",
     "cover": "assets/074 - Catch Your Breath - 21 Gun Salute - Shame On Me.jpg",
-    "alt": "21 Gun Salute by Catch Your Breath"
+    "alt": "21 Gun Salute by Catch Your Breath",
+    "is_metal": true
   },
   {
     "title": "Voices In My Head",
@@ -597,7 +671,8 @@
     "album": "Voices In My Head",
     "embed": "https://open.spotify.com/embed/track/5XUuldRjPXcP5QxyEN4IXT?utm_source=generator",
     "cover": "assets/075 - Falling In Reverse - Voices In My Head - Voices In My Head.jpg",
-    "alt": "Voices In My Head by Falling In Reverse"
+    "alt": "Voices In My Head by Falling In Reverse",
+    "is_metal": true
   },
   {
     "title": "There’s Fear In Letting Go",
@@ -605,7 +680,8 @@
     "album": "TRUE POWER",
     "embed": "https://open.spotify.com/embed/track/2OYtcqflvzQwh3cMPmTHs4?utm_source=generator",
     "cover": "assets/076 - I Prevail - There_s Fear In Letting Go - TRUE POWER.jpg",
-    "alt": "There’s Fear In Letting Go by I Prevail"
+    "alt": "There’s Fear In Letting Go by I Prevail",
+    "is_metal": true
   },
   {
     "title": "Hurricane",
@@ -613,7 +689,8 @@
     "album": "TRAUMA",
     "embed": "https://open.spotify.com/embed/track/2GFwwTIVLjnOrtP7m9luHC?utm_source=generator",
     "cover": "assets/077 - I Prevail - Hurricane - TRAUMA.jpg",
-    "alt": "Hurricane by I Prevail"
+    "alt": "Hurricane by I Prevail",
+    "is_metal": true
   },
   {
     "title": "Shivering",
@@ -621,7 +698,8 @@
     "album": "ILLENIUM",
     "embed": "https://open.spotify.com/embed/track/0jB2q9HnxNZWXyOTXkscvl?utm_source=generator",
     "cover": "assets/078 - ILLENIUM, Spiritbox - Shivering - ILLENIUM.jpg",
-    "alt": "Shivering by ILLENIUM"
+    "alt": "Shivering by ILLENIUM",
+    "is_metal": true
   },
   {
     "title": "Whore",
@@ -629,7 +707,8 @@
     "album": "Blood",
     "embed": "https://open.spotify.com/embed/track/2tAzcTFry1OhmNERFjUR93?utm_source=generator",
     "cover": "assets/079 - In This Moment - Whore - Blood.jpg",
-    "alt": "Whore by In This Moment"
+    "alt": "Whore by In This Moment",
+    "is_metal": true
   },
   {
     "title": "Heavy Is the Crown",
@@ -637,7 +716,8 @@
     "album": "Heavy Is the Crown",
     "embed": "https://open.spotify.com/embed/track/3fgehc497TFqKH1zBL2YNK?utm_source=generator",
     "cover": "assets/080 - Linkin Park - Heavy Is the Crown - Heavy Is the Crown.jpg",
-    "alt": "Heavy Is the Crown by Linkin Park"
+    "alt": "Heavy Is the Crown by Linkin Park",
+    "is_metal": true
   },
   {
     "title": "Misery",
@@ -645,7 +725,8 @@
     "album": "Remade In Misery",
     "embed": "https://open.spotify.com/embed/track/2SVbjw7sdiNjAvGpQ4eEai?utm_source=generator",
     "cover": "assets/081 - Memphis May Fire - Misery - Remade In Misery.jpg",
-    "alt": "Misery by Memphis May Fire"
+    "alt": "Misery by Memphis May Fire",
+    "is_metal": true
   },
   {
     "title": "Masterpiece",
@@ -653,7 +734,8 @@
     "album": "Scoring The End Of The World",
     "embed": "https://open.spotify.com/embed/track/3c9kVsKF68xMzlS0NikVn3?utm_source=generator",
     "cover": "assets/082 - Motionless In White - Masterpiece - Scoring The End Of The World.jpg",
-    "alt": "Masterpiece by Motionless In White"
+    "alt": "Masterpiece by Motionless In White",
+    "is_metal": true
   },
   {
     "title": "Sound of Madness",
@@ -661,7 +743,8 @@
     "album": "The Sound of Madness",
     "embed": "https://open.spotify.com/embed/track/0W9Xvd4Qx1aZPxEi94vgRY?utm_source=generator",
     "cover": "assets/083 - Shinedown - Sound of Madness - The Sound of Madness.jpg",
-    "alt": "Sound of Madness by Shinedown"
+    "alt": "Sound of Madness by Shinedown",
+    "is_metal": true
   },
   {
     "title": "Take Me Back To Eden",
@@ -669,7 +752,8 @@
     "album": "Take Me Back To Eden",
     "embed": "https://open.spotify.com/embed/track/2Gt7fjNlx901pPRkvBiNBZ?utm_source=generator",
     "cover": "assets/084 - Sleep Token - Take Me Back To Eden - Take Me Back To Eden.jpg",
-    "alt": "Take Me Back To Eden by Sleep Token"
+    "alt": "Take Me Back To Eden by Sleep Token",
+    "is_metal": true
   },
   {
     "title": "Divide",
@@ -677,7 +761,8 @@
     "album": "Divide",
     "embed": "https://open.spotify.com/embed/track/1sp1NrbrCjJ82c5KjelUpr?utm_source=generator",
     "cover": "assets/085 - The Plot In You - Divide - Divide.jpg",
-    "alt": "Divide by The Plot In You"
+    "alt": "Divide by The Plot In You",
+    "is_metal": true
   },
   {
     "title": "Left Behind",
@@ -685,7 +770,8 @@
     "album": "Forgotten",
     "embed": "https://open.spotify.com/embed/track/1maPvmbIAUUw5StegWvnnb?utm_source=generator",
     "cover": "assets/086 - The Plot In You - Left Behind - Forgotten.jpg",
-    "alt": "Left Behind by The Plot In You"
+    "alt": "Left Behind by The Plot In You",
+    "is_metal": true
   },
   {
     "title": "So Called Life",
@@ -693,7 +779,8 @@
     "album": "EXPLOSIONS",
     "embed": "https://open.spotify.com/embed/track/1QTQ3VNzabl4yF5GJE6hhK?utm_source=generator",
     "cover": "assets/087 - Three Days Grace - So Called Life - EXPLOSIONS.jpg",
-    "alt": "So Called Life by Three Days Grace"
+    "alt": "So Called Life by Three Days Grace",
+    "is_metal": true
   },
   {
     "title": "Nothing Ever After",
@@ -701,7 +788,8 @@
     "album": "ILLENIUM",
     "embed": "https://open.spotify.com/embed/track/2foma3XC28Wk4Fcthqu7lk?utm_source=generator",
     "cover": "assets/088 - ILLENIUM, Motionless In White - Nothing Ever After - ILLENIUM.jpg",
-    "alt": "Nothing Ever After by ILLENIUM"
+    "alt": "Nothing Ever After by ILLENIUM",
+    "is_metal": true
   },
   {
     "title": "Been Here Before",
@@ -709,7 +797,8 @@
     "album": "Been Here Before",
     "embed": "https://open.spotify.com/embed/track/2KlAdT5Y6515sZdOPka8sA?utm_source=generator",
     "cover": "assets/089 - The Plot In You - Been Here Before - Been Here Before.jpg",
-    "alt": "Been Here Before by The Plot In You"
+    "alt": "Been Here Before by The Plot In You",
+    "is_metal": true
   },
   {
     "title": "I COME ALIVE",
@@ -717,7 +806,8 @@
     "album": "I COME ALIVE",
     "embed": "https://open.spotify.com/embed/track/15INkb1H6jpZgMnpa5flHf?utm_source=generator",
     "cover": "assets/090 - Dorothy - I COME ALIVE - I COME ALIVE.jpg",
-    "alt": "I COME ALIVE by Dorothy"
+    "alt": "I COME ALIVE by Dorothy",
+    "is_metal": true
   },
   {
     "title": "DArkSide",
@@ -725,7 +815,8 @@
     "album": "DArkSide",
     "embed": "https://open.spotify.com/embed/track/19vHgVS1aukRiQWhTqfKnE?utm_source=generator",
     "cover": "assets/091 - Bring Me The Horizon - DArkSide - DArkSide.jpg",
-    "alt": "DArkSide by Bring Me The Horizon"
+    "alt": "DArkSide by Bring Me The Horizon",
+    "is_metal": true
   },
   {
     "title": "Look To Windward",
@@ -733,7 +824,8 @@
     "album": "Even In Arcadia",
     "embed": "https://open.spotify.com/embed/track/4Lojbtk7XNMdSKRHSFbdkm?utm_source=generator",
     "cover": "assets/092 - Sleep Token - Look To Windward - Even In Arcadia.jpg",
-    "alt": "Look To Windward by Sleep Token"
+    "alt": "Look To Windward by Sleep Token",
+    "is_metal": true
   },
   {
     "title": "Good for Nothin'",
@@ -741,7 +833,8 @@
     "album": "Good for Nothin'",
     "embed": "https://open.spotify.com/embed/track/1EcOOFryaVutU8q1jxloy6?utm_source=generator",
     "cover": "assets/093 - Jon Wayne Hatfield - Good for Nothin' - Good for Nothin'.jpg",
-    "alt": "Good for Nothin' by Jon Wayne Hatfield"
+    "alt": "Good for Nothin' by Jon Wayne Hatfield",
+    "is_metal": false
   },
   {
     "title": "Some Girls",
@@ -749,7 +842,8 @@
     "album": "Jameson Rodgers",
     "embed": "https://open.spotify.com/embed/track/54eUv9Q3D9MZuOGS5PSflp?utm_source=generator",
     "cover": "assets/094 - Jameson Rodgers - Some Girls - Jameson Rodgers.jpg",
-    "alt": "Some Girls by Jameson Rodgers"
+    "alt": "Some Girls by Jameson Rodgers",
+    "is_metal": false
   },
   {
     "title": "Ring Finger",
@@ -757,7 +851,8 @@
     "album": "Whirlwind",
     "embed": "https://open.spotify.com/embed/track/2vdTESMRnbbNSe8i8LbZq9?utm_source=generator",
     "cover": "assets/095 - Lainey Wilson - Ring Finger - Whirlwind.jpg",
-    "alt": "Ring Finger by Lainey Wilson"
+    "alt": "Ring Finger by Lainey Wilson",
+    "is_metal": false
   },
   {
     "title": "Fallin’ In Love",
@@ -765,7 +860,8 @@
     "album": "F-1 Trillion: Long Bed",
     "embed": "https://open.spotify.com/embed/track/1QTNo6sCt8km4v3GyHRNlS?utm_source=generator",
     "cover": "assets/096 - Post Malone - Fallin_ In Love - F-1 Trillion_ Long Bed.jpg",
-    "alt": "Fallin’ In Love by Post Malone"
+    "alt": "Fallin’ In Love by Post Malone",
+    "is_metal": false
   },
   {
     "title": "All On Me",
@@ -773,7 +869,8 @@
     "album": "Dark Horse",
     "embed": "https://open.spotify.com/embed/track/2mfahQ0EaaZWq4cFNg6A1o?utm_source=generator",
     "cover": "assets/097 - Devin Dawson - All On Me - Dark Horse.jpg",
-    "alt": "All On Me by Devin Dawson"
+    "alt": "All On Me by Devin Dawson",
+    "is_metal": false
   },
   {
     "title": "What Could Go Right",
@@ -781,7 +878,8 @@
     "album": "What Could Go Right (feat. Lanie Gardner)",
     "embed": "https://open.spotify.com/embed/track/2iMX5bHSf125ZHBIysZ9na?utm_source=generator",
     "cover": "assets/098 - Thomas Rhett, Lanie Gardner - What Could Go Right (feat. Lanie Gardner) - What Could Go Right (feat. Lanie Gardner).jpg",
-    "alt": "What Could Go Right by Thomas Rhett"
+    "alt": "What Could Go Right by Thomas Rhett",
+    "is_metal": false
   },
   {
     "title": "... COUNTRY AS HELL",
@@ -789,7 +887,8 @@
     "album": "A ROCK",
     "embed": "https://open.spotify.com/embed/track/7fkAb0kXW8636FD1Mwz4MY?utm_source=generator",
     "cover": "assets/099 - HARDY - UNAPOLOGETICALLY COUNTRY AS HELL - A ROCK.jpg",
-    "alt": "UNAPOLOGETICALLY COUNTRY AS HELL by HARDY"
+    "alt": "UNAPOLOGETICALLY COUNTRY AS HELL by HARDY",
+    "is_metal": false
   },
   {
     "title": "Life Behind Bars",
@@ -797,7 +896,8 @@
     "album": "Life Behind Bars",
     "embed": "https://open.spotify.com/embed/track/2xa6tkIvKAtbjIirdxJXcd?utm_source=generator",
     "cover": "assets/100 - Zach John King, Bayker Blankenship - Life Behind Bars - Life Behind Bars.jpg",
-    "alt": "Life Behind Bars by Zach John King"
+    "alt": "Life Behind Bars by Zach John King",
+    "is_metal": false
   },
   {
     "title": "Lose You",
@@ -805,7 +905,8 @@
     "album": "Slow Down",
     "embed": "https://open.spotify.com/embed/track/2SF6DL81zTodxZPW7m3VHl?utm_source=generator",
     "cover": "assets/101 - Zach John King - Lose You - Slow Down.jpg",
-    "alt": "Lose You by Zach John King"
+    "alt": "Lose You by Zach John King",
+    "is_metal": false
   },
   {
     "title": "Bar Star",
@@ -813,7 +914,8 @@
     "album": "Cherry Valley",
     "embed": "https://open.spotify.com/embed/track/5RMUxF8CmJjVHqf3T4Jsfj?utm_source=generator",
     "cover": "assets/102 - Carter Faith - Bar Star - Cherry Valley.jpg",
-    "alt": "Bar Star by Carter Faith"
+    "alt": "Bar Star by Carter Faith",
+    "is_metal": false
   },
   {
     "title": "Need A Boat",
@@ -821,7 +923,8 @@
     "album": "Dangerous: The Double Album",
     "embed": "https://open.spotify.com/embed/track/5UmCoA8uugbNcVAfKMW3P2?utm_source=generator",
     "cover": "assets/103 - Morgan Wallen - Need A Boat - Dangerous_ The Double Album.jpg",
-    "alt": "Need A Boat by Morgan Wallen"
+    "alt": "Need A Boat by Morgan Wallen",
+    "is_metal": false
   },
   {
     "title": "Forever Ain't Long Enough",
@@ -829,7 +932,8 @@
     "album": "Night Diving (The Cost of Growing Up)",
     "embed": "https://open.spotify.com/embed/track/5bKXRRnFPZfKWP1iIzq0FV?utm_source=generator",
     "cover": "assets/104 - Max McNown - Forever Ain't Long Enough - Night Diving (The Cost of Growing Up).jpg",
-    "alt": "Forever Ain't Long Enough by Max McNown"
+    "alt": "Forever Ain't Long Enough by Max McNown",
+    "is_metal": false
   },
   {
     "title": "Say Goodbye To Mum And Dad",
@@ -837,7 +941,8 @@
     "album": "Songs For A Nervous Planet",
     "embed": "https://open.spotify.com/embed/track/0s5CpCxuZnyITiWTuSWmxI?utm_source=generator",
     "cover": "assets/105 - Tears For Fears - Say Goodbye To Mum And Dad - Songs For A Nervous Planet.jpg",
-    "alt": "Say Goodbye To Mum And Dad by Tears For Fears"
+    "alt": "Say Goodbye To Mum And Dad by Tears For Fears",
+    "is_metal": false
   },
   {
     "title": "This Christmas",
@@ -845,7 +950,8 @@
     "album": "This Christmas",
     "embed": "https://open.spotify.com/embed/track/7FNsGGAGyMoSwjH3ivmcep?utm_source=generator",
     "cover": "assets/106 - Oh Wonder - This Christmas - This Christmas.jpg",
-    "alt": "This Christmas by Oh Wonder"
+    "alt": "This Christmas by Oh Wonder",
+    "is_metal": false
   },
   {
     "title": "I Like It When I’m With You",
@@ -853,7 +959,8 @@
     "album": "I Like It When I’m With You (Ooh La La)",
     "embed": "https://open.spotify.com/embed/track/4EsW1BaCaYf6laMGE0aQaT?utm_source=generator",
     "cover": "assets/107 - Norman - I Like It When I_m With You (Ooh La La) - I Like It When I_m With You (Ooh La La).jpg",
-    "alt": "I Like It When I’m With You by Norman"
+    "alt": "I Like It When I’m With You by Norman",
+    "is_metal": false
   },
   {
     "title": "1 SIDED LOVE",
@@ -861,7 +968,8 @@
     "album": "ANONYMOUS",
     "embed": "https://open.spotify.com/embed/track/1GowBSErSjxWNm735omxiQ?utm_source=generator",
     "cover": "assets/108 - blackbear - 1 SIDED LOVE - ANONYMOUS.jpg",
-    "alt": "1 SIDED LOVE by blackbear"
+    "alt": "1 SIDED LOVE by blackbear",
+    "is_metal": false
   },
   {
     "title": "Deep Green",
@@ -869,7 +977,8 @@
     "album": "Suspension of Disbelief",
     "embed": "https://open.spotify.com/embed/track/2xGGpmywtvPY3h7JkcwP1E?utm_source=generator",
     "cover": "assets/109 - Christian Kuria - Deep Green - Suspension of Disbelief.jpg",
-    "alt": "Deep Green by Christian Kuria"
+    "alt": "Deep Green by Christian Kuria",
+    "is_metal": false
   },
   {
     "title": "Don't Let Me Down",
@@ -877,7 +986,8 @@
     "album": "Henge",
     "embed": "https://open.spotify.com/embed/track/14uA8SPeP5sioxmCPIeXt0?utm_source=generator",
     "cover": "assets/110 - Gus Dapperton, BENEE - Don't Let Me Down - Henge.jpg",
-    "alt": "Don't Let Me Down by Gus Dapperton"
+    "alt": "Don't Let Me Down by Gus Dapperton",
+    "is_metal": false
   },
   {
     "title": "Dizzy",
@@ -885,7 +995,8 @@
     "album": "Dizzy (feat. Thomas Headon and Alfie Templeman)",
     "embed": "https://open.spotify.com/embed/track/3Gplr4iOpewQ9ynbZujzlu?utm_source=generator",
     "cover": "assets/111 - chloe moriondo, Thomas Headon, Alfie Templeman - Dizzy (feat. Thomas Headon and Alfie Templeman) - Dizzy (feat. Thomas Headon and Alfie Templeman).jpg",
-    "alt": "Dizzy by chloe moriondo"
+    "alt": "Dizzy by chloe moriondo",
+    "is_metal": false
   },
   {
     "title": "Bunny",
@@ -893,7 +1004,8 @@
     "album": "Wild",
     "embed": "https://open.spotify.com/embed/track/6ap5AekhAt3k6e0zAknDyV?utm_source=generator",
     "cover": "assets/112 - Tourist - Bunny - Wild.jpg",
-    "alt": "Bunny by Tourist"
+    "alt": "Bunny by Tourist",
+    "is_metal": false
   },
   {
     "title": "Vision of a Floating World",
@@ -901,7 +1013,8 @@
     "album": "Something Lost, Something Gained",
     "embed": "https://open.spotify.com/embed/track/7CtddFqbp2aAST4T4vLAAU?utm_source=generator",
     "cover": "assets/113 - Kidnap - Vision of a Floating World - Something Lost, Something Gained.jpg",
-    "alt": "Vision of a Floating World by Kidnap"
+    "alt": "Vision of a Floating World by Kidnap",
+    "is_metal": false
   },
   {
     "title": "Drinkin",
@@ -909,7 +1022,8 @@
     "album": "Drinkin",
     "embed": "https://open.spotify.com/embed/track/1Usa0Fv8L9NmRKY4UYk4sD?utm_source=generator",
     "cover": "assets/114 - Mike Candys - Drinkin - Drinkin.jpg",
-    "alt": "Drinkin by Mike Candys"
+    "alt": "Drinkin by Mike Candys",
+    "is_metal": false
   },
   {
     "title": "Living in America",
@@ -917,7 +1031,8 @@
     "album": "Dying to Say This to You (Premium Download Version)",
     "embed": "https://open.spotify.com/embed/track/4lYrsZ7ivskKOFIsW6DGQi?utm_source=generator",
     "cover": "assets/115 - The Sounds - Living in America - Dying to Say This to You (Premium Download Version).jpg",
-    "alt": "Living in America by The Sounds"
+    "alt": "Living in America by The Sounds",
+    "is_metal": false
   },
   {
     "title": "She's so High",
@@ -925,7 +1040,8 @@
     "album": "Tal Bachman",
     "embed": "https://open.spotify.com/embed/track/7mnGQesk1TzQLzQ9bYWZPR?utm_source=generator",
     "cover": "assets/116 - Tal Bachman - She's so High - Tal Bachman.jpg",
-    "alt": "She's so High by Tal Bachman"
+    "alt": "She's so High by Tal Bachman",
+    "is_metal": false
   },
   {
     "title": "One Headlight",
@@ -933,7 +1049,8 @@
     "album": "Bringing Down The Horse",
     "embed": "https://open.spotify.com/embed/track/0z1b34WikhOH9ZxU8QDWcv?utm_source=generator",
     "cover": "assets/117 - The Wallflowers - One Headlight - Bringing Down The Horse.jpg",
-    "alt": "One Headlight by The Wallflowers"
+    "alt": "One Headlight by The Wallflowers",
+    "is_metal": false
   },
   {
     "title": "Perfectly Out Of Place",
@@ -941,7 +1058,8 @@
     "album": "Perfectly Out Of Place",
     "embed": "https://open.spotify.com/embed/track/1ogk8gkNwRw9iHONH2CAna?utm_source=generator",
     "cover": "assets/118 - Dreams We've Had - Perfectly Out Of Place - Perfectly Out Of Place.jpg",
-    "alt": "Perfectly Out Of Place by Dreams We've Had"
+    "alt": "Perfectly Out Of Place by Dreams We've Had",
+    "is_metal": false
   },
   {
     "title": "One By One",
@@ -949,7 +1067,8 @@
     "album": "One By One (feat. Oaks)",
     "embed": "https://open.spotify.com/embed/track/2D1P2Y9RUxZW2Ch9A1rwHA?utm_source=generator",
     "cover": "assets/119 - Robin Schulz, Topic, Oaks - One By One (feat. Oaks) - One By One (feat. Oaks).jpg",
-    "alt": "One By One by Robin Schulz"
+    "alt": "One By One by Robin Schulz",
+    "is_metal": false
   },
   {
     "title": ".",
@@ -957,7 +1076,8 @@
     "album": "if i could make it go quiet",
     "embed": "https://open.spotify.com/embed/track/4r1AqGpB9YrXV2ivcrqfJY?utm_source=generator",
     "cover": "assets/120 - girl in red - . - if i could make it go quiet.jpg",
-    "alt": ". by girl in red"
+    "alt": ". by girl in red",
+    "is_metal": false
   },
   {
     "title": "Love You Like That",
@@ -965,7 +1085,8 @@
     "album": "Love You Like That",
     "embed": "https://open.spotify.com/embed/track/2IClzYyvgwrsmVVipYsx5T?utm_source=generator",
     "cover": "assets/121 - Dagny - Love You Like That - Love You Like That.jpg",
-    "alt": "Love You Like That by Dagny"
+    "alt": "Love You Like That by Dagny",
+    "is_metal": false
   },
   {
     "title": "Night of Passion",
@@ -973,7 +1094,8 @@
     "album": "Metal Will Stand Tall",
     "embed": "https://open.spotify.com/embed/track/1ianoyRbOK3RXrQIiT2aTk?utm_source=generator",
     "cover": "assets/122 - The Poodles - Night of Passion - Metal Will Stand Tall.jpg",
-    "alt": "Night of Passion by The Poodles"
+    "alt": "Night of Passion by The Poodles",
+    "is_metal": true
   },
   {
     "title": "Right Now",
@@ -981,7 +1103,8 @@
     "album": "Now You See Inside",
     "embed": "https://open.spotify.com/embed/track/3iwsyTZzOWHZbHffBEyi1N?utm_source=generator",
     "cover": "assets/123 - SR-71 - Right Now - Now You See Inside.jpg",
-    "alt": "Right Now by SR-71"
+    "alt": "Right Now by SR-71",
+    "is_metal": false
   },
   {
     "title": "Viva La Victoria",
@@ -989,7 +1112,8 @@
     "album": "Paradigm",
     "embed": "https://open.spotify.com/embed/track/2MC57MCOiCz2UGskL2uCVF?utm_source=generator",
     "cover": "assets/124 - Eclipse - Viva La Victoria - Paradigm.jpg",
-    "alt": "Viva La Victoria by Eclipse"
+    "alt": "Viva La Victoria by Eclipse",
+    "is_metal": true
   },
   {
     "title": "I Alone",
@@ -997,7 +1121,8 @@
     "album": "Throwing Copper",
     "embed": "https://open.spotify.com/embed/track/3LpnzPxkMI6XS4JCbhNeek?utm_source=generator",
     "cover": "assets/125 - Live - I Alone - Throwing Copper.jpg",
-    "alt": "I Alone by Live"
+    "alt": "I Alone by Live",
+    "is_metal": true
   },
   {
     "title": "Gypsy Road",
@@ -1005,7 +1130,8 @@
     "album": "Long Cold Winter",
     "embed": "https://open.spotify.com/embed/track/2F8Glc7r4mHHSCEegD4Ju1?utm_source=generator",
     "cover": "assets/126 - Cinderella - Gypsy Road - Long Cold Winter.jpg",
-    "alt": "Gypsy Road by Cinderella"
+    "alt": "Gypsy Road by Cinderella",
+    "is_metal": true
   },
   {
     "title": "Floating [remix]",
@@ -1013,7 +1139,8 @@
     "album": "Floating (feat. Khalid) [filous Remix]",
     "embed": "https://open.spotify.com/embed/track/3Vtl4Xc9cKVs1UoenXtScn?utm_source=generator",
     "cover": "assets/127 - Alina Baraz, Khalid, filous - Floating (feat. Khalid) [filous Remix] - Floating (feat. Khalid) [filous Remix].jpg",
-    "alt": "Floating by Alina Baraz"
+    "alt": "Floating by Alina Baraz",
+    "is_metal": false
   },
   {
     "title": "Be So Alive",
@@ -1021,7 +1148,8 @@
     "album": "Be So Alive",
     "embed": "https://open.spotify.com/embed/track/2Cb3BgkJxovZ6kwJHNQXzh?utm_source=generator",
     "cover": "assets/128 - BKAYE - Be So Alive - Be So Alive.jpg",
-    "alt": "Be So Alive by BKAYE"
+    "alt": "Be So Alive by BKAYE",
+    "is_metal": false
   },
   {
     "title": "COLD",
@@ -1029,7 +1157,8 @@
     "album": "COLD",
     "embed": "https://open.spotify.com/embed/track/3QKB8XAHPIbBaD4wlVHa3U?utm_source=generator",
     "cover": "assets/129 - James Carter - COLD - COLD.jpg",
-    "alt": "COLD by James Carter"
+    "alt": "COLD by James Carter",
+    "is_metal": false
   },
   {
     "title": "Ordinary Man",
@@ -1037,7 +1166,8 @@
     "album": "Ordinary Man",
     "embed": "https://open.spotify.com/embed/track/7CR5qGZ2eJwYrFQ8UmHuaR?utm_source=generator",
     "cover": "assets/130 - Ozzy Osbourne, Elton John - Ordinary Man (feat. Elton John) - Ordinary Man.jpg",
-    "alt": "Ordinary Man by Ozzy Osbourne"
+    "alt": "Ordinary Man by Ozzy Osbourne",
+    "is_metal": false
   },
   {
     "title": "Crying On The Dancefloor",
@@ -1045,7 +1175,8 @@
     "album": "Crying On The Dancefloor",
     "embed": "https://open.spotify.com/embed/track/09rAJ1Q1NNJSaUKEW3X9P6?utm_source=generator",
     "cover": "assets/131 - Sam Feldt, Jonas Blue, Endless Summer, Violet Days - Crying On The Dancefloor - Crying On The Dancefloor.jpg",
-    "alt": "Crying On The Dancefloor by Sam Feldt"
+    "alt": "Crying On The Dancefloor by Sam Feldt",
+    "is_metal": false
   },
   {
     "title": "Guestlist",
@@ -1053,7 +1184,8 @@
     "album": "Guestlist (feat. SACHA)",
     "embed": "https://open.spotify.com/embed/track/0MS7sUW9VxvXjuDg9VZZIS?utm_source=generator",
     "cover": "assets/132 - casso, SACHA - Guestlist (feat. SACHA) - Guestlist (feat. SACHA).jpg",
-    "alt": "Guestlist by cassö"
+    "alt": "Guestlist by cassö",
+    "is_metal": false
   },
   {
     "title": "I Don’t Wanna Party Anymore",
@@ -1061,7 +1193,8 @@
     "album": "My Favorite Drug",
     "embed": "https://open.spotify.com/embed/track/4lYXGLDwvjIqqY45B4RvDT?utm_source=generator",
     "cover": "assets/133 - Vlad Holiday, Kacey Musgraves - I Don_t Wanna Party Anymore (feat. Kacey Musgraves) - My Favorite Drug.jpg",
-    "alt": "I Don’t Wanna Party Anymore by Vlad Holiday"
+    "alt": "I Don’t Wanna Party Anymore by Vlad Holiday",
+    "is_metal": false
   },
   {
     "title": "Liquorlip Loaded Gun",
@@ -1069,7 +1202,8 @@
     "album": "Land Of Pleasure",
     "embed": "https://open.spotify.com/embed/track/75OkRq6IjAcnSaBcvFq3oY?utm_source=generator",
     "cover": "assets/134 - Sticky Fingers - Liquorlip Loaded Gun - Land Of Pleasure.jpg",
-    "alt": "Liquorlip Loaded Gun by Sticky Fingers"
+    "alt": "Liquorlip Loaded Gun by Sticky Fingers",
+    "is_metal": false
   },
   {
     "title": "Headlights",
@@ -1077,7 +1211,8 @@
     "album": "Headlights",
     "embed": "https://open.spotify.com/embed/track/7shaHtNeaR9wolLuJOLqfH?utm_source=generator",
     "cover": "assets/135 - In Color - Headlights - Headlights.jpg",
-    "alt": "Headlights by In Color"
+    "alt": "Headlights by In Color",
+    "is_metal": false
   },
   {
     "title": "King of Everything",
@@ -1085,7 +1220,8 @@
     "album": "Don't Forget About Me, Demos",
     "embed": "https://open.spotify.com/embed/track/0lO1yt6M1l1OAs80M3vEfM?utm_source=generator",
     "cover": "assets/001 - Dominic Fike - King of Everything - Don't Forget About Me, Demos.jpg",
-    "alt": "King of Everything by Dominic Fike"
+    "alt": "King of Everything by Dominic Fike",
+    "is_metal": false
   },
   {
     "title": "Love U Like That",
@@ -1093,7 +1229,8 @@
     "album": "Love U Like That",
     "embed": "https://open.spotify.com/embed/track/3rmqiQbzPDx7A8p88IRFKg?utm_source=generator",
     "cover": "assets/002 - Lauv - Love U Like That - Love U Like That.jpg",
-    "alt": "Love U Like That by Lauv"
+    "alt": "Love U Like That by Lauv",
+    "is_metal": false
   },
   {
     "title": "Only Lovers Left Alive",
@@ -1101,7 +1238,8 @@
     "album": "Hounds Tooth",
     "embed": "https://open.spotify.com/embed/track/1Bw9sLUvtmlaK3MklhYx0c?utm_source=generator",
     "cover": "assets/003 - DOPE LEMON - Only Lovers Left Alive - Hounds Tooth.jpg",
-    "alt": "Only Lovers Left Alive by DOPE LEMON"
+    "alt": "Only Lovers Left Alive by DOPE LEMON",
+    "is_metal": false
   },
   {
     "title": "Hush",
@@ -1109,7 +1247,8 @@
     "album": "Hush",
     "embed": "https://open.spotify.com/embed/track/4iXqSVXVzaldHOsQgHtzOD?utm_source=generator",
     "cover": "assets/004 - BYRNE - Hush - Hush.jpg",
-    "alt": "Hush by BYRNE"
+    "alt": "Hush by BYRNE",
+    "is_metal": false
   },
   {
     "title": "Going Gets Tough",
@@ -1117,7 +1256,8 @@
     "album": "Chinese Fountain",
     "embed": "https://open.spotify.com/embed/track/0dEhydwCE5Og4PLKyjfqMR?utm_source=generator",
     "cover": "assets/005 - The Growlers - Going Gets Tough - Chinese Fountain.jpg",
-    "alt": "Going Gets Tough by The Growlers"
+    "alt": "Going Gets Tough by The Growlers",
+    "is_metal": false
   },
   {
     "title": "A Lingering Love",
@@ -1125,7 +1265,8 @@
     "album": "Gold Past Life",
     "embed": "https://open.spotify.com/embed/track/1vX5qdTsxb0Gedzmyc8UV2?utm_source=generator",
     "cover": "assets/006 - Fruit Bats - A Lingering Love - Gold Past Life.jpg",
-    "alt": "A Lingering Love by Fruit Bats"
+    "alt": "A Lingering Love by Fruit Bats",
+    "is_metal": false
   },
   {
     "title": "When U Love Somebody",
@@ -1133,7 +1274,8 @@
     "album": "Mouthfuls",
     "embed": "https://open.spotify.com/embed/track/68Euox5QCQrf0sMI847CfC?utm_source=generator",
     "cover": "assets/007 - Fruit Bats - When U Love Somebody - Mouthfuls.jpg",
-    "alt": "When U Love Somebody by Fruit Bats"
+    "alt": "When U Love Somebody by Fruit Bats",
+    "is_metal": false
   },
   {
     "title": "Heatstroke",
@@ -1141,7 +1283,8 @@
     "album": "Sincere",
     "embed": "https://open.spotify.com/embed/track/5zjS49hh8KF7mnbvgUtiJa?utm_source=generator",
     "cover": "assets/008 - Khalid - Heatstroke - Sincere.jpg",
-    "alt": "Heatstroke by Khalid"
+    "alt": "Heatstroke by Khalid",
+    "is_metal": false
   },
   {
     "title": "can't slow down",
@@ -1149,7 +1292,8 @@
     "album": "DIVE (deluxe)",
     "embed": "https://open.spotify.com/embed/track/1Qo0I5GmDG3IYM3tXCiVIs?utm_source=generator",
     "cover": "assets/009 - almost monday - can't slow down - DIVE (deluxe).jpg",
-    "alt": "can't slow down by almost monday"
+    "alt": "can't slow down by almost monday",
+    "is_metal": false
   },
   {
     "title": "coast to coast",
@@ -1157,7 +1301,8 @@
     "album": "coast to coast",
     "embed": "https://open.spotify.com/embed/track/3MDFRerrTl5CyeVsb71XId?utm_source=generator",
     "cover": "assets/010 - almost monday - coast to coast - coast to coast.jpg",
-    "alt": "coast to coast by almost monday"
+    "alt": "coast to coast by almost monday",
+    "is_metal": false
   },
   {
     "title": "Lemonade",
@@ -1165,7 +1310,8 @@
     "album": "Lemonade",
     "embed": "https://open.spotify.com/embed/track/2teMWxI0AhcKHArtjumPzZ?utm_source=generator",
     "cover": "assets/011 - Circa Waves, Alfie Templeman - Lemonade - Lemonade.jpg",
-    "alt": "Lemonade by Circa Waves"
+    "alt": "Lemonade by Circa Waves",
+    "is_metal": false
   },
   {
     "title": "Don't Stop",
@@ -1173,7 +1319,8 @@
     "album": "Torches",
     "embed": "https://open.spotify.com/embed/track/4HRa9ZWcmZ8JD7UySPu0wT?utm_source=generator",
     "cover": "assets/012 - Foster The People - Don't Stop (Color on the Walls) - Torches.jpg",
-    "alt": "Don't Stop by Foster The People"
+    "alt": "Don't Stop by Foster The People",
+    "is_metal": false
   },
   {
     "title": "Welcome to Your Life",
@@ -1181,7 +1328,8 @@
     "album": "Big Mess",
     "embed": "https://open.spotify.com/embed/track/4hAhyE1iL07EIUJnqw2bsV?utm_source=generator",
     "cover": "assets/013 - GROUPLOVE - Welcome to Your Life - Big Mess.jpg",
-    "alt": "Welcome to Your Life by GROUPLOVE"
+    "alt": "Welcome to Your Life by GROUPLOVE",
+    "is_metal": false
   },
   {
     "title": "saturday",
@@ -1189,7 +1337,8 @@
     "album": "saturday",
     "embed": "https://open.spotify.com/embed/track/4d76CU49i79iiV1JulIWqq?utm_source=generator",
     "cover": "assets/014 - Yot Club - saturday - saturday.jpg",
-    "alt": "saturday by Yot Club"
+    "alt": "saturday by Yot Club",
+    "is_metal": false
   },
   {
     "title": "Tastes Like Forever",
@@ -1197,7 +1346,8 @@
     "album": "Tastes Like Forever",
     "embed": "https://open.spotify.com/embed/track/33xgQAHpWcbY8B45sakPCn?utm_source=generator",
     "cover": "assets/015 - Daily J - Tastes Like Forever - Tastes Like Forever.jpg",
-    "alt": "Tastes Like Forever by Daily J"
+    "alt": "Tastes Like Forever by Daily J",
+    "is_metal": false
   },
   {
     "title": "Tell Me I'm A Wreck",
@@ -1205,7 +1355,8 @@
     "album": "Picture Perfect",
     "embed": "https://open.spotify.com/embed/track/203zTFd1zbfG0fiOG9OREv?utm_source=generator",
     "cover": "assets/016 - Every Avenue - Tell Me I'm A Wreck - Picture Perfect.jpg",
-    "alt": "Tell Me I'm A Wreck by Every Avenue"
+    "alt": "Tell Me I'm A Wreck by Every Avenue",
+    "is_metal": false
   },
   {
     "title": "Harlem",
@@ -1213,7 +1364,8 @@
     "album": "A Bad Girl In Harlem",
     "embed": "https://open.spotify.com/embed/track/573latfTMO7SpGtStVrQx5?utm_source=generator",
     "cover": "assets/017 - New Politics - Harlem - A Bad Girl In Harlem.jpg",
-    "alt": "Harlem by New Politics"
+    "alt": "Harlem by New Politics",
+    "is_metal": false
   },
   {
     "title": "1985",
@@ -1221,7 +1373,8 @@
     "album": "A Hangover You Don't Deserve",
     "embed": "https://open.spotify.com/embed/track/5oQcOu1omDykbIPSdSQQNJ?utm_source=generator",
     "cover": "assets/018 - Bowling For Soup - 1985 - A Hangover You Don't Deserve.jpg",
-    "alt": "1985 by Bowling For Soup"
+    "alt": "1985 by Bowling For Soup",
+    "is_metal": false
   },
   {
     "title": "Love Drunk",
@@ -1229,7 +1382,8 @@
     "album": "Love Drunk",
     "embed": "https://open.spotify.com/embed/track/20X9OeC606XNwEtDBOym5u?utm_source=generator",
     "cover": "assets/019 - BOYS LIKE GIRLS - Love Drunk - Love Drunk.jpg",
-    "alt": "Love Drunk by BOYS LIKE GIRLS"
+    "alt": "Love Drunk by BOYS LIKE GIRLS",
+    "is_metal": false
   },
   {
     "title": "Teenagers",
@@ -1237,7 +1391,8 @@
     "album": "The Black Parade",
     "embed": "https://open.spotify.com/embed/track/7j31rVgGX9Q2blT92VBEA0?utm_source=generator",
     "cover": "assets/020 - My Chemical Romance - Teenagers - The Black Parade.jpg",
-    "alt": "Teenagers by My Chemical Romance"
+    "alt": "Teenagers by My Chemical Romance",
+    "is_metal": false
   },
   {
     "title": "King of Everything",
@@ -1245,7 +1400,8 @@
     "album": "Don't Forget About Me, Demos",
     "embed": "https://open.spotify.com/embed/track/0lO1yt6M1l1OAs80M3vEfM?utm_source=generator",
     "cover": "assets/136 - Dominic Fike - King of Everything - Don't Forget About Me, Demos.jpg",
-    "alt": "King of Everything by Dominic Fike"
+    "alt": "King of Everything by Dominic Fike",
+    "is_metal": false
   },
   {
     "title": "Love U Like That",
@@ -1253,7 +1409,8 @@
     "album": "Love U Like That",
     "embed": "https://open.spotify.com/embed/track/3rmqiQbzPDx7A8p88IRFKg?utm_source=generator",
     "cover": "assets/137 - Lauv - Love U Like That - Love U Like That.jpg",
-    "alt": "Love U Like That by Lauv"
+    "alt": "Love U Like That by Lauv",
+    "is_metal": false
   },
   {
     "title": "Only Lovers Left Alive",
@@ -1261,7 +1418,8 @@
     "album": "Hounds Tooth",
     "embed": "https://open.spotify.com/embed/track/1Bw9sLUvtmlaK3MklhYx0c?utm_source=generator",
     "cover": "assets/138 - DOPE LEMON - Only Lovers Left Alive - Hounds Tooth.jpg",
-    "alt": "Only Lovers Left Alive by DOPE LEMON"
+    "alt": "Only Lovers Left Alive by DOPE LEMON",
+    "is_metal": false
   },
   {
     "title": "Hush",
@@ -1269,7 +1427,8 @@
     "album": "Hush",
     "embed": "https://open.spotify.com/embed/track/4iXqSVXVzaldHOsQgHtzOD?utm_source=generator",
     "cover": "assets/139 - BYRNE - Hush - Hush.jpg",
-    "alt": "Hush by BYRNE"
+    "alt": "Hush by BYRNE",
+    "is_metal": false
   },
   {
     "title": "Going Gets Tough",
@@ -1277,7 +1436,8 @@
     "album": "Chinese Fountain",
     "embed": "https://open.spotify.com/embed/track/0dEhydwCE5Og4PLKyjfqMR?utm_source=generator",
     "cover": "assets/140 - The Growlers - Going Gets Tough - Chinese Fountain.jpg",
-    "alt": "Going Gets Tough by The Growlers"
+    "alt": "Going Gets Tough by The Growlers",
+    "is_metal": false
   },
   {
     "title": "A Lingering Love",
@@ -1285,7 +1445,8 @@
     "album": "Gold Past Life",
     "embed": "https://open.spotify.com/embed/track/1vX5qdTsxb0Gedzmyc8UV2?utm_source=generator",
     "cover": "assets/141 - Fruit Bats - A Lingering Love - Gold Past Life.jpg",
-    "alt": "A Lingering Love by Fruit Bats"
+    "alt": "A Lingering Love by Fruit Bats",
+    "is_metal": false
   },
   {
     "title": "When U Love Somebody",
@@ -1293,7 +1454,8 @@
     "album": "Mouthfuls",
     "embed": "https://open.spotify.com/embed/track/68Euox5QCQrf0sMI847CfC?utm_source=generator",
     "cover": "assets/142 - Fruit Bats - When U Love Somebody - Mouthfuls.jpg",
-    "alt": "When U Love Somebody by Fruit Bats"
+    "alt": "When U Love Somebody by Fruit Bats",
+    "is_metal": false
   },
   {
     "title": "Heatstroke",
@@ -1301,7 +1463,8 @@
     "album": "Sincere",
     "embed": "https://open.spotify.com/embed/track/5zjS49hh8KF7mnbvgUtiJa?utm_source=generator",
     "cover": "assets/143 - Khalid - Heatstroke - Sincere.jpg",
-    "alt": "Heatstroke by Khalid"
+    "alt": "Heatstroke by Khalid",
+    "is_metal": false
   },
   {
     "title": "can't slow down",
@@ -1309,7 +1472,8 @@
     "album": "DIVE (deluxe)",
     "embed": "https://open.spotify.com/embed/track/1Qo0I5GmDG3IYM3tXCiVIs?utm_source=generator",
     "cover": "assets/144 - almost monday - can't slow down - DIVE (deluxe).jpg",
-    "alt": "can't slow down by almost monday"
+    "alt": "can't slow down by almost monday",
+    "is_metal": false
   },
   {
     "title": "coast to coast",
@@ -1317,7 +1481,8 @@
     "album": "coast to coast",
     "embed": "https://open.spotify.com/embed/track/3MDFRerrTl5CyeVsb71XId?utm_source=generator",
     "cover": "assets/145 - almost monday - coast to coast - coast to coast.jpg",
-    "alt": "coast to coast by almost monday"
+    "alt": "coast to coast by almost monday",
+    "is_metal": false
   },
   {
     "title": "Welcome to Your Life",
@@ -1325,7 +1490,8 @@
     "album": "Big Mess",
     "embed": "https://open.spotify.com/embed/track/4hAhyE1iL07EIUJnqw2bsV?utm_source=generator",
     "cover": "assets/148 - GROUPLOVE - Welcome to Your Life - Big Mess.jpg",
-    "alt": "Welcome to Your Life by GROUPLOVE"
+    "alt": "Welcome to Your Life by GROUPLOVE",
+    "is_metal": false
   },
   {
     "title": "saturday",
@@ -1333,7 +1499,8 @@
     "album": "saturday",
     "embed": "https://open.spotify.com/embed/track/4d76CU49i79iiV1JulIWqq?utm_source=generator",
     "cover": "assets/149 - Yot Club - saturday - saturday.jpg",
-    "alt": "saturday by Yot Club"
+    "alt": "saturday by Yot Club",
+    "is_metal": false
   },
   {
     "title": "Tastes Like Forever",
@@ -1341,7 +1508,8 @@
     "album": "Tastes Like Forever",
     "embed": "https://open.spotify.com/embed/track/33xgQAHpWcbY8B45sakPCn?utm_source=generator",
     "cover": "assets/150 - Daily J - Tastes Like Forever - Tastes Like Forever.jpg",
-    "alt": "Tastes Like Forever by Daily J"
+    "alt": "Tastes Like Forever by Daily J",
+    "is_metal": false
   },
   {
     "title": "Tell Me I'm A Wreck",
@@ -1349,7 +1517,8 @@
     "album": "Picture Perfect",
     "embed": "https://open.spotify.com/embed/track/203zTFd1zbfG0fiOG9OREv?utm_source=generator",
     "cover": "assets/151 - Every Avenue - Tell Me I'm A Wreck - Picture Perfect.jpg",
-    "alt": "Tell Me I'm A Wreck by Every Avenue"
+    "alt": "Tell Me I'm A Wreck by Every Avenue",
+    "is_metal": false
   },
   {
     "title": "Harlem",
@@ -1357,7 +1526,8 @@
     "album": "A Bad Girl In Harlem",
     "embed": "https://open.spotify.com/embed/track/573latfTMO7SpGtStVrQx5?utm_source=generator",
     "cover": "assets/152 - New Politics - Harlem - A Bad Girl In Harlem.jpg",
-    "alt": "Harlem by New Politics"
+    "alt": "Harlem by New Politics",
+    "is_metal": false
   },
   {
     "title": "1985",
@@ -1365,7 +1535,8 @@
     "album": "A Hangover You Don't Deserve",
     "embed": "https://open.spotify.com/embed/track/5oQcOu1omDykbIPSdSQQNJ?utm_source=generator",
     "cover": "assets/153 - Bowling For Soup - 1985 - A Hangover You Don't Deserve.jpg",
-    "alt": "1985 by Bowling For Soup"
+    "alt": "1985 by Bowling For Soup",
+    "is_metal": false
   },
   {
     "title": "Love Drunk",
@@ -1373,7 +1544,8 @@
     "album": "Love Drunk",
     "embed": "https://open.spotify.com/embed/track/20X9OeC606XNwEtDBOym5u?utm_source=generator",
     "cover": "assets/154 - BOYS LIKE GIRLS - Love Drunk - Love Drunk.jpg",
-    "alt": "Love Drunk by BOYS LIKE GIRLS"
+    "alt": "Love Drunk by BOYS LIKE GIRLS",
+    "is_metal": false
   },
   {
     "title": "Teenagers",
@@ -1381,7 +1553,8 @@
     "album": "The Black Parade",
     "embed": "https://open.spotify.com/embed/track/7j31rVgGX9Q2blT92VBEA0?utm_source=generator",
     "cover": "assets/155 - My Chemical Romance - Teenagers - The Black Parade.jpg",
-    "alt": "Teenagers by My Chemical Romance"
+    "alt": "Teenagers by My Chemical Romance",
+    "is_metal": false
   },
   {
     "title": "All Of The Time",
@@ -1389,7 +1562,8 @@
     "album": "All Of The Time",
     "embed": "https://open.spotify.com/embed/track/4hllJRapkwQbIDGnaqeN6F?utm_source=generator",
     "cover": "assets/156 - Wilmah - All Of The Time - All Of The Time.jpg",
-    "alt": "All Of The Time by Wilmah"
+    "alt": "All Of The Time by Wilmah",
+    "is_metal": false
   },
   {
     "title": "Most of All",
@@ -1397,7 +1571,8 @@
     "album": "Most of All",
     "embed": "https://open.spotify.com/embed/track/6WqImyDAHzc4J9n4Qn5p3O?utm_source=generator",
     "cover": "assets/157 - Oracle Sisters - Most of All - Most of All.jpg",
-    "alt": "Most of All by Oracle Sisters"
+    "alt": "Most of All by Oracle Sisters",
+    "is_metal": false
   },
   {
     "title": "Blinding Sights",
@@ -1405,7 +1580,8 @@
     "album": "A Carnival of Fears",
     "embed": "https://open.spotify.com/embed/track/7mb5XTIMvNZa2N0Mdx68Xi?utm_source=generator",
     "cover": "assets/158 - Yellow House - Blinding Sights - A Carnival of Fears.jpg",
-    "alt": "Blinding Sights by Yellow House"
+    "alt": "Blinding Sights by Yellow House",
+    "is_metal": false
   },
   {
     "title": "decay",
@@ -1413,7 +1589,8 @@
     "album": "decay",
     "embed": "https://open.spotify.com/embed/track/7HDXpYf4Eloe0NtQKOyt6j?utm_source=generator",
     "cover": "assets/159 - Ethan Regan - decay - decay.jpg",
-    "alt": "decay by Ethan Regan"
+    "alt": "decay by Ethan Regan",
+    "is_metal": false
   },
   {
     "title": "get by",
@@ -1421,7 +1598,8 @@
     "album": "get by",
     "embed": "https://open.spotify.com/embed/track/3vGuwAV3rxD4189HC3p0SD?utm_source=generator",
     "cover": "assets/160 - Ethan Regan - get by - get by.jpg",
-    "alt": "get by by Ethan Regan"
+    "alt": "get by by Ethan Regan",
+    "is_metal": false
   },
   {
     "title": "Emergence",
@@ -1429,7 +1607,8 @@
     "album": "Even In Arcadia",
     "embed": "https://open.spotify.com/embed/track/2OMjHcniFxzijWX7EaBrXE?utm_source=generator",
     "cover": "assets/161 - Sleep Token - Emergence - Even In Arcadia.jpg",
-    "alt": "Emergence by Sleep Token"
+    "alt": "Emergence by Sleep Token",
+    "is_metal": true
   },
   {
     "title": "Not Me Anymore",
@@ -1437,7 +1616,8 @@
     "album": "Not Me Anymore",
     "embed": "https://open.spotify.com/embed/track/46gcml0UNQm0C3bzAHgbV3?utm_source=generator",
     "cover": "assets/162 - POLYDRIVE - Not Me Anymore - Not Me Anymore.jpg",
-    "alt": "Not Me Anymore by POLYDRIVE"
+    "alt": "Not Me Anymore by POLYDRIVE",
+    "is_metal": false
   },
   {
     "title": "Kissing Days",
@@ -1445,7 +1625,8 @@
     "album": "Oh Sweet Cafe Racer",
     "embed": "https://open.spotify.com/embed/track/6la3SrbNxWQ9K10OfIQOTr?utm_source=generator",
     "cover": "assets/163 - Sumbuck - Kissing Days - Oh Sweet Cafe Racer.jpg",
-    "alt": "Kissing Days by Sumbuck"
+    "alt": "Kissing Days by Sumbuck",
+    "is_metal": false
   },
   {
     "title": "Don't Mind Me",
@@ -1453,7 +1634,8 @@
     "album": "Real Time",
     "embed": "https://open.spotify.com/embed/track/4Gr28QyljEPj2FNKhyaSqX?utm_source=generator",
     "cover": "assets/164 - Styrofoam Winos - Don't Mind Me - Real Time.jpg",
-    "alt": "Don't Mind Me by Styrofoam Winos"
+    "alt": "Don't Mind Me by Styrofoam Winos",
+    "is_metal": false
   },
   {
     "title": "Bullet",
@@ -1461,7 +1643,8 @@
     "album": "Down Home",
     "embed": "https://open.spotify.com/embed/track/5PsTq1nBaB7CynumBOJaGM?utm_source=generator",
     "cover": "assets/165 - Teddy and The Rough Riders - Bullet - Down Home.jpg",
-    "alt": "Bullet by Teddy and The Rough Riders"
+    "alt": "Bullet by Teddy and The Rough Riders",
+    "is_metal": false
   },
   {
     "title": "CHEMICALS!",
@@ -1469,7 +1652,8 @@
     "album": "georgia got colder",
     "embed": "https://open.spotify.com/embed/track/2ZLdPwznoSFQGZflBC04oL?utm_source=generator",
     "cover": "assets/166 - Jonah Kagen - CHEMICALS! - georgia got colder.jpg",
-    "alt": "CHEMICALS! by Jonah Kagen"
+    "alt": "CHEMICALS! by Jonah Kagen",
+    "is_metal": false
   },
   {
     "title": "Mexico",
@@ -1477,7 +1661,8 @@
     "album": "After the Gold Rush Party",
     "embed": "https://open.spotify.com/embed/track/7xUtTW7HuiwSANiKLz8VHE?utm_source=generator",
     "cover": "assets/167 - Husbands - Mexico - After the Gold Rush Party.jpg",
-    "alt": "Mexico by Husbands"
+    "alt": "Mexico by Husbands",
+    "is_metal": false
   },
   {
     "title": "How To Live",
@@ -1485,7 +1670,8 @@
     "album": "Chasing The Chimera",
     "embed": "https://open.spotify.com/embed/track/4M97EBNl6eCzroqazkYClC?utm_source=generator",
     "cover": "assets/168 - Del Water Gap - How To Live - Chasing The Chimera.jpg",
-    "alt": "How To Live by Del Water Gap"
+    "alt": "How To Live by Del Water Gap",
+    "is_metal": false
   },
   {
     "title": "graveyard shift",
@@ -1493,7 +1679,8 @@
     "album": "georgia got colder",
     "embed": "https://open.spotify.com/embed/track/32GhlLgrx9mXXKHf2ltF7U?utm_source=generator",
     "cover": "assets/169 - Jonah Kagen - graveyard shift - georgia got colder.jpg",
-    "alt": "graveyard shift by Jonah Kagen"
+    "alt": "graveyard shift by Jonah Kagen",
+    "is_metal": false
   },
   {
     "title": "Better Views",
@@ -1501,7 +1688,8 @@
     "album": "Better Views",
     "embed": "https://open.spotify.com/embed/track/5PE2TkQKrgcLZupVGe5Pxu?utm_source=generator",
     "cover": "assets/170 - Yellow House - Better Views - Better Views.jpg",
-    "alt": "Better Views by Yellow House"
+    "alt": "Better Views by Yellow House",
+    "is_metal": false
   },
   {
     "title": "Always, Everytime",
@@ -1509,7 +1697,8 @@
     "album": "Speed",
     "embed": "https://open.spotify.com/embed/track/0m23mCa7VRx73ec3JbPv75?utm_source=generator",
     "cover": "assets/171 - The Wrecks - Always, Everytime - Speed.jpg",
-    "alt": "Always, Everytime by The Wrecks"
+    "alt": "Always, Everytime by The Wrecks",
+    "is_metal": false
   },
   {
     "title": "Younger",
@@ -1517,7 +1706,8 @@
     "album": "He Seems Upset",
     "embed": "https://open.spotify.com/embed/track/6kE3BJhZYLIfGLQY2hSzaM?utm_source=generator",
     "cover": "assets/172 - The Hails - Younger - He Seems Upset.jpg",
-    "alt": "Younger by The Hails"
+    "alt": "Younger by The Hails",
+    "is_metal": false
   },
   {
     "title": "Joyride",
@@ -1525,7 +1715,8 @@
     "album": "Joyride",
     "embed": "https://open.spotify.com/embed/track/4wBcEq9lBQo8TR7CgKdf0i?utm_source=generator",
     "cover": "assets/173 - Roxette - Joyride - Joyride.jpg",
-    "alt": "Joyride by Roxette"
+    "alt": "Joyride by Roxette",
+    "is_metal": false
   },
   {
     "title": "Smoke Machine",
@@ -1533,7 +1724,8 @@
     "album": "Autoflower",
     "embed": "https://open.spotify.com/embed/track/0YwaIqzVJcWsFHqT7oaiVq?utm_source=generator",
     "cover": "assets/174 - Jesse Woods - Smoke Machine - Autoflower.jpg",
-    "alt": "Smoke Machine by Jesse Woods"
+    "alt": "Smoke Machine by Jesse Woods",
+    "is_metal": false
   },
   {
     "title": "U.F.O.",
@@ -1541,7 +1733,8 @@
     "album": "Autoflower",
     "embed": "https://open.spotify.com/embed/track/45LStTENF92V5WirCZvRlc?utm_source=generator",
     "cover": "assets/175 - Jesse Woods - U.F.O. - Autoflower.jpg",
-    "alt": "U.F.O. by Jesse Woods"
+    "alt": "U.F.O. by Jesse Woods",
+    "is_metal": false
   },
   {
     "title": "Rhythm From A Red Car",
@@ -1549,7 +1742,8 @@
     "album": "Double Eclipse",
     "embed": "https://open.spotify.com/embed/track/57IGjyH1P26YUEGjKJWSNe?utm_source=generator",
     "cover": "assets/176 - Hardline - Rhythm From A Red Car - Double Eclipse.jpg",
-    "alt": "Rhythm From A Red Car by Hardline"
+    "alt": "Rhythm From A Red Car by Hardline",
+    "is_metal": true
   },
   {
     "title": "Old Recliners",
@@ -1557,7 +1751,8 @@
     "album": "Kansas Anymore (The Longest Goodbye)",
     "embed": "https://open.spotify.com/embed/track/1PewwBauzqbg7VGp2JHyKZ?utm_source=generator",
     "cover": "assets/177 - ROLE MODEL - Old Recliners - Kansas Anymore (The Longest Goodbye).jpg",
-    "alt": "Old Recliners by ROLE MODEL"
+    "alt": "Old Recliners by ROLE MODEL",
+    "is_metal": false
   },
   {
     "title": "Lost in Time",
@@ -1565,7 +1760,8 @@
     "album": "Lost in Time (feat. Boo Seeka)",
     "embed": "https://open.spotify.com/embed/track/09FOF3hUR4VM1jKHKfgR2R?utm_source=generator",
     "cover": "assets/178 - Daily J - Lost in Time - Lost in Time (feat. Boo Seeka).jpg",
-    "alt": "Lost in Time by Daily J"
+    "alt": "Lost in Time by Daily J",
+    "is_metal": false
   },
   {
     "title": "who’s your boyfriend",
@@ -1573,7 +1769,8 @@
     "album": "hickey",
     "embed": "https://open.spotify.com/embed/track/1FrmEoNfKBx7Z6nU05KW5w?utm_source=generator",
     "cover": "assets/179 - Royel Otis - who’s your boyfriend - hickey.jpg",
-    "alt": "who’s your boyfriend by Royel Otis"
+    "alt": "who’s your boyfriend by Royel Otis",
+    "is_metal": false
   },
   {
     "title": "Crocodile",
@@ -1581,7 +1778,8 @@
     "album": "Lola",
     "embed": "https://open.spotify.com/embed/track/27NPOgyYpnRjfVRWgNRTG9?utm_source=generator",
     "cover": "assets/180 - Goth Babe - Crocodile - Lola.jpg",
-    "alt": "Crocodile by Goth Babe"
+    "alt": "Crocodile by Goth Babe",
+    "is_metal": false
   },
   {
     "title": "Light My Fire",
@@ -1589,7 +1787,8 @@
     "album": "Light My Fire",
     "embed": "https://open.spotify.com/embed/track/6GM7Tngzr6tK5whGLnsUEx?utm_source=generator",
     "cover": "assets/181 - Caye - Light My Fire - Light My Fire.jpg",
-    "alt": "Light My Fire by Caye"
+    "alt": "Light My Fire by Caye",
+    "is_metal": false
   },
   {
     "title": "Whateverrrr",
@@ -1597,7 +1796,8 @@
     "album": "If That Makes Sense",
     "embed": "https://open.spotify.com/embed/track/7rmqj2wCUD7rmeFLrcEfNC?utm_source=generator",
     "cover": "assets/182 - Spacey Jane - Whateverrrr - If That Makes Sense.jpg",
-    "alt": "Whateverrrr by Spacey Jane"
+    "alt": "Whateverrrr by Spacey Jane",
+    "is_metal": false
   },
   {
     "title": "One Of Your Girls",
@@ -1605,7 +1805,8 @@
     "album": "Something To Give Each Other",
     "embed": "https://open.spotify.com/embed/track/5Eh1nj7IjV9lwpcKAkidyY?utm_source=generator",
     "cover": "assets/183 - Troye Sivan - One Of Your Girls - Something To Give Each Other.jpg",
-    "alt": "One Of Your Girls by Troye Sivan"
+    "alt": "One Of Your Girls by Troye Sivan",
+    "is_metal": false
   },
   {
     "title": "Astronaut",
@@ -1613,7 +1814,8 @@
     "album": "Don't You Worry, Honey",
     "embed": "https://open.spotify.com/embed/track/3q5Zm5NnYcpXKLNmTO1tyo?utm_source=generator",
     "cover": "assets/184 - Sir Sly - Astronaut - Don't You Worry, Honey.jpg",
-    "alt": "Astronaut by Sir Sly"
+    "alt": "Astronaut by Sir Sly",
+    "is_metal": false
   },
   {
     "title": "Crossed",
@@ -1621,7 +1823,8 @@
     "album": "Crossed",
     "embed": "https://open.spotify.com/embed/track/5GQjbqE2o7GfYUSXYPpNlq?utm_source=generator",
     "cover": "assets/185 - brady - Crossed - Crossed.jpg",
-    "alt": "Crossed by brady"
+    "alt": "Crossed by brady",
+    "is_metal": false
   },
   {
     "title": "Cemetery",
@@ -1629,7 +1832,8 @@
     "album": "Dreamland",
     "embed": "https://open.spotify.com/embed/track/7fc5kWes8Og0UNQM1TxuAQ?utm_source=generator",
     "cover": "assets/186 - COIN - Cemetery - Dreamland.jpg",
-    "alt": "Cemetery by COIN"
+    "alt": "Cemetery by COIN",
+    "is_metal": false
   },
   {
     "title": "The Blue Door",
@@ -1637,7 +1841,8 @@
     "album": "Broken Brights (Bonus Track Version)",
     "embed": "https://open.spotify.com/embed/track/3LQ7Rd8SswMtsIzALPUOZY?utm_source=generator",
     "cover": "assets/187 - Angus Stone - The Blue Door - Broken Brights (Bonus Track Version).jpg",
-    "alt": "The Blue Door by Angus Stone"
+    "alt": "The Blue Door by Angus Stone",
+    "is_metal": false
   },
   {
     "title": "Sweet True Lies",
@@ -1645,7 +1850,8 @@
     "album": "From Hell With Love",
     "embed": "https://open.spotify.com/embed/track/2cyJkqB2OYHwWWvKGtrJ0r?utm_source=generator",
     "cover": "assets/188 - Beast In Black - Sweet True Lies - From Hell With Love.jpg",
-    "alt": "Sweet True Lies by Beast In Black"
+    "alt": "Sweet True Lies by Beast In Black",
+    "is_metal": true
   },
   {
     "title": "Melody",
@@ -1653,6 +1859,7 @@
     "album": "Every Cloud - Silver Linings",
     "embed": "https://open.spotify.com/embed/track/4ZofmEdvs4mQqZ756GQhSY?utm_source=generator",
     "cover": "assets/189 - Sigala - Melody - Every Cloud - Silver Linings.jpg",
-    "alt": "Melody by Sigala"
+    "alt": "Melody by Sigala",
+    "is_metal": false
   }
 ]

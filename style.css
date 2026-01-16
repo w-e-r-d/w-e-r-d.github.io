@@ -391,6 +391,65 @@ nav a[data-active="true"]:hover::before {
 
 
 /* MUSIC PAGE */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.toggle-title {
+  color: black;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(145deg, #888, #aaa);
+  border-radius: 26px;
+  transition: all 0.3s;
+  box-shadow: 2px 2px 5px 0px #33333359;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: linear-gradient(145deg, #d97182, #ff879a);
+  box-shadow: 2px 2px 5px 0px #45090059;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;
