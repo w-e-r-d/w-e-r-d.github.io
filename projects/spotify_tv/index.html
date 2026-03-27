@@ -18,8 +18,8 @@
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>now</title>
-  <link rel="stylesheet" href="../style.css" />
+  <title>spotify tv</title>
+  <link rel="stylesheet" href="/style.css" />
 </head>
 
 <body class="home">
@@ -27,14 +27,14 @@
     <header class="nav-title-box">
       <h1 class="slide-text ">
         <span class="line back">w<span class="flip">e</span><span class="flip">r</span>d</span>
-        <span class="line front">/now</span>
+        <span class="line front">spotify tv</span>
       </h1>
       <nav>
         <a href="/home/" class="nav-link home">home</a>
         <a href="/about/" class="nav-link about">about</a>
-        <a href="/now/" class="nav-link now" data-active="true">now</a>
+        <a href="/now/" class="nav-link now">now</a>
         <a href="/music/" class="nav-link music">music</a>
-        <a href="/projects/" class="nav-link projects">projects</a>
+        <a href="/projects/" class="nav-link projects" data-active="true">projects</a>
         <a href="/tools/" class="nav-link tools">tools</a>
       </nav>
     </header>
@@ -42,33 +42,28 @@
 
     <main>
       <section>
-        <p>this is my /now page.  if you're curious, read more about what this is <a href="https://nownownow.com/about" target="_blank">here</a>.</p>
-        <h1>april, 2026</h1>
-        
-        <h3>doing</h3>
+        <h2>a wee spotify tv</h2>
+        <p>this is a gift i made that connects two spotify accounts' activity.</p>
+        <p>apologies for the terrible picture.  i failed to take a good one before i gave it away.</p>
+        <img src="/projects/spotify_tv/assets/spotify_tv.png" style="max-width: 700px; height: auto;">
+        <p>what does it do?</p>
         <ul>
-          <li>putting most of my free time into a contract i got moonlighting as a programmer</li>
-          <li>working on pivoting spools since spotify changed their api</li>
-          <li>still working on <a href="/projects/spotipad">spotipad</a>.</li>
-          <li>running a lot</li>
-          <li>been biking to work most days instead of driving</li>
-          <li>applying to grad school?</li>
-          <li>making some maps for fun/art... we'll see how they turn out</li>
-        </ul>
-        <!-- <h3>learning</h3>
-        <ul>
-          <li>to code and create things w/ python, js, html, css, and ruby.</li>
-          <li>more about ai, specifically n8n</li>
-          <li>to play the piano</li>
-        </ul> -->
-        <h3>thinking about</h3>
-        <ul>
-          <li>painting my furniture</li>
-          <li>my next vacation</li>
+            <li>it shows when each account is using spotify. (the green leds turn on)</li>
+            <li>it shows album art for the currently playing track (for both accounts).  the black switch in the middle changes between the two accounts.</li>
+            <li>it adds the currently playing track from one account to the other account's queue (this is what the buttons on the left do.  one for each direction)</li>
+            <li>that's it!</li>
         </ul>
 
-        
-      </section>
+        <p>what's it built with?</p>
+        <ul>
+            <li>raspberry pi 4B is the computer.  probably overkill for this but it's the only one i wasn't using for anything else.</li>
+            <li>python is the software.  i used pillow to do all the album art processing, pygame to render the display and spotipy for the spotify integration</li>
+            <li>lcd display.  idk the exact model but i had it laying around from an old project.</li>
+            <li>mdf, chalk paint, and vinyl wrap for the case</li>
+            <li>little things like resistors, buttons, switches, wires, etc.</li>
+        </ul>
+    </section>
+
     </main>
 
 <!-- footer -->
