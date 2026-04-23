@@ -39,40 +39,71 @@
 
     <main>
       <p>
-        i had a cool idea for this page.  but spotify removed preview_url endpoint from their API, so in order to provide a way for you to listen to these tracks, i have to have the iframe visible (boo!).  i've still got some ideas to make this more fun, but for now, it is what it is:
+        this page is under contsruction still.
       </p>
       <h2>drew's hall of fame</h2>
       <i>last updated: march 24, 2026</i>
-      <br><br>
-      <div class="toggle-container">
-        <span class="toggle-title">exclude metal and heavier rock</span>
-        <label class="toggle-switch">
-          <input type="checkbox" id="exclude-metal" checked>
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-      <br>
-      <button class="button" id="random" style="margin-bottom:12px;">random</button>
-      <br><br>
-      <iframe 
-        id="spotify-iframe"
-        data-testid="embed-iframe" 
-        style="border-radius:12px" 
-        src="https://open.spotify.com/embed/track/32GhlLgrx9mXXKHf2ltF7U?utm_source=generator&theme=0" 
-        width="500px" 
-        height="152" 
-        frameBorder="0" 
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-        loading="lazy">
-      </iframe>
-      <br><br>
-      <div class="col">
-        <div class="row">
+      <div class="music-layout">
+        <div class="music-controls">
+          <div class="toggle-container">
+            <span class="toggle-title">exclude metal and heavier rock</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="exclude-metal" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <button class="button" id="random">random</button>
+          <div id="dim-filters">
+            <div class="dim-filter-col" data-dim="clarity">
+              <span class="dim-filter-val">–</span>
+              <input type="range" class="v-slider" min="0" max="5" step="1" value="0" id="filter-clarity">
+              <span class="dim-filter-label">c</span>
+            </div>
+            <div class="dim-filter-col" data-dim="warmth">
+              <span class="dim-filter-val">–</span>
+              <input type="range" class="v-slider" min="0" max="5" step="1" value="0" id="filter-warmth">
+              <span class="dim-filter-label">w</span>
+            </div>
+            <div class="dim-filter-col" data-dim="texture">
+              <span class="dim-filter-val">–</span>
+              <input type="range" class="v-slider" min="0" max="5" step="1" value="0" id="filter-texture">
+              <span class="dim-filter-label">t</span>
+            </div>
+            <div class="dim-filter-col" data-dim="weight">
+              <span class="dim-filter-val">–</span>
+              <input type="range" class="v-slider" min="0" max="5" step="1" value="0" id="filter-weight">
+              <span class="dim-filter-label">w</span>
+            </div>
+            <div class="dim-filter-col" data-dim="motion">
+              <span class="dim-filter-val">–</span>
+              <input type="range" class="v-slider" min="0" max="5" step="1" value="0" id="filter-motion">
+              <span class="dim-filter-label">m</span>
+            </div>
+            <div class="dim-filter-col" data-dim="familiarity">
+              <span class="dim-filter-val">–</span>
+              <input type="range" class="v-slider" min="0" max="5" step="1" value="0" id="filter-familiarity">
+              <span class="dim-filter-label">f</span>
+            </div>
+          </div>
+          <iframe
+            id="spotify-iframe"
+            data-testid="embed-iframe"
+            style="border-radius:12px;display:block;"
+            src="https://open.spotify.com/embed/track/32GhlLgrx9mXXKHf2ltF7U?utm_source=generator&theme=0"
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+          </iframe>
+        </div>
+        <div class="col">
+          <div class="row"></div>
         </div>
       </div>
     
-      <p style="color: white">note: i do not own any of the artwork shown above.  artwork belongs to its respective owners.</p>
+      <p style="color: rgba(255,254,242,0.3); font-size: 0.78rem;">note: i do not own any of the artwork shown above.  artwork belongs to its respective owners.</p>
     </main>
 
 
@@ -107,14 +138,48 @@
 
       // filter state
       let excludeMetal = true;
+      const FILTER_DIMS = ['clarity', 'warmth', 'texture', 'weight', 'motion', 'familiarity'];
+
+      function getDimFilters() {
+        const filters = {};
+        for (const dim of FILTER_DIMS) {
+          const el = document.getElementById(`filter-${dim}`);
+          filters[dim] = el ? parseInt(el.value) : 0;
+        }
+        return filters;
+      }
 
       // get filtered albums based on current filter state
       function getFilteredAlbums() {
         if (!window.__allAlbums) return [];
+        const dimFilters = getDimFilters();
         return window.__allAlbums.filter(album => {
           if (excludeMetal && album.is_metal) return false;
+          for (const dim of FILTER_DIMS) {
+            const threshold = dimFilters[dim];
+            if (threshold === 0) continue;
+            const val = album[dim];
+            if (val == null || val !== threshold) return false;
+          }
           return true;
         });
+      }
+
+      // calculate item size to fill the grid container without exceeding 100px
+      function calcItemSize(n) {
+        if (n === 0) return 100;
+        const col = document.querySelector('.col');
+        if (!col) return 100;
+        const W = col.offsetWidth;
+        const H = col.offsetHeight;
+        let size = Math.min(100, Math.floor(Math.sqrt((W * H) / n)));
+        while (size > 16) {
+          const cols = Math.floor(W / size);
+          const rows = Math.ceil(n / cols);
+          if (rows * size <= H) break;
+          size--;
+        }
+        return Math.max(size, 16);
       }
 
       // render album grid
@@ -124,11 +189,14 @@
         const frag = document.createDocumentFragment();
         const filtered = getFilteredAlbums();
         window.__albums = filtered;
+        const size = calcItemSize(filtered.length);
 
         shuffle([...filtered]).forEach(album => {
           const container = document.createElement('div');
           container.className = 'album-art-container';
           container.setAttribute('data-track', album.embed);
+          container.style.width  = size + 'px';
+          container.style.height = size + 'px';
 
           const img = document.createElement('img');
           img.src = album.cover;
@@ -185,6 +253,20 @@
         }
       });
 
+
+      // dimension filter sliders
+      FILTER_DIMS.forEach(dim => {
+        document.getElementById(`filter-${dim}`)?.addEventListener('input', (e) => {
+          const val = parseInt(e.target.value);
+          document.querySelector(`[data-dim="${dim}"] .dim-filter-val`).textContent = val > 0 ? val : '–';
+          renderAlbumGrid();
+          if (window.__albums && window.__albums.length) {
+            const rand = window.__albums[Math.floor(Math.random() * window.__albums.length)];
+            const iframe = document.getElementById('spotify-iframe');
+            if (iframe && rand.embed) iframe.src = rand.embed + '&theme=0';
+          }
+        });
+      });
 
       // album art click behaivor
       document.addEventListener('click', (e) => {
