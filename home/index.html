@@ -7,7 +7,7 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-  
+
     gtag('config', 'G-3LNJ2DCY46');
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,7 +96,7 @@
       row.appendChild(cursor);
       container.appendChild(row);
 
-      cursor.textContent = ' '; // keep block visible
+      cursor.textContent = ' '; // keep block visible
       for (const ch of prefix) {
         if (ch === ' ') {
           typed.textContent += ch;
@@ -109,7 +109,7 @@
           await sleep(rand(6, 16));
         }
         typed.textContent += ch;
-        cursor.textContent = ' ';
+        cursor.textContent = ' ';
         container.scrollTop = container.scrollHeight;
         await sleep(rand(3, 10));
       }
@@ -251,10 +251,10 @@
             out('music/');
             out('now/');
             out('projects/');
-            out('  \u251c\u2500 sp_field_scanner/');
-            out('  \u251c\u2500 spools/');
-            out('  \u251c\u2500 spotify_tv/');
-            out('  \u2514\u2500 spotipad/');
+            out('  ├─ sp_field_scanner/');
+            out('  ├─ spools/');
+            out('  ├─ spotify_tv/');
+            out('  └─ spotipad/');
             out('tools/');
             startInteractive(container);
           } else if (cmd === 'whoami') {
@@ -275,8 +275,8 @@
         }
       });
     }
-    
-        async function runTerminal() {
+
+    async function runTerminal() {
       const block = document.getElementById('terminal-block');
       block.style.opacity = '1';
       await sleep(650);
@@ -350,14 +350,18 @@
       imgEl.style.opacity     = '1';
     }
 
-    function positionAmelia() {
-      const footer = document.querySelector('.site-footer');
-      if (!footer) return;
-      const fromBottom = window.innerHeight - footer.getBoundingClientRect().top;
-      document.getElementById('amelia-corner').style.bottom = (fromBottom + 12) + 'px';
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+    if (!isMobile) {
+      function positionAmelia() {
+        const footer = document.querySelector('.site-footer');
+        if (!footer) return;
+        const fromBottom = window.innerHeight - footer.getBoundingClientRect().top;
+        document.getElementById('amelia-corner').style.bottom = (fromBottom + 12) + 'px';
+      }
+      positionAmelia();
+      window.addEventListener('resize', positionAmelia);
     }
-    positionAmelia();
-    window.addEventListener('resize', positionAmelia);
 
     if (sessionStorage.getItem('home-visited')) {
       // return visit — show everything instantly
@@ -379,15 +383,19 @@
         block.appendChild(row);
       }
       startInteractive(block);
-      document.getElementById('amelia-corner').style.opacity = '1';
-      setInterval(cycleThought, 18000);
+      if (!isMobile) {
+        document.getElementById('amelia-corner').style.opacity = '1';
+        setInterval(cycleThought, 18000);
+      }
     } else {
       sessionStorage.setItem('home-visited', '1');
       setTimeout(runTerminal, 4200);
-      setTimeout(() => {
-        document.getElementById('amelia-corner').style.opacity = '1';
-        setInterval(cycleThought, 18000);
-      }, 5000);
+      if (!isMobile) {
+        setTimeout(() => {
+          document.getElementById('amelia-corner').style.opacity = '1';
+          setInterval(cycleThought, 18000);
+        }, 5000);
+      }
     }
   })();
   </script>

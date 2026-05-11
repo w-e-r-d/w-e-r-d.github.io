@@ -610,15 +610,19 @@ pre {
   max-height: 55vh;
   overflow-y: auto;
   scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
-#terminal-block { scrollbar-width: none; }
 #terminal-block::-webkit-scrollbar { display: none; }
 
 .terminal-line {
   color: rgba(255,254,242,0.72);
   line-height: 1.9;
   white-space: pre-wrap;
+}
+
+.terminal-error {
+  color: #fd9484;
 }
 
 .terminal-link {
@@ -656,6 +660,24 @@ pre {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
 }
+
+.terminal-hidden-input {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  border: none;
+  outline: none;
+  padding: 0;
+  font-size: 16px;
+  background: transparent;
+}
+
+/* return-visit instant — suppress animations */
+.instant .text-flicker-in-glow { animation: none !important; opacity: 1 !important; }
+.instant #terminal-block, .instant #amelia-corner { transition: none !important; }
 
 /* ── home: amelia's corner ── */
 #amelia-corner {
@@ -719,7 +741,6 @@ pre {
   position: relative;
   bottom: -20px;
   display: block;
-  transition: opacity 0.3s ease;
 }
 
 .amelia-img-placeholder {
@@ -737,29 +758,6 @@ pre {
   font-style: italic;
 }
 
-@media (max-width: 640px) {
-  #amelia-corner { display: none; }
-}
-.terminal-error { color: rgba(253,148,132,0.6); }
-/* ── return-visit: skip animations ── */
-.instant .text-flicker-in-glow {
-  animation: none !important;
-  opacity: 1 !important;
-}
-.instant #terminal-block,
-.instant #amelia-corner {
-  transition: none !important;
-}
-.terminal-hidden-input {
-  position: fixed;
-  top: -9999px;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  border: none;
-  outline: none;
-  padding: 0;
-  font-size: 16px;
-  background: transparent;
+@media (max-width: 768px) {
+  #amelia-corner { display: none !important; }
 }
