@@ -19,6 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>drew lefebvre.</title>
   <link rel="stylesheet" href="/style.css" />
+  <script>if(sessionStorage.getItem("home-visited")){document.documentElement.classList.add("instant");}</script>
 </head>
 <body class="home">
   <div class="container">
@@ -34,11 +35,11 @@
         <a href="/music/" class="nav-link music">music</a>
         <a href="/projects/" class="nav-link projects">projects</a>
         <a href="/tools/" class="nav-link tools">tools</a>
-        <a href="https://feed.drewlefebvre.com" class="nav-link feed">feed</a>
       </nav>
     </header>
 	<main>
 	  <h1 class="text-flicker-in-glow">hello.</h1>
+	  <div id="terminal-block" aria-live="polite"></div>
 	</main>
 	<footer class="site-footer">
   		<div class="footer-inner">
@@ -62,5 +63,333 @@
 
 	</footer>
   </div>
+
+  <!-- amelia's corner -->
+  <div id="amelia-corner">
+    <div class="amelia-thought" id="amelia-thought-text">is that a squirrel</div>
+    <img class="amelia-img" id="amelia-img" src="/home/assets/amelia_0000_IMG_9290.png" alt="Amelia">
+  </div>
+
+  <script>
+  (function () {
+    // ── terminal typewriter ──────────────────────────────────────
+    const termLines = [
+      { prefix: '> welcome to my site', link: null },
+      { prefix: "> don't know me?  ", link: { text: 'cd ~/about', href: '/about/' } },
+      { prefix: "> curious what i'm doing rn? ",  link: { text: 'cd ~/now',      href: '/now/' } },
+      { prefix: '> want to see some things i\'ve made? ', link: { text: 'cd ~/projects', href: '/projects/' } },
+      { prefix: '> or just poke around, it\'s a small site', link: null }
+    ];
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const rand  = (lo, hi) => Math.random() * (hi - lo) + lo;
+    const SCRAMBLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&?/|<>';
+
+    async function typeLine(container, prefix, linkData) {
+      const row = document.createElement('div');
+      row.className = 'terminal-line';
+      const typed  = document.createElement('span');
+      const cursor = document.createElement('span');
+      cursor.className = 'terminal-block-cursor';
+      cursor.setAttribute('aria-hidden', 'true');
+      row.appendChild(typed);
+      row.appendChild(cursor);
+      container.appendChild(row);
+
+      cursor.textContent = ' '; // keep block visible
+      for (const ch of prefix) {
+        if (ch === ' ') {
+          typed.textContent += ch;
+          await sleep(rand(4, 10));
+          continue;
+        }
+        const scrambleCount = Math.floor(rand(1, 4));
+        for (let i = 0; i < scrambleCount; i++) {
+          cursor.textContent = SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)];
+          await sleep(rand(6, 16));
+        }
+        typed.textContent += ch;
+        cursor.textContent = ' ';
+        container.scrollTop = container.scrollHeight;
+        await sleep(rand(3, 10));
+      }
+      cursor.remove();
+
+      if (linkData) {
+        const a       = document.createElement('a');
+        a.href        = linkData.href;
+        a.textContent = linkData.text;
+        a.className   = 'terminal-link';
+        row.appendChild(a);
+      }
+      await sleep(rand(40, 100));
+    }
+
+    const routes = {
+      'about':                           '/about/',
+      'now':                             '/now/',
+      'projects':                        '/projects/',
+      'music':                           '/music/',
+      'tools':                           '/tools/',
+      'feed':                            'https://feed.drewlefebvre.com',
+      'home':                            '/home/',
+      'projects/sp_field_scanner':       '/projects/sp_field_scanner/',
+      'projects/spools':                 '/projects/spools/',
+      'projects/spotify_tv':             '/projects/spotify_tv/',
+      'projects/spotipad':               '/projects/spotipad/',
+      'projects/spotipad/documentation': '/projects/spotipad/documentation/',
+    };
+
+    const cmdHistory = [];
+    let historyPos = -1;
+
+    function startInteractive(container) {
+      const row = document.createElement('div');
+      row.className = 'terminal-line';
+      const prompt  = document.createTextNode('> ');
+      const display = document.createElement('span');
+      const cursor  = document.createElement('span');
+      cursor.className = 'terminal-cursor-blink';
+      cursor.setAttribute('aria-hidden', 'true');
+      cursor.textContent = ' ';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'terminal-hidden-input';
+      input.setAttribute('autocomplete', 'off');
+      input.setAttribute('autocorrect', 'off');
+      input.setAttribute('autocapitalize', 'off');
+      input.setAttribute('spellcheck', 'false');
+
+      row.appendChild(prompt);
+      row.appendChild(display);
+      row.appendChild(cursor);
+      row.appendChild(input);
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+
+      let buffer = '';
+
+      function focusInput() { input.focus(); }
+      container.addEventListener('click', focusInput);
+      if (!window.matchMedia('(hover: none)').matches) input.focus();
+
+      function done() {
+        container.removeEventListener('click', focusInput);
+        cursor.remove();
+        input.remove();
+      }
+
+      function out(text, cls) {
+        const r = document.createElement('div');
+        r.className = 'terminal-line' + (cls ? ' ' + cls : '');
+        r.textContent = text;
+        container.appendChild(r);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      function resolve(cmd) {
+        const m = cmd.match(/(?:cd\s+)?(?:~\/|\/)?([/\w-]+)/);
+        return m ? routes[m[1].replace(/\/+$/, '')] : null;
+      }
+
+      input.addEventListener('input', () => {
+        buffer = input.value;
+        display.textContent = buffer;
+        container.scrollTop = container.scrollHeight;
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (cmdHistory.length === 0) return;
+          historyPos = Math.min(historyPos + 1, cmdHistory.length - 1);
+          buffer = cmdHistory[cmdHistory.length - 1 - historyPos];
+          input.value = buffer;
+          display.textContent = buffer;
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          historyPos = Math.max(historyPos - 1, -1);
+          buffer = historyPos === -1 ? '' : cmdHistory[cmdHistory.length - 1 - historyPos];
+          input.value = buffer;
+          display.textContent = buffer;
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          const raw = buffer.trim();
+          const cmd = raw.toLowerCase();
+          done();
+          if (raw) { cmdHistory.push(raw); historyPos = -1; }
+          buffer = '';
+
+          if (cmd === 'clear') {
+            container.innerHTML = '';
+            startInteractive(container);
+          } else if (cmd.startsWith('sudo')) {
+            out('nice try.', 'terminal-error');
+            startInteractive(container);
+          } else if (/^rm\s+-rf\s+\/?$/.test(cmd)) {
+            (async () => {
+              const files = ['/boot', '/etc', '/home/index', '/about/index', '/var', '/usr', '/usr/local/bin/amelia', '/music/assets', '/projects/index', '/'];
+              for (const f of files) {
+                out('removing ' + f + '...', 'terminal-error');
+                await sleep(rand(150, 400));
+              }
+              out('just kidding. good try tho', 'terminal-error');
+              startInteractive(container);
+            })();
+          } else if (cmd === 'help') {
+            out('available commands:');
+            out('  ls                  list all pages');
+            out('  cd ~/[page]         navigate to a page');
+            out('  pwd                 print working directory');
+            out('  whoami              identify yourself');
+            out('  clear               clear the terminal');
+            out("  ...and maybe a few other things :)");
+            startInteractive(container);
+          } else if (cmd === 'ls') {
+            out('about/');
+            out('music/');
+            out('now/');
+            out('projects/');
+            out('  \u251c\u2500 sp_field_scanner/');
+            out('  \u251c\u2500 spools/');
+            out('  \u251c\u2500 spotify_tv/');
+            out('  \u2514\u2500 spotipad/');
+            out('tools/');
+            startInteractive(container);
+          } else if (cmd === 'whoami') {
+            out('unknown user. probably just lost on the internet.', 'terminal-error');
+            startInteractive(container);
+          } else if (cmd === 'pwd') {
+            out('/home');
+            startInteractive(container);
+          } else {
+            const url = resolve(cmd);
+            if (url) {
+              window.location.href = url;
+            } else {
+              out('bash: ' + (raw || '(empty)') + ': command not found', 'terminal-error');
+              startInteractive(container);
+            }
+          }
+        }
+      });
+    }
+    
+        async function runTerminal() {
+      const block = document.getElementById('terminal-block');
+      block.style.opacity = '1';
+      await sleep(650);
+      for (const l of termLines) {
+        await typeLine(block, l.prefix, l.link);
+      }
+      startInteractive(block);
+    }
+
+    // ── amelia's corner ──────────────────────────────────────────
+    const ameliaThoughts = [
+      "is that a squsirrel?",
+      "the uv is like 7 rn, time to tan",
+      "if i stare at him long enough he'll give me a treat",
+      "human food is where it's at",
+      "trying to make friends",
+      "where is drew",
+      "i should be on the couch right now",
+      "leave me alone",
+      "nap time? nap time.",
+      "i heard a noise.",
+      "drew has been at the computer for too long",
+      "birds. why.",
+      "love camping",
+      "someone at the door?",
+      "...",
+      "zoomies!",
+      "can i please have chocolate?",
+      "dreaming of adventure",
+      "great day for a nap",
+      "kinda feel like tearing up a book rn",
+    ];
+
+    const ameliaImages = [
+      '/home/assets/amelia_0000_IMG_9290.png',
+      '/home/assets/amelia_0001_IMG_9097.png',
+      '/home/assets/amelia_0002_IMG_8599.png',
+      '/home/assets/amelia_0003_IMG_6451.png',
+      '/home/assets/amelia_0004_IMG_4715.png',
+      '/home/assets/amelia_0005_IMG_5942.png',
+      '/home/assets/amelia_0006_IMG_5408.png',
+      '/home/assets/amelia_0007_IMG_4304.png',
+      '/home/assets/amelia_0008_IMG_3263.png',
+      '/home/assets/amelia_0009_IMG_1410.png',
+      '/home/assets/amelia_0010_IMG_1195.png',
+      '/home/assets/amelia_0011_IMG_1108.png',
+      '/home/assets/amelia_0012_IMG_0893.png',
+      '/home/assets/amelia_0013_IMG_0557.png',
+      '/home/assets/amelia_0014_IMG_0452.png',
+      '/home/assets/amelia_0015_IMG_0043.png',
+      '/home/assets/amelia_0016_IMG_0035.png',
+      '/home/assets/amelia_0017_101-(Small).png',
+      '/home/assets/amelia_0018__MG_0169.png',
+      '/home/assets/amelia_0019_Layer-0.png',
+    ];
+
+    let pairIdx = 0;
+
+    async function cycleThought() {
+      const thoughtEl = document.getElementById('amelia-thought-text');
+      const imgEl     = document.getElementById('amelia-img');
+      thoughtEl.style.opacity = '0';
+      imgEl.style.opacity     = '0';
+      await sleep(300);
+      let next;
+      do { next = Math.floor(Math.random() * ameliaThoughts.length); } while (next === pairIdx);
+      pairIdx = next;
+      thoughtEl.textContent = ameliaThoughts[pairIdx];
+      imgEl.src             = ameliaImages[pairIdx];
+      thoughtEl.style.opacity = '1';
+      imgEl.style.opacity     = '1';
+    }
+
+    function positionAmelia() {
+      const footer = document.querySelector('.site-footer');
+      if (!footer) return;
+      const fromBottom = window.innerHeight - footer.getBoundingClientRect().top;
+      document.getElementById('amelia-corner').style.bottom = (fromBottom + 12) + 'px';
+    }
+    positionAmelia();
+    window.addEventListener('resize', positionAmelia);
+
+    if (sessionStorage.getItem('home-visited')) {
+      // return visit — show everything instantly
+      const block = document.getElementById('terminal-block');
+      block.style.opacity = '1';
+      for (const l of termLines) {
+        const row = document.createElement('div');
+        row.className = 'terminal-line';
+        const t = document.createElement('span');
+        t.textContent = l.prefix;
+        row.appendChild(t);
+        if (l.link) {
+          const a = document.createElement('a');
+          a.href = l.link.href;
+          a.textContent = l.link.text;
+          a.className = 'terminal-link';
+          row.appendChild(a);
+        }
+        block.appendChild(row);
+      }
+      startInteractive(block);
+      document.getElementById('amelia-corner').style.opacity = '1';
+      setInterval(cycleThought, 18000);
+    } else {
+      sessionStorage.setItem('home-visited', '1');
+      setTimeout(runTerminal, 4200);
+      setTimeout(() => {
+        document.getElementById('amelia-corner').style.opacity = '1';
+        setInterval(cycleThought, 18000);
+      }, 5000);
+    }
+  })();
+  </script>
 </body>
 </html>
