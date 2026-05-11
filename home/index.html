@@ -69,7 +69,6 @@
     <div class="amelia-thought" id="amelia-thought-text">is that a squirrel</div>
     <img class="amelia-img" id="amelia-img" src="/home/assets/amelia_0000_IMG_9290.png" alt="Amelia">
   </div>
-  <script>if(window.matchMedia('(max-width:768px)').matches){document.getElementById('amelia-corner').style.display='none';}</script>
 
   <script>
   (function () {
@@ -351,18 +350,14 @@
       imgEl.style.opacity     = '1';
     }
 
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-    if (!isMobile) {
-      function positionAmelia() {
-        const footer = document.querySelector('.site-footer');
-        if (!footer) return;
-        const fromBottom = window.innerHeight - footer.getBoundingClientRect().top;
-        document.getElementById('amelia-corner').style.bottom = (fromBottom + 12) + 'px';
-      }
-      positionAmelia();
-      window.addEventListener('resize', positionAmelia);
+    function positionAmelia() {
+      const footer = document.querySelector('.site-footer');
+      if (!footer) return;
+      const fromBottom = window.innerHeight - footer.getBoundingClientRect().top;
+      document.getElementById('amelia-corner').style.bottom = (fromBottom + 12) + 'px';
     }
+    positionAmelia();
+    window.addEventListener('resize', positionAmelia);
 
     if (sessionStorage.getItem('home-visited')) {
       // return visit — show everything instantly
@@ -384,19 +379,15 @@
         block.appendChild(row);
       }
       startInteractive(block);
-      if (!isMobile) {
-        document.getElementById('amelia-corner').style.opacity = '1';
-        setInterval(cycleThought, 18000);
-      }
+      document.getElementById('amelia-corner').style.opacity = '1';
+      setInterval(cycleThought, 18000);
     } else {
       sessionStorage.setItem('home-visited', '1');
       setTimeout(runTerminal, 4200);
-      if (!isMobile) {
-        setTimeout(() => {
-          document.getElementById('amelia-corner').style.opacity = '1';
-          setInterval(cycleThought, 18000);
-        }, 5000);
-      }
+      setTimeout(() => {
+        document.getElementById('amelia-corner').style.opacity = '1';
+        setInterval(cycleThought, 18000);
+      }, 5000);
     }
   })();
   </script>

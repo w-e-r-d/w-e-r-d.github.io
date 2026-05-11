@@ -673,6 +673,18 @@ pre {
   padding: 0;
   font-size: 16px;
   background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  -webkit-appearance: none;
+}
+.terminal-hidden-input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  -webkit-appearance: none;
 }
 
 /* return-visit instant — suppress animations */
@@ -759,5 +771,18 @@ pre {
 }
 
 @media (max-width: 768px) {
-  #amelia-corner { display: none !important; }
+  #amelia-corner {
+    right: 10px;
+    bottom: 10px !important;
+  }
+  .amelia-img {
+    width: 80px;
+    bottom: -8px;
+  }
+  .amelia-thought {
+    max-width: 110px;
+    font-size: 0.65rem;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+  }
 }
